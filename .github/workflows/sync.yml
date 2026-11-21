@@ -1,0 +1,84 @@
+name: Nikrid Radio Auto Sync
+
+on:
+  schedule:
+    # Каждый день в 03:00 по Омску (UTC+6 -> 21:00 UTC)
+    - cron: '0 21 * * *'
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: 'Лимит треков за запуск (0 = без лимита, рекомендуемо 40-60 для старта)'
+        required: false
+        default: '50'
+      skip_yt_sync:
+        description: 'Только добить миграцию текущего playlist.json (true/false)'
+        required: false
+        default: 'false'
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+
+    steps:
+      - name: Скачать репозиторий
+        uses: actions/checkout@v4
+
+      - name: Установить Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Установить зависимости
+        run: |
+          python -m pip install --upgrade pip
+          pip install yt-dlp ytmusicapi Pillow
+
+      - name: Подготовить секретные файлы
+        env:
+          YADISK_TOKEN: ${{ secrets.YADISK_TOKEN }}
+          SYNC_CONFIG: ${{ secrets.SYNC_CONFIG }}
+          BROWSER_JSON: ${{ secrets.BROWSER_JSON }}
+          COOKIES_TXT: ${{ secrets.COOKIES_TXT }}
+        run: |
+          printf '%s' "$YADISK_TOKEN" > yadisk_token.txt
+          printf '%s' "$SYNC_CONFIG" > sync_config.json
+          printf '%s' "$BROWSER_JSON" > browser.json
+          if [ -n "$COOKIES_TXT" ]; then
+            printf '%s' "$COOKIES_TXT" > cookies.txt
+          fi
+
+      - name: Запустить core.py
+        env:
+          INPUT_LIMIT: ${{ github.event.inputs.limit }}
+          INPUT_SKIP_YT: ${{ github.event.inputs.skip_yt_sync }}
+        run: |
+          ARGS="--workers 5"
+          LIMIT="${INPUT_LIMIT:-50}"
+          if [ "$LIMIT" != "0" ]; then
+            ARGS="$ARGS --limit $LIMIT"
+          fi
+          if [ "$INPUT_SKIP_YT" = "true" ]; then
+            ARGS="$ARGS --skip-yt-sync"
+          fi
+          python core.py $ARGS
+
+      - name: Удалить временные секреты перед коммитом
+        if: always()
+        run: |
+          rm -f yadisk_token.txt sync_config.json browser.json cookies.txt failed_tracks.log
+
+      - name: Запушить обновлённый playlist.json и обложки
+        run: |
+          git config user.name "Nikrid Radio Bot"
+          git config user.email "actions@github.com"
+          git add playlist.json covers/ unavailable_ids.json
+          if git diff --cached --quiet; then
+            echo "Нет изменений для коммита"
+          else
+            git commit -m "Auto sync tracks and covers"
+            git push
+          fi

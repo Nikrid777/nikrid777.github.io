@@ -7,9 +7,11 @@ import time
 import shutil
 import logging
 import argparse
+import threading
 import urllib.parse
 import urllib.request
 import urllib.error
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 from pathlib import Path
 
@@ -38,6 +40,8 @@ CLIENT_SECRET_PATH = Path("client_secret.json")
 WAVE_TARGET_COUNT = 200
 COVER_SIZE = (512, 512)
 COVER_WEBP_QUALITY = 84
+MAX_WORKERS = 5          # Параллельные потоки для скачивания и заливки аудио
+COVER_WORKERS = 8        # Параллельные потоки для обложек
 
 # ANSI-цвета для консоли (с автоматическим включением VT100 в Windows 10+)
 _ANSI_RESET = "\033[0m"
@@ -59,7 +63,6 @@ def _enable_windows_ansi() -> bool:
             h_out = kernel32.GetStdHandle(-11)  # STD_OUTPUT_HANDLE
             mode = ctypes.c_ulong()
             if kernel32.GetConsoleMode(h_out, ctypes.byref(mode)):
-                # ENABLE_VIRTUAL_TERMINAL_PROCESSING = 0x0004
                 kernel32.SetConsoleMode(h_out, mode.value | 0x0004)
                 return True
         except Exception:
@@ -70,6 +73,7 @@ def _enable_windows_ansi() -> bool:
 
 _USE_ANSI = _enable_windows_ansi()
 _LAST_INLINE_LEN = 0
+_UI_LOCK = threading.Lock()
 
 
 def _c(text: str, code: str) -> str:
@@ -82,14 +86,15 @@ def _write_file_log(level: str, msg: str, step: str = ""):
     ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     step_tag = f" [{step}]" if step else ""
     line = f"{ts} [{level}]{step_tag} {msg}\n"
-    try:
-        with open(FAILED_LOG_PATH, "a", encoding="utf-8") as f:
-            f.write(line)
-    except Exception:
-        pass
+    with _UI_LOCK:
+        try:
+            with open(FAILED_LOG_PATH, "a", encoding="utf-8") as f:
+                f.write(line)
+        except Exception:
+            pass
 
 
-def ui_clear_inline():
+def _clear_inline_unlocked():
     global _LAST_INLINE_LEN
     if _LAST_INLINE_LEN > 0:
         if _USE_ANSI:
@@ -100,33 +105,41 @@ def ui_clear_inline():
         _LAST_INLINE_LEN = 0
 
 
+def ui_clear_inline():
+    with _UI_LOCK:
+        _clear_inline_unlocked()
+
+
 def ui_status(icon: str, text: str, color: str = "", step: str = "", log_level: str | None = None):
     global _LAST_INLINE_LEN
     clean_msg = f"{icon} {text}".strip()
     colored_msg = _c(clean_msg, color) if color else clean_msg
-    if _USE_ANSI and sys.stdout.isatty():
-        pad = max(0, _LAST_INLINE_LEN - len(clean_msg))
-        sys.stdout.write(f"\r{colored_msg}{' ' * pad}")
-        sys.stdout.flush()
-        _LAST_INLINE_LEN = len(clean_msg)
-    else:
-        print(clean_msg, flush=True)
-        _LAST_INLINE_LEN = 0
+    with _UI_LOCK:
+        if _USE_ANSI and sys.stdout.isatty():
+            pad = max(0, _LAST_INLINE_LEN - len(clean_msg))
+            sys.stdout.write(f"\r{colored_msg}{' ' * pad}")
+            sys.stdout.flush()
+            _LAST_INLINE_LEN = len(clean_msg)
+        else:
+            print(clean_msg, flush=True)
+            _LAST_INLINE_LEN = 0
     if log_level:
         _write_file_log(log_level, text, step=step)
 
 
 def ui_line(icon: str, text: str, color: str = "", step: str = "", log_level: str | None = None):
-    ui_clear_inline()
     msg = f"{icon} {text}".strip()
-    print(_c(msg, color) if color else msg, flush=True)
+    with _UI_LOCK:
+        _clear_inline_unlocked()
+        print(_c(msg, color) if color else msg, flush=True)
     if log_level:
         _write_file_log(log_level, text, step=step)
 
 
 def ui_section(title: str):
-    ui_clear_inline()
-    print(f"\n{_c(f'── {title} ', _ANSI_CYAN + _ANSI_BOLD)}{_c('─' * max(10, 56 - len(title)), _ANSI_DIM)}", flush=True)
+    with _UI_LOCK:
+        _clear_inline_unlocked()
+        print(f"\n{_c(f'── {title} ', _ANSI_CYAN + _ANSI_BOLD)}{_c('─' * max(10, 56 - len(title)), _ANSI_DIM)}", flush=True)
 
 
 def ui_progress(step_label: str, current: int, total: int, detail: str = ""):
@@ -140,22 +153,23 @@ def ui_progress(step_label: str, current: int, total: int, detail: str = ""):
     if detail:
         plain += f" • {detail}"
 
-    if _USE_ANSI and sys.stdout.isatty():
-        colored = (
-            f"  {_c(step_label, _ANSI_BOLD)} "
-            f"{_c('[' + '#' * filled, _ANSI_GREEN)}{_c('.' * (bar_len - filled), _ANSI_DIM)} "
-            f"{_c(f'{pct:>3}%', _ANSI_CYAN)} ({current}/{total})"
-        )
-        if detail:
-            colored += f" {_c('• ' + detail, _ANSI_DIM)}"
-        pad = max(0, _LAST_INLINE_LEN - len(plain))
-        sys.stdout.write(f"\r{colored}{' ' * pad}")
-        sys.stdout.flush()
-        _LAST_INLINE_LEN = len(plain)
-    else:
-        if current == total or current == 1 or current % 10 == 0:
-            print(plain, flush=True)
-            _LAST_INLINE_LEN = 0
+    with _UI_LOCK:
+        if _USE_ANSI and sys.stdout.isatty():
+            colored = (
+                f"  {_c(step_label, _ANSI_BOLD)} "
+                f"{_c('[' + '#' * filled, _ANSI_GREEN)}{_c('.' * (bar_len - filled), _ANSI_DIM)} "
+                f"{_c(f'{pct:>3}%', _ANSI_CYAN)} ({current}/{total})"
+            )
+            if detail:
+                colored += f" {_c('• ' + detail, _ANSI_DIM)}"
+            pad = max(0, _LAST_INLINE_LEN - len(plain))
+            sys.stdout.write(f"\r{colored}{' ' * pad}")
+            sys.stdout.flush()
+            _LAST_INLINE_LEN = len(plain)
+        else:
+            if current == total or current == 1 or current % 5 == 0:
+                print(plain, flush=True)
+                _LAST_INLINE_LEN = 0
 
 
 def _compact_err(err: Exception | str, limit: int = 160) -> str:
@@ -187,7 +201,7 @@ def yadisk_request(
     params: dict | None = None,
     data: bytes | None = None,
     headers: dict | None = None,
-    timeout: int = 60,
+    timeout: int = 45,
     absolute_url: str | None = None,
 ) -> tuple[int, dict]:
     if absolute_url:
@@ -197,7 +211,7 @@ def yadisk_request(
         if params:
             url = f"{url}?{urllib.parse.urlencode(params)}"
 
-    req_headers = {"User-Agent": "Nikrid-Radio-Sync/2.0"}
+    req_headers = {"User-Agent": "Nikrid-Radio-Sync/2.1"}
     if not absolute_url:
         req_headers["Authorization"] = f"OAuth {token}"
         req_headers["Accept"] = "application/json"
@@ -288,7 +302,7 @@ def publish_yadisk_resource(token: str, remote_path: str) -> str:
         )
         if g_status == 200 and g_data.get("public_url"):
             return g_data["public_url"]
-        time.sleep(0.5)
+        time.sleep(0.35)
 
     raise RuntimeError(f"Не удалось получить public_url после публикации {remote_path}")
 
@@ -313,14 +327,13 @@ def upload_and_publish_yadisk(token: str, local_path: Path, video_id: str) -> tu
         token,
         data=file_bytes,
         headers={"Content-Type": "application/octet-stream"},
-        timeout=180,
+        timeout=120,
         absolute_url=data["href"],
     )
     if put_status not in (200, 201, 202):
         raise RuntimeError(f"Ошибка PUT загрузки {remote_path}: HTTP {put_status} {put_data}")
 
     public_url = publish_yadisk_resource(token, remote_path)
-    time.sleep(0.15)
     return remote_path, public_url
 
 
@@ -381,7 +394,7 @@ def ensure_local_cover(video_id: str, remote_url: str = "") -> str:
                 url,
                 headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"},
             )
-            with urllib.request.urlopen(req, timeout=15) as resp:
+            with urllib.request.urlopen(req, timeout=12) as resp:
                 raw = resp.read()
             if len(raw) < 512:
                 last_err = f"Слишком маленький ответ ({len(raw)} B) с {url}"
@@ -522,7 +535,7 @@ def load_cloud_sync_state() -> dict:
 
 
 # =========================================================
-# НАДЁЖНОЕ СКАЧИВАНИЕ АУДИО (YT-DLP)
+# БЫСТРОЕ И НАДЁЖНОЕ СКАЧИВАНИЕ АУДИО (YT-DLP)
 # =========================================================
 def load_unavailable_ids() -> set[str]:
     if not UNAVAILABLE_IDS_PATH.exists():
@@ -544,30 +557,40 @@ def save_unavailable_ids(ids: set[str]):
         _write_file_log("WARN", f"Не удалось сохранить {UNAVAILABLE_IDS_PATH}: {_compact_err(e)}", step="yt_dlp")
 
 
-def download_audio_robust(video_id: str, unavailable_ids: set[str] | None = None, track_label: str = "") -> Path | None:
+def download_audio_robust(video_id: str, unavailable_ids: set[str] | None = None, track_label: str = "") -> tuple[Path | None, bool]:
+    """
+    Скачивает аудио во временную папку.
+    Возвращает (path_or_none, is_permanent_unavailable).
+    """
     if unavailable_ids is not None and video_id in unavailable_ids:
         _write_file_log("INFO", f"[{video_id}] ({track_label}) пропущен по {UNAVAILABLE_IDS_PATH}", step="yt_dlp")
-        return None
+        return None, False
 
     TEMP_AUDIO_DIR.mkdir(exist_ok=True)
     url = f"https://www.youtube.com/watch?v={video_id}"
+    has_cookies = Path("cookies.txt").exists()
 
+    # В GitHub Actions (или если есть cookies.txt) пробуем сначала нативный профиль, затем cookies
     profiles = [
         {"name": "native_default", "clients": None, "use_cookies": False, "fmt": "251/140/bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio/best"},
         {"name": "visionos_vr", "clients": ["visionos", "android_vr"], "use_cookies": False, "fmt": "bestaudio/best"},
         {"name": "cookies_fallback", "clients": None, "use_cookies": True, "fmt": "bestaudio/best"},
     ]
 
+    if os.getenv("GITHUB_ACTIONS") == "true" and has_cookies:
+        # На серверах GitHub сразу ставим cookies первым, чтобы не тратить время на bot-check
+        profiles = [
+            {"name": "cookies_ci", "clients": None, "use_cookies": True, "fmt": "251/140/bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio/best"},
+            {"name": "visionos_vr", "clients": ["visionos", "android_vr"], "use_cookies": False, "fmt": "bestaudio/best"},
+        ]
+
     permanent_unavailable = False
     last_err = ""
 
     for attempt, prof in enumerate(profiles, start=1):
         prof_name = prof["name"]
-        if prof["use_cookies"] and not Path("cookies.txt").exists():
+        if prof["use_cookies"] and not has_cookies:
             continue
-
-        if attempt > 1:
-            ui_status("↻", f"{track_label} — повтор ({prof_name})...", _ANSI_YELLOW, step="yt_dlp")
 
         out_tmpl = str(TEMP_AUDIO_DIR / f"{video_id}.%(ext)s")
         ydl_opts = {
@@ -576,9 +599,10 @@ def download_audio_robust(video_id: str, unavailable_ids: set[str] | None = None
             "quiet": True,
             "no_warnings": True,
             "ignoreerrors": False,
-            "retries": 3,
-            "fragment_retries": 3,
-            "socket_timeout": 30,
+            "retries": 1,
+            "fragment_retries": 1,
+            "concurrent_fragment_downloads": 4,
+            "socket_timeout": 12,
             "nocheckcertificate": True,
             "geo_bypass": True,
         }
@@ -595,7 +619,7 @@ def download_audio_robust(video_id: str, unavailable_ids: set[str] | None = None
 
             for f in TEMP_AUDIO_DIR.glob(f"{video_id}.*"):
                 if f.is_file() and f.stat().st_size > 10_000 and not f.name.endswith(".part"):
-                    return f
+                    return f, False
             last_err = "Файл не найден или пуст после yt-dlp"
         except Exception as e:
             err_clean = _compact_err(e, 180)
@@ -607,20 +631,20 @@ def download_audio_robust(video_id: str, unavailable_ids: set[str] | None = None
                 or "this video is not available" in lower_err
                 or "private video" in lower_err
                 or "removed by the uploader" in lower_err
-                or "age-restricted" in lower_err
-                or "sign in to confirm your age" in lower_err
+                or "account associated with this video has been terminated" in lower_err
             ):
                 permanent_unavailable = True
-            time.sleep(1.0 * attempt)
+                break
+            if "age-restricted" in lower_err or "sign in to confirm your age" in lower_err:
+                permanent_unavailable = not has_cookies
+            time.sleep(0.3)
 
-    if permanent_unavailable and unavailable_ids is not None:
-        unavailable_ids.add(video_id)
-        save_unavailable_ids(unavailable_ids)
+    if permanent_unavailable:
         ui_line("×", f"Пропущен (недоступен на YouTube): {track_label} [{video_id}]", _ANSI_DIM, step="yt_dlp", log_level="ERROR")
     else:
         ui_line("!", f"Ошибка скачивания: {track_label} [{video_id}] — {last_err}", _ANSI_RED, step="yt_dlp", log_level="ERROR")
 
-    return None
+    return None, permanent_unavailable
 
 
 def parse_duration_sec(dur_str: str) -> int:
@@ -681,13 +705,15 @@ def fetch_wave_200(yt: YTMusic, liked_seeds: list[str], exclude_vids: set[str]) 
 
 
 def save_playlist_json(tracks: list[dict]):
-    PLAYLIST_JSON_PATH.write_text(
+    tmp_path = PLAYLIST_JSON_PATH.with_suffix(".json.tmp")
+    tmp_path.write_text(
         json.dumps(tracks, ensure_ascii=False, indent=2),
         encoding="utf-8"
     )
+    tmp_path.replace(PLAYLIST_JSON_PATH)
 
 
-def _format_track_name(track: dict, max_len: int = 44) -> str:
+def _format_track_name(track: dict, max_len: int = 40) -> str:
     artist = (track.get("artist") or "").strip()
     title = (track.get("title") or "Без названия").strip()
     label = f"{artist} — {title}" if artist else title
@@ -696,12 +722,15 @@ def _format_track_name(track: dict, max_len: int = 44) -> str:
 
 def main():
     parser = argparse.ArgumentParser(description="Nikrid Radio Sync (Яндекс Диск + обложки 512x512 WebP)")
-    parser.add_argument("--limit", type=int, default=0, help="Ограничить число скачиваемых/мигрируемых аудио за запуск (например --limit 10)")
+    parser.add_argument("--limit", type=int, default=0, help="Ограничить число скачиваемых/мигрируемых аудио за запуск (например --limit 50)")
+    parser.add_argument("--workers", type=int, default=MAX_WORKERS, help=f"Количество параллельных потоков (по умолчанию {MAX_WORKERS})")
     parser.add_argument("--covers-only", action="store_true", help="Скачать/сжать только локальные обложки 512x512 в covers/")
     parser.add_argument("--skip-yt-sync", action="store_true", help="Не запрашивать новые треки из YouTube Music")
     args = parser.parse_args()
 
+    workers = max(1, min(10, args.workers))
     start_ts = time.time()
+    io_lock = threading.Lock()
     stats = {
         "migrated_ok": 0,
         "migrated_linked": 0,
@@ -731,258 +760,309 @@ def main():
             ui_line("!", f"Ошибка чтения {PLAYLIST_JSON_PATH} ({_compact_err(e, 100)}) — начат пустой список", _ANSI_YELLOW, step="playlist_load", log_level="WARN")
             existing_tracks = []
 
-    # 2. Подтягиваем облачный буфер лайков/дизлайков/прослушиваний
-    cloud = load_cloud_sync_state()
-    disliked_ids = set(cloud.get("dislikeIds", []))
-    liked_ids = set(cloud.get("likeIds", []))
-    wave_listened_ids = set(cloud.get("waveListenedIds", []))
+    try:
+        # 2. Подтягиваем облачный буфер лайков/дизлайков/прослушиваний
+        cloud = load_cloud_sync_state()
+        disliked_ids = set(cloud.get("dislikeIds", []))
+        liked_ids = set(cloud.get("likeIds", []))
+        wave_listened_ids = set(cloud.get("waveListenedIds", []))
 
-    disliked_vids = set()
-    cleaned_tracks = []
-    removed_count = 0
-    for t in existing_tracks:
-        if "source" not in t:
-            t["source"] = "playlist"
-        if "liked" not in t:
-            t["liked"] = t["source"] == "playlist"
-
-        tid = t.get("id")
-        vid = t.get("videoId", "")
-        is_liked = (tid in liked_ids) or bool(t.get("liked")) or (t.get("source") == "playlist")
-        is_listened_wave = (t.get("source") == "wave") and (tid in wave_listened_ids)
-
-        if tid in disliked_ids or (is_listened_wave and not is_liked):
-            removed_count += 1
-            if vid:
-                disliked_vids.add(vid)
-                delete_local_cover(vid)
-            if t.get("yadiskPath"):
-                delete_from_yadisk(yadisk_token, t["yadiskPath"])
-            reason = "дизлайк" if tid in disliked_ids else "прослушан в волне"
-            _write_file_log("INFO", f"Удалён трек ({reason}): {t.get('title')} [{vid}]", step="cleanup")
-            continue
-
-        if tid in liked_ids:
-            t["liked"] = True
-            if t.get("source") != "wave":
+        disliked_vids = set()
+        cleaned_tracks = []
+        removed_count = 0
+        for t in existing_tracks:
+            if "source" not in t:
                 t["source"] = "playlist"
-        cleaned_tracks.append(t)
+            if "liked" not in t:
+                t["liked"] = t["source"] == "playlist"
 
-    existing_tracks = cleaned_tracks
-    if removed_count > 0:
-        ui_line("•", f"Очищено по буферу/волне: {removed_count} трек(ов)", _ANSI_DIM, step="cleanup")
-
-    by_vid = {t.get("videoId"): t for t in existing_tracks if t.get("videoId")}
-    next_numeric_id = max((t.get("id", 0) for t in existing_tracks), default=0) + 1
-    unavailable_ids = load_unavailable_ids()
-
-    # 3. Локальные обложки 512x512 WebP в covers/
-    ui_section("Обложки (512×512 WebP)")
-    total_tracks_for_covers = len(existing_tracks)
-    covers_missing = [
-        t for t in existing_tracks
-        if t.get("videoId") and not (t.get("image") == f"covers/{t['videoId']}.webp" and (COVERS_DIR / f"{t['videoId']}.webp").exists())
-    ]
-
-    if not covers_missing:
-        ui_line("✓", f"Все обложки на месте ({total_tracks_for_covers} треков)", _ANSI_GREEN, step="covers")
-    else:
-        for idx, t in enumerate(existing_tracks, start=1):
+            tid = t.get("id")
             vid = t.get("videoId", "")
-            if not vid:
-                continue
-            expected_rel = f"covers/{vid}.webp"
-            if t.get("image") == expected_rel and (COVERS_DIR / f"{vid}.webp").exists():
-                ui_progress("Обложки", idx, total_tracks_for_covers, _format_track_name(t, 34))
-                continue
+            is_liked = (tid in liked_ids) or bool(t.get("liked")) or (t.get("source") == "playlist")
+            is_listened_wave = (t.get("source") == "wave") and (tid in wave_listened_ids)
 
-            ui_progress("Обложки", idx, total_tracks_for_covers, _format_track_name(t, 34))
-            local_cover = ensure_local_cover(vid, t.get("image", ""))
-            if local_cover:
-                t["image"] = local_cover
-                stats["covers_ok"] += 1
-                if stats["covers_ok"] % 25 == 0:
-                    save_playlist_json(existing_tracks)
-
-        ui_clear_inline()
-        save_playlist_json(existing_tracks)
-        ui_line("✓", f"Обложки готовы: скачано/сжато {stats['covers_ok']} шт.", _ANSI_GREEN, step="covers")
-
-    if args.covers_only:
-        elapsed = time.time() - start_ts
-        ui_section("Итог")
-        ui_line("✓", f"Режим --covers-only завершён за {elapsed:.1f} с", _ANSI_GREEN, step="summary")
-        return
-
-    # 4. Миграция существующих треков из playlist.json на Яндекс Диск
-    need_migrate = [t for t in existing_tracks if t.get("videoId") and not t.get("yadiskPublicUrl")]
-    audio_ops_done = 0
-    saved_batch = 0
-
-    if need_migrate:
-        ui_section(f"Миграция аудио на Яндекс Диск (осталось: {len(need_migrate)})")
-        for idx, t in enumerate(need_migrate, start=1):
-            if args.limit > 0 and audio_ops_done >= args.limit:
-                ui_line("•", f"Остановлено по лимиту --limit {args.limit}", _ANSI_CYAN, step="migrate")
-                break
-
-            vid = t["videoId"]
-            short_name = _format_track_name(t, 38)
-
-            if vid in existing_yadisk_files:
-                remote_info = existing_yadisk_files[vid]
-                remote_path = remote_info["path"]
-                pub_url = remote_info["public_url"]
-                try:
-                    if not pub_url:
-                        pub_url = publish_yadisk_resource(yadisk_token, remote_path)
-                    t["yadiskPath"] = remote_path
-                    t["yadiskPublicUrl"] = pub_url
-                    t.pop("driveId", None)
-                    t.pop("audioUrl", None)
-                    stats["migrated_linked"] += 1
-                    saved_batch += 1
-                    ui_progress("Миграция", idx, len(need_migrate), f"связан: {short_name}")
-                    if saved_batch >= 5:
-                        save_playlist_json(existing_tracks)
-                        saved_batch = 0
-                    continue
-                except Exception as e:
-                    stats["errors"] += 1
-                    ui_line("!", f"Публикация {short_name} [{vid}] не удалась: {_compact_err(e, 110)}", _ANSI_YELLOW, step="migrate", log_level="ERROR")
-
-            ui_status("↓", f"[{idx}/{len(need_migrate)}] Качаю: {short_name}", _ANSI_CYAN, step="migrate")
-            local_file = download_audio_robust(vid, unavailable_ids, track_label=f"{short_name}")
-            if not local_file:
-                stats["errors"] += 1
+            if tid in disliked_ids or (is_listened_wave and not is_liked):
+                removed_count += 1
+                if vid:
+                    disliked_vids.add(vid)
+                    delete_local_cover(vid)
+                if t.get("yadiskPath"):
+                    delete_from_yadisk(yadisk_token, t["yadiskPath"])
+                reason = "дизлайк" if tid in disliked_ids else "прослушан в волне"
+                _write_file_log("INFO", f"Удалён трек ({reason}): {t.get('title')} [{vid}]", step="cleanup")
                 continue
 
-            try:
-                ui_status("↑", f"[{idx}/{len(need_migrate)}] Заливаю на Диск: {short_name}", _ANSI_CYAN, step="migrate")
-                remote_path, pub_url = upload_and_publish_yadisk(yadisk_token, local_file, vid)
-                t["yadiskPath"] = remote_path
-                t["yadiskPublicUrl"] = pub_url
-                t.pop("driveId", None)
-                t.pop("audioUrl", None)
-                existing_yadisk_files[vid] = {"path": remote_path, "public_url": pub_url}
-                audio_ops_done += 1
-                stats["migrated_ok"] += 1
-                saved_batch += 1
-                ui_progress("Миграция", idx, len(need_migrate), f"✓ {short_name}")
-                if saved_batch >= 5:
-                    save_playlist_json(existing_tracks)
-                    saved_batch = 0
-            except Exception as e:
-                stats["errors"] += 1
-                ui_line("!", f"Ошибка Яндекс Диска для {short_name} [{vid}]: {_compact_err(e, 120)}", _ANSI_RED, step="migrate", log_level="ERROR")
-            finally:
-                try:
-                    if local_file.exists():
-                        local_file.unlink()
-                except Exception:
-                    pass
+            if tid in liked_ids:
+                t["liked"] = True
+                if t.get("source") != "wave":
+                    t["source"] = "playlist"
+            cleaned_tracks.append(t)
 
-        ui_clear_inline()
-        save_playlist_json(existing_tracks)
+        existing_tracks = cleaned_tracks
+        if removed_count > 0:
+            ui_line("•", f"Очищено по буферу/волне: {removed_count} трек(ов)", _ANSI_DIM, step="cleanup")
 
-    # 5. Синхронизация новых треков из YouTube Music
-    if not args.skip_yt_sync and (args.limit == 0 or audio_ops_done < args.limit):
-        ui_section("Синхронизация с YouTube Music")
-        try:
-            yt = get_ytmusic_client()
-            ui_status("↻", "Запрашиваю лайкнутые треки...", _ANSI_CYAN, step="yt_sync")
-            yt_liked_raw = yt.get_liked_songs(limit=1000).get("tracks", [])
-            liked_metas = []
-            liked_vids = []
-            for item in yt_liked_raw:
-                meta = extract_track_meta(item, source="playlist")
-                if meta and meta["videoId"] not in disliked_vids:
-                    liked_metas.append(meta)
-                    liked_vids.append(meta["videoId"])
+        by_vid = {t.get("videoId"): t for t in existing_tracks if t.get("videoId")}
+        next_numeric_id = max((t.get("id", 0) for t in existing_tracks), default=0) + 1
+        unavailable_ids = load_unavailable_ids()
 
-            current_wave_total = [t for t in existing_tracks if t.get("source") == "wave"]
-            need_wave = max(0, WAVE_TARGET_COUNT - len(current_wave_total))
-            wave_metas = []
-            if need_wave > 0:
-                ui_status("↻", f"Подбираю «Мою волну» ({need_wave} треков)...", _ANSI_CYAN, step="yt_sync")
-                exclude_set = set(liked_vids) | disliked_vids | set(by_vid.keys())
-                wave_metas = fetch_wave_200(yt, liked_vids, exclude_set)[:need_wave]
+        # 3. Локальные обложки 512x512 WebP в covers/ (параллельно)
+        ui_section("Обложки (512×512 WebP)")
+        covers_missing = [
+            t for t in existing_tracks
+            if t.get("videoId") and not (t.get("image") == f"covers/{t['videoId']}.webp" and (COVERS_DIR / f"{t['videoId']}.webp").exists())
+        ]
+
+        if not covers_missing:
+            ui_line("✓", f"Все обложки на месте ({len(existing_tracks)} треков)", _ANSI_GREEN, step="covers")
+        else:
+            completed_c = 0
+            saved_c = 0
+
+            def _cover_one(t_item):
+                vid_c = t_item["videoId"]
+                rel = ensure_local_cover(vid_c, t_item.get("image", ""))
+                return t_item, rel
+
+            with ThreadPoolExecutor(max_workers=COVER_WORKERS) as pool:
+                futures = [pool.submit(_cover_one, t) for t in covers_missing]
+                for fut in as_completed(futures):
+                    completed_c += 1
+                    t_item, rel = fut.result()
+                    with io_lock:
+                        if rel:
+                            t_item["image"] = rel
+                            stats["covers_ok"] += 1
+                            saved_c += 1
+                            if saved_c >= 25:
+                                save_playlist_json(existing_tracks)
+                                saved_c = 0
+                        ui_progress("Обложки", completed_c, len(covers_missing), _format_track_name(t_item, 32))
 
             ui_clear_inline()
-            ui_line("✓", f"YTMusic: лайков {len(liked_metas)}, новых в волну {len(wave_metas)}", _ANSI_GREEN, step="yt_sync")
+            save_playlist_json(existing_tracks)
+            ui_line("✓", f"Обложки готовы: скачано/сжато {stats['covers_ok']} шт.", _ANSI_GREEN, step="covers")
 
-            to_process = liked_metas + wave_metas
+        if args.covers_only:
+            elapsed = time.time() - start_ts
+            ui_section("Итог")
+            ui_line("✓", f"Режим --covers-only завершён за {elapsed:.1f} с", _ANSI_GREEN, step="summary")
+            return
+
+        # 4. Миграция существующих треков из playlist.json на Яндекс Диск (параллельно)
+        need_migrate = [t for t in existing_tracks if t.get("videoId") and not t.get("yadiskPublicUrl")]
+        audio_ops_done = 0
+
+        if need_migrate:
+            batch_migrate = need_migrate[: args.limit] if args.limit > 0 else need_migrate
+            if args.limit > 0 and len(need_migrate) > args.limit:
+                ui_line("•", f"Ограничено флагом --limit {args.limit} (из {len(need_migrate)})", _ANSI_CYAN, step="migrate")
+            ui_section(f"Миграция аудио на Яндекс Диск ({len(batch_migrate)} треков, потоков: {workers})")
+
+            completed_m = 0
             saved_batch = 0
 
-            for idx, meta in enumerate(to_process, start=1):
-                if args.limit > 0 and audio_ops_done >= args.limit:
-                    ui_line("•", f"Остановлено по лимиту --limit {args.limit}", _ANSI_CYAN, step="yt_sync")
-                    break
+            def _migrate_one(t_item):
+                vid_m = t_item["videoId"]
+                name_m = _format_track_name(t_item, 36)
 
-                vid = meta["videoId"]
-                short_name = _format_track_name(meta, 38)
+                with io_lock:
+                    existing_info = existing_yadisk_files.get(vid_m)
+                    is_unavail = vid_m in unavailable_ids
 
-                if vid in by_vid:
-                    if meta["source"] == "playlist":
-                        by_vid[vid]["source"] = "playlist"
-                        by_vid[vid]["liked"] = True
-                    by_vid[vid]["moods"] = ["Весёлая"]
-                    ui_progress("YTMusic", idx, len(to_process), f"актуален: {short_name}")
-                    continue
+                if existing_info:
+                    try:
+                        r_path = existing_info["path"]
+                        p_url = existing_info["public_url"] or publish_yadisk_resource(yadisk_token, r_path)
+                        return ("linked", t_item, vid_m, name_m, r_path, p_url, False, None)
+                    except Exception as exc:
+                        return ("fail_up", t_item, vid_m, name_m, "", "", False, exc)
 
-                ui_status("↓", f"[{idx}/{len(to_process)}] Качаю ({meta['source']}): {short_name}", _ANSI_CYAN, step="yt_sync")
-                local_file = download_audio_robust(vid, unavailable_ids, track_label=short_name)
-                if not local_file:
-                    stats["errors"] += 1
-                    continue
+                if is_unavail:
+                    return ("skip_unavail", t_item, vid_m, name_m, "", "", False, None)
+
+                loc_path, perm_unavail = download_audio_robust(vid_m, None, track_label=name_m)
+                if not loc_path:
+                    return ("fail_dl", t_item, vid_m, name_m, "", "", perm_unavail, None)
 
                 try:
-                    ui_status("↑", f"[{idx}/{len(to_process)}] Заливаю на Диск: {short_name}", _ANSI_CYAN, step="yt_sync")
-                    remote_path, pub_url = upload_and_publish_yadisk(yadisk_token, local_file, vid)
-                    local_cover = ensure_local_cover(vid, meta.get("image", ""))
-                    if local_cover:
-                        stats["covers_ok"] += 1
-                    new_entry = {
-                        "id": next_numeric_id,
-                        "videoId": vid,
-                        "yadiskPath": remote_path,
-                        "yadiskPublicUrl": pub_url,
-                        "title": meta["title"],
-                        "artist": meta["artist"],
-                        "duration": meta["duration"],
-                        "seconds": meta["seconds"],
-                        "moods": ["Весёлая"],
-                        "source": meta["source"],
-                        "liked": meta["liked"],
-                        "image": local_cover
-                    }
-                    next_numeric_id += 1
-                    existing_tracks.append(new_entry)
-                    by_vid[vid] = new_entry
-                    audio_ops_done += 1
-                    stats["new_ok"] += 1
-                    saved_batch += 1
-                    ui_progress("YTMusic", idx, len(to_process), f"✓ {short_name}")
-
-                    if saved_batch >= 5:
-                        save_playlist_json(existing_tracks)
-                        saved_batch = 0
-                except Exception as e:
-                    stats["errors"] += 1
-                    ui_line("!", f"Ошибка загрузки {short_name} [{vid}]: {_compact_err(e, 120)}", _ANSI_RED, step="yt_sync", log_level="ERROR")
+                    r_path, p_url = upload_and_publish_yadisk(yadisk_token, loc_path, vid_m)
+                    return ("uploaded", t_item, vid_m, name_m, r_path, p_url, False, None)
+                except Exception as exc:
+                    return ("fail_up", t_item, vid_m, name_m, "", "", False, exc)
                 finally:
                     try:
-                        if local_file.exists():
-                            local_file.unlink()
+                        if loc_path.exists():
+                            loc_path.unlink()
                     except Exception:
                         pass
 
-            ui_clear_inline()
-        except Exception as e:
-            ui_line("!", f"Сбой авторизации/запроса YouTube Music: {_compact_err(e, 140)}", _ANSI_RED, step="yt_sync", log_level="ERROR")
+            with ThreadPoolExecutor(max_workers=workers) as pool:
+                futures = [pool.submit(_migrate_one, item) for item in batch_migrate]
+                for fut in as_completed(futures):
+                    completed_m += 1
+                    kind, t_item, vid_m, name_m, r_path, p_url, perm_unavail, exc = fut.result()
+                    with io_lock:
+                        if perm_unavail:
+                            unavailable_ids.add(vid_m)
+                            save_unavailable_ids(unavailable_ids)
 
-    save_playlist_json(existing_tracks)
-    shutil.rmtree(TEMP_AUDIO_DIR, ignore_errors=True)
+                        if kind == "linked":
+                            t_item["yadiskPath"] = r_path
+                            t_item["yadiskPublicUrl"] = p_url
+                            t_item.pop("driveId", None)
+                            t_item.pop("audioUrl", None)
+                            stats["migrated_linked"] += 1
+                            saved_batch += 1
+                            ui_progress("Миграция", completed_m, len(batch_migrate), f"связан: {name_m}")
+                        elif kind == "uploaded":
+                            t_item["yadiskPath"] = r_path
+                            t_item["yadiskPublicUrl"] = p_url
+                            t_item.pop("driveId", None)
+                            t_item.pop("audioUrl", None)
+                            existing_yadisk_files[vid_m] = {"path": r_path, "public_url": p_url}
+                            audio_ops_done += 1
+                            stats["migrated_ok"] += 1
+                            saved_batch += 1
+                            ui_progress("Миграция", completed_m, len(batch_migrate), f"✓ {name_m}")
+                        elif kind == "fail_up":
+                            stats["errors"] += 1
+                            ui_line("!", f"Ошибка Яндекс Диска {name_m} [{vid_m}]: {_compact_err(exc, 110)}", _ANSI_RED, step="migrate", log_level="ERROR")
+                        else:
+                            stats["errors"] += 1
+                            ui_progress("Миграция", completed_m, len(batch_migrate), f"пропуск: {name_m}")
+
+                        if saved_batch >= 5:
+                            save_playlist_json(existing_tracks)
+                            saved_batch = 0
+
+            ui_clear_inline()
+            save_playlist_json(existing_tracks)
+
+        # 5. Синхронизация новых треков из YouTube Music (параллельно)
+        if not args.skip_yt_sync and (args.limit == 0 or audio_ops_done < args.limit):
+            ui_section("Синхронизация с YouTube Music")
+            try:
+                yt = get_ytmusic_client()
+                ui_status("↻", "Запрашиваю лайкнутые треки...", _ANSI_CYAN, step="yt_sync")
+                yt_liked_raw = yt.get_liked_songs(limit=1000).get("tracks", [])
+                liked_metas = []
+                liked_vids = []
+                for item in yt_liked_raw:
+                    meta = extract_track_meta(item, source="playlist")
+                    if meta and meta["videoId"] not in disliked_vids:
+                        liked_metas.append(meta)
+                        liked_vids.append(meta["videoId"])
+
+                current_wave_total = [t for t in existing_tracks if t.get("source") == "wave"]
+                need_wave = max(0, WAVE_TARGET_COUNT - len(current_wave_total))
+                wave_metas = []
+                if need_wave > 0:
+                    ui_status("↻", f"Подбираю «Мою волну» ({need_wave} треков)...", _ANSI_CYAN, step="yt_sync")
+                    exclude_set = set(liked_vids) | disliked_vids | set(by_vid.keys())
+                    wave_metas = fetch_wave_200(yt, liked_vids, exclude_set)[:need_wave]
+
+                ui_clear_inline()
+                ui_line("✓", f"YTMusic: лайков {len(liked_metas)}, новых в волну {len(wave_metas)}", _ANSI_GREEN, step="yt_sync")
+
+                to_process = []
+                for meta in (liked_metas + wave_metas):
+                    vid_m = meta["videoId"]
+                    if vid_m in by_vid:
+                        if meta["source"] == "playlist":
+                            by_vid[vid_m]["source"] = "playlist"
+                            by_vid[vid_m]["liked"] = True
+                        by_vid[vid_m]["moods"] = ["Весёлая"]
+                    else:
+                        to_process.append(meta)
+
+                remaining_quota = (args.limit - audio_ops_done) if args.limit > 0 else len(to_process)
+                if remaining_quota > 0 and to_process:
+                    batch_new = to_process[:remaining_quota]
+                    saved_batch = 0
+                    completed_n = 0
+
+                    def _fetch_new_one(m_item):
+                        vid_n = m_item["videoId"]
+                        name_n = _format_track_name(m_item, 36)
+                        with io_lock:
+                            is_unavail = vid_n in unavailable_ids
+
+                        if is_unavail:
+                            return ("skip_unavail", m_item, vid_n, name_n, "", "", "", False, None)
+
+                        loc_p, perm_unavail = download_audio_robust(vid_n, None, track_label=name_n)
+                        if not loc_p:
+                            return ("fail_dl", m_item, vid_n, name_n, "", "", "", perm_unavail, None)
+
+                        try:
+                            r_p, p_u = upload_and_publish_yadisk(yadisk_token, loc_p, vid_n)
+                            cov_p = ensure_local_cover(vid_n, m_item.get("image", ""))
+                            return ("uploaded", m_item, vid_n, name_n, r_p, p_u, cov_p, False, None)
+                        except Exception as exc:
+                            return ("fail_up", m_item, vid_n, name_n, "", "", "", False, exc)
+                        finally:
+                            try:
+                                if loc_p.exists():
+                                    loc_p.unlink()
+                            except Exception:
+                                pass
+
+                    with ThreadPoolExecutor(max_workers=workers) as pool:
+                        futures = [pool.submit(_fetch_new_one, m) for m in batch_new]
+                        for fut in as_completed(futures):
+                            completed_n += 1
+                            kind, m_item, vid_n, name_n, r_p, p_u, cov_p, perm_unavail, exc = fut.result()
+                            with io_lock:
+                                if perm_unavail:
+                                    unavailable_ids.add(vid_n)
+                                    save_unavailable_ids(unavailable_ids)
+
+                                if kind == "uploaded":
+                                    new_entry = {
+                                        "id": next_numeric_id,
+                                        "videoId": vid_n,
+                                        "yadiskPath": r_p,
+                                        "yadiskPublicUrl": p_u,
+                                        "title": m_item["title"],
+                                        "artist": m_item["artist"],
+                                        "duration": m_item["duration"],
+                                        "seconds": m_item["seconds"],
+                                        "moods": ["Весёлая"],
+                                        "source": m_item["source"],
+                                        "liked": m_item["liked"],
+                                        "image": cov_p
+                                    }
+                                    next_numeric_id += 1
+                                    existing_tracks.append(new_entry)
+                                    by_vid[vid_n] = new_entry
+                                    audio_ops_done += 1
+                                    stats["new_ok"] += 1
+                                    if cov_p:
+                                        stats["covers_ok"] += 1
+                                    saved_batch += 1
+                                    ui_progress("YTMusic", completed_n, len(batch_new), f"✓ {name_n}")
+                                elif kind == "fail_up":
+                                    stats["errors"] += 1
+                                    ui_line("!", f"Ошибка загрузки {name_n} [{vid_n}]: {_compact_err(exc, 110)}", _ANSI_RED, step="yt_sync", log_level="ERROR")
+                                else:
+                                    stats["errors"] += 1
+                                    ui_progress("YTMusic", completed_n, len(batch_new), f"пропуск: {name_n}")
+
+                                if saved_batch >= 5:
+                                    save_playlist_json(existing_tracks)
+                                    saved_batch = 0
+
+                    ui_clear_inline()
+            except Exception as e:
+                ui_line("!", f"Сбой авторизации/запроса YouTube Music: {_compact_err(e, 140)}", _ANSI_RED, step="yt_sync", log_level="ERROR")
+
+    except KeyboardInterrupt:
+        ui_line("!", "Остановлено пользователем (Ctrl+C) — сохраняю прогресс...", _ANSI_YELLOW, step="interrupt", log_level="INFO")
+    finally:
+        if existing_tracks:
+            save_playlist_json(existing_tracks)
+        shutil.rmtree(TEMP_AUDIO_DIR, ignore_errors=True)
 
     elapsed = time.time() - start_ts
     migrated_count = sum(1 for t in existing_tracks if t.get("yadiskPublicUrl"))

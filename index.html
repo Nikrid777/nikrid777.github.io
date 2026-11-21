@@ -547,6 +547,15 @@
       }
     }
 
+    // =========================================================
+    // ЯНДЕКС ДИСК: ПРЯМЫЕ ССЫЛКИ, ПОСЛЕДОВАТЕЛЬНЫЙ ПРЕФЕТЧ (3 ТРЕКА) И РЕКОННЕКТ ПРИ VPN
+    // =========================================================
+    const PREFETCH_THREE_COUNT = 3;
+    
+    const prefetchedAudioCache = new Map(); // videoId -> HTMLAudioElement
+    let _prefetchChainRunning = false;
+    let _prefetchForTrackId = null;
+
     async function resolveYadiskAudioUrl(track, forceRefresh = false) {
       if (!track) return null;
       const pubUrl = (track.yadiskPublicUrl || '').trim();
@@ -558,7 +567,7 @@
       }
 
       const controller = new AbortController();
-      const tid = setTimeout(() => controller.abort(), 12000);
+      const tid = setTimeout(() => controller.abort(), 14000);
       try {
         const apiUrl = `https://cloud-api.yandex.net/v1/disk/public/resources/download?public_key=${encodeURIComponent(pubUrl)}`;
         const res = await fetch(apiUrl, { signal: controller.signal, cache: 'no-store' });
@@ -579,6 +588,95 @@
       } catch (e) {
         clearTimeout(tid);
         throw e;
+      }
+    }
+
+    function warmupSingleTrackSequential(track) {
+      return new Promise((resolve) => {
+        if (!track || !track.yadiskPublicUrl) {
+          resolve(false);
+          return;
+        }
+        const key = track.videoId || String(track.id);
+        if (prefetchedAudioCache.has(key)) {
+          resolve(true);
+          return;
+        }
+
+        resolveYadiskAudioUrl(track, false).then((directUrl) => {
+          if (!directUrl) {
+            resolve(false);
+            return;
+          }
+
+          const preAudio = new Audio();
+          preAudio.preload = 'auto';
+          preAudio.muted = true;
+          let settled = false;
+
+          const finish = (ok) => {
+            if (settled) return;
+            settled = true;
+            clearTimeout(timer);
+            preAudio.removeEventListener('canplay', onReady);
+            preAudio.removeEventListener('canplaythrough', onReady);
+            preAudio.removeEventListener('error', onFail);
+            if (ok) {
+              prefetchedAudioCache.set(key, preAudio);
+              if (prefetchedAudioCache.size > 6) {
+                const firstKey = prefetchedAudioCache.keys().next().value;
+                const oldEl = prefetchedAudioCache.get(firstKey);
+                if (oldEl) {
+                  try { oldEl.src = ''; oldEl.load(); } catch (e) {}
+                }
+                prefetchedAudioCache.delete(firstKey);
+              }
+            } else {
+              try { preAudio.src = ''; } catch (e) {}
+            }
+            resolve(ok);
+          };
+
+          const onReady = () => finish(true);
+          const onFail = () => finish(false);
+          const timer = setTimeout(() => finish(false), 12000);
+
+          preAudio.addEventListener('canplay', onReady, { once: true });
+          preAudio.addEventListener('canplaythrough', onReady, { once: true });
+          preAudio.addEventListener('error', onFail, { once: true });
+          preAudio.src = directUrl;
+          preAudio.load();
+        }).catch(() => resolve(false));
+      });
+    }
+
+    async function prefetchNextThreeSequential() {
+      if (!state.currentTrack || !state.queue.length) return;
+      const anchorId = state.currentTrack.id;
+      _prefetchForTrackId = anchorId;
+
+      if (_prefetchChainRunning) return;
+      _prefetchChainRunning = true;
+
+      try {
+        while (_prefetchForTrackId !== null) {
+          const activeAnchor = _prefetchForTrackId;
+          _prefetchForTrackId = null;
+
+          const curIdx = state.queue.findIndex(t => t.id === activeAnchor);
+          if (curIdx === -1) continue;
+
+          for (let offset = 1; offset <= PREFETCH_THREE_COUNT; offset++) {
+            if (_prefetchForTrackId !== null && _prefetchForTrackId !== activeAnchor) break;
+            if (!state.currentTrack || state.currentTrack.id !== activeAnchor) break;
+
+            const nextT = state.queue[(curIdx + offset) % state.queue.length];
+            if (!nextT || !nextT.yadiskPublicUrl) continue;
+            await warmupSingleTrackSequential(nextT);
+          }
+        }
+      } finally {
+        _prefetchChainRunning = false;
       }
     }
 
@@ -981,32 +1079,31 @@
     async function reconnectCurrentStream() {
       if (!state.isPlaying || !state.currentTrack) return;
 
-      if (!navigator.onLine) {
-        state.isPlaying = false;
+      if (state.reconnectAttempts >= 6) {
         updatePlayerUI();
-        showToast('Нет подключения к интернету', 'warn');
-        return;
-      }
-
-      if (state.reconnectAttempts >= 3) {
-        state.isPlaying = false;
-        updatePlayerUI();
-        showToast('Не удалось восстановить поток с Яндекс Диска.', 'error', 'Повторить', () => {
+        showToast('Сеть/VPN нестабильны — поток поставлен на паузу.', 'error', 'Продолжить', () => {
           state.reconnectAttempts = 0;
           state.isPlaying = true;
           reconnectCurrentStream();
         }, 0);
+        state.isPlaying = false;
+        updatePlayerUI();
         return;
       }
 
       state.reconnectAttempts++;
       const resumeTime = audio.currentTime || 0;
       const reqId = state.playRequestId;
+      const backoffMs = Math.min(2500, 450 * state.reconnectAttempts);
 
-      showToast(`Обновление ссылки Яндекс Диска (${state.reconnectAttempts}/3)...`, 'warn', null, null, 2500);
+      showToast(`Переключение маршрута/VPN — восстанавливаю поток (${state.reconnectAttempts}/6)...`, 'warn', null, null, 2500);
+
+      await new Promise(r => setTimeout(r, backoffMs));
+      if (reqId !== state.playRequestId || !state.isPlaying || !state.currentTrack) return;
 
       try {
-        const freshUrl = await resolveYadiskAudioUrl(state.currentTrack, true);
+        const forceFresh = state.reconnectAttempts >= 2;
+        const freshUrl = await resolveYadiskAudioUrl(state.currentTrack, forceFresh);
         if (reqId !== state.playRequestId || !state.isPlaying || !freshUrl) return;
 
         audio.pause();
@@ -1015,16 +1112,16 @@
 
         audio.addEventListener('loadedmetadata', function onMeta() {
           audio.removeEventListener('loadedmetadata', onMeta);
-          if (reqId !== state.playRequestId) return;
-          if (resumeTime > 0 && audio.duration && resumeTime < audio.duration) {
-            audio.currentTime = resumeTime;
+          if (reqId !== state.playRequestId || !state.isPlaying) return;
+          if (resumeTime > 0 && audio.duration && resumeTime < audio.duration - 1) {
+            try { audio.currentTime = resumeTime; } catch (e) {}
           }
-          if (state.isPlaying) {
-            audio.play().catch(() => {});
-          }
-        });
+          audio.play().catch(() => {
+            if (state.isPlaying) scheduleStallWatchdog();
+          });
+        }, { once: true });
       } catch (e) {
-        scheduleStallWatchdog();
+        if (state.isPlaying) scheduleStallWatchdog();
       }
     }
 
@@ -1032,10 +1129,10 @@
       clearTimeout(state.stallTimerId);
       if (!state.isPlaying) return;
       state.stallTimerId = setTimeout(() => {
-        if (state.isPlaying && (audio.paused || audio.readyState < 3)) {
+        if (state.isPlaying && (audio.paused || audio.readyState < 2)) {
           reconnectCurrentStream();
         }
-      }, 6500);
+      }, 5000);
     }
 
     function initAudioEngine() {
@@ -1051,6 +1148,7 @@
       audio.addEventListener('playing', () => {
         clearTimeout(state.stallTimerId);
         state.reconnectAttempts = 0;
+        prefetchNextThreeSequential();
       });
 
       audio.addEventListener('waiting', () => scheduleStallWatchdog());
@@ -1078,18 +1176,19 @@
 
       audio.addEventListener('error', () => {
         if (state.isPlaying && state.currentTrack && state.currentTrack.yadiskPublicUrl) {
-          reconnectCurrentStream();
+          scheduleStallWatchdog();
         }
       });
 
       window.addEventListener('offline', () => {
         updateNetworkBadge();
-        showToast('Сеть пропала', 'warn');
+        showToast('Сигнал сети/VPN меняется — пробую удержать поток', 'warn', null, null, 2500);
+        if (state.isPlaying) scheduleStallWatchdog();
       });
 
       window.addEventListener('online', () => {
         updateNetworkBadge();
-        showToast('Сеть восстановлена', 'ok', null, null, 2500);
+        showToast('Маршрут обновлён — продолжаю воспроизведение', 'ok', null, null, 2200);
         if (state.isPlaying && (audio.paused || audio.readyState < 3)) {
           state.reconnectAttempts = 0;
           reconnectCurrentStream();
@@ -1502,10 +1601,7 @@
       renderContent();
 
       if (!navigator.onLine) {
-        showToast('Нет подключения к интернету', 'error');
-        state.isPlaying = false;
-        updatePlayerUI();
-        return;
+        showToast('Проверка сети при смене VPN...', 'warn', null, null, 2000);
       }
 
       if (!found.yadiskPublicUrl) {
@@ -1522,10 +1618,13 @@
         await startAudioSource(directUrl, reqId);
       } catch (e) {
         if (reqId !== state.playRequestId) return;
-        clearTimeout(state.stallTimerId);
-        state.isPlaying = false;
-        updatePlayerUI();
-        showToast(`Ошибка Яндекс Диска: ${e.message}`, 'error', 'Повторить', () => playTrack(found.id, false), 6000);
+        if (state.isPlaying) {
+          reconnectCurrentStream();
+        } else {
+          clearTimeout(state.stallTimerId);
+          updatePlayerUI();
+          showToast(`Ошибка Яндекс Диска: ${e.message}`, 'error', 'Повторить', () => playTrack(found.id, false), 6000);
+        }
       }
     }
 
