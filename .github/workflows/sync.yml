@@ -32,10 +32,15 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Установить Deno (для yt-dlp)
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
       - name: Установить зависимости
         run: |
           python -m pip install --upgrade pip
-          pip install yt-dlp ytmusicapi Pillow
+          pip install -U "yt-dlp[default]" ytmusicapi Pillow
 
       - name: Подготовить секретные файлы
         env:
