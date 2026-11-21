@@ -75,7 +75,9 @@ jobs:
         run: |
           git config user.name "Nikrid Radio Bot"
           git config user.email "actions@github.com"
-          git add playlist.json covers/ unavailable_ids.json
+          git add -f playlist.json
+          [ -d covers ] && git add -f covers/
+          [ -f unavailable_ids.json ] && git add -f unavailable_ids.json
           if git diff --cached --quiet; then
             echo "Нет изменений для коммита"
           else
