@@ -8622,22 +8622,6 @@
     "yadiskPublicUrl": "https://yadi.sk/d/Yx4Ds-LLT5NfCg"
   },
   {
-    "id": 542,
-    "videoId": "WLrMhryN-XI",
-    "title": "ZAYLO - ULTIMATE AURA FUNK (Slowed & Reverb)",
-    "artist": "Prox1ma.",
-    "duration": "2:31",
-    "seconds": 151,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "image": "covers/WLrMhryN-XI.webp",
-    "yadiskPath": "disk:/NikridRadio/WLrMhryN-XI.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/aJG58ZOoyx_Mlg"
-  },
-  {
     "id": 543,
     "videoId": "mviHmKPHSQU",
     "title": "Pulsebreaker (Slowed) - OTVphonk x Guts (𝙏𝙞𝙠𝙩𝙤𝙠 𝙀𝙙𝙞𝙩)",
@@ -9854,22 +9838,6 @@
     "yadiskPublicUrl": "https://yadi.sk/d/d9HgKhT8VgibbA"
   },
   {
-    "id": 619,
-    "videoId": "U-Dtzrr-EoY",
-    "title": "MONTAGEM GUERREIRO (Slowed)",
-    "artist": "Cotneus",
-    "duration": "3:28",
-    "seconds": 208,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "image": "covers/U-Dtzrr-EoY.webp",
-    "yadiskPath": "disk:/NikridRadio/U-Dtzrr-EoY.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/SjWsouueaP9uQQ"
-  },
-  {
     "id": 620,
     "videoId": "ku8Bm6GjC0k",
     "title": "HOLY SCRIPTURE (SLOWED)",
@@ -9976,7 +9944,7 @@
       "Весёлая"
     ],
     "source": "wave",
-    "liked": false,
+    "liked": true,
     "image": "covers/hK2--OTQANU.webp",
     "yadiskPath": "disk:/NikridRadio/hK2--OTQANU.webm",
     "yadiskPublicUrl": "https://yadi.sk/d/BvC65PLGvGJSqg"
@@ -10028,22 +9996,6 @@
     "image": "covers/kdZcKCIn2kI.webp",
     "yadiskPath": "disk:/NikridRadio/kdZcKCIn2kI.webm",
     "yadiskPublicUrl": "https://yadi.sk/d/4az2teCKRGbMwA"
-  },
-  {
-    "id": 630,
-    "videoId": "ERt1q5Hr5ns",
-    "title": "44",
-    "artist": "DEATHPIXIE",
-    "duration": "2:16",
-    "seconds": 136,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "image": "covers/ERt1q5Hr5ns.webp",
-    "yadiskPath": "disk:/NikridRadio/ERt1q5Hr5ns.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/tLaE3c1aA32C5A"
   },
   {
     "id": 631,
@@ -10376,7 +10328,7 @@
       "Весёлая"
     ],
     "source": "wave",
-    "liked": false,
+    "liked": true,
     "image": "covers/fu_baHELX80.webp",
     "yadiskPath": "disk:/NikridRadio/fu_baHELX80.webm",
     "yadiskPublicUrl": "https://yadi.sk/d/fiJYrG8sJSwqVw"
@@ -10494,22 +10446,6 @@
     "yadiskPublicUrl": "https://yadi.sk/d/Bfj3rC3_NdLhJA"
   },
   {
-    "id": 659,
-    "videoId": "w8yJAqnygCQ",
-    "title": "Toji Fushiguro (The Sorcerer Killer) - VAZIO ETERNO (Slowed)",
-    "artist": "n3rzsa",
-    "duration": "1:50",
-    "seconds": 110,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "image": "covers/w8yJAqnygCQ.webp",
-    "yadiskPath": "disk:/NikridRadio/w8yJAqnygCQ.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/Yds0AoPKpSXSjw"
-  },
-  {
     "id": 660,
     "videoId": "IDsOSjhdkcQ",
     "title": "𝐎𝐂𝐔𝐋𝐔𝐒 · 𝐗𝐏𝐎𝐌𝐈𝐍𝐊𝐈 (𝐒𝐋𝐎𝐖𝐄𝐃) | 𝐙𝐄𝐍𝐋𝐄𝐒𝐒 𝐙𝐎𝐍𝐄 𝐙𝐄𝐑𝐎 𝐄𝐃𝐈𝐓 · 𝐅𝐀𝐈𝐑𝐘 𝐗 𝐘𝐎𝐔𝐊𝐀𝐈",
@@ -10520,7 +10456,7 @@
       "Весёлая"
     ],
     "source": "wave",
-    "liked": false,
+    "liked": true,
     "image": "covers/IDsOSjhdkcQ.webp",
     "yadiskPath": "disk:/NikridRadio/IDsOSjhdkcQ.webm",
     "yadiskPublicUrl": "https://yadi.sk/d/OPAHdqCdR0OMhQ"
