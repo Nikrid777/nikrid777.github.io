@@ -3120,21 +3120,6 @@
     "yadiskPublicUrl": "https://yadi.sk/d/uA6Y73VHDs7sIA"
   },
   {
-    "id": 196,
-    "videoId": "WK07v3FyEwU",
-    "title": "Главный Герой",
-    "artist": "iwasin17",
-    "duration": "1:25",
-    "seconds": 85,
-    "moods": [
-      "Весёлая"
-    ],
-    "image": "covers/WK07v3FyEwU.webp",
-    "audioUrl": "https://drive.google.com/uc?export=download&id=1T-c9x7V9Ut6rSVV9HRNxnxVS3TFvezeD",
-    "source": "playlist",
-    "liked": true
-  },
-  {
     "id": 197,
     "videoId": "gh8FMAOg5Mw",
     "title": "TOPBOY",
@@ -4301,21 +4286,6 @@
     "liked": true,
     "yadiskPath": "disk:/NikridRadio/z3zMnhdVGNc.webm",
     "yadiskPublicUrl": "https://yadi.sk/d/JmFZe-rNFFRZ0w"
-  },
-  {
-    "id": 270,
-    "videoId": "F-gM-1XBM9c",
-    "title": "Hey Mama AMV | Nezuko Kamado AMV |",
-    "artist": "•Many_Fandoms•",
-    "duration": "3:11",
-    "seconds": 191,
-    "moods": [
-      "Весёлая"
-    ],
-    "image": "covers/F-gM-1XBM9c.webp",
-    "audioUrl": "https://drive.google.com/uc?export=download&id=1p-LSn_VB7igwcIcWKmrP0FFoOnXuBlEi",
-    "source": "playlist",
-    "liked": true
   },
   {
     "id": 271,
@@ -8487,7 +8457,7 @@
     "moods": [
       "Весёлая"
     ],
-    "source": "wave",
+    "source": "playlist",
     "liked": true,
     "image": "covers/1A9cjk3gnUI.webp",
     "yadiskPath": "disk:/NikridRadio/1A9cjk3gnUI.webm",
@@ -8503,27 +8473,11 @@
     "moods": [
       "Весёлая"
     ],
-    "source": "wave",
+    "source": "playlist",
     "liked": true,
     "image": "covers/h7-PwQNaclU.webp",
     "yadiskPath": "disk:/NikridRadio/h7-PwQNaclU.webm",
     "yadiskPublicUrl": "https://yadi.sk/d/b5lUosquWa0VnQ"
-  },
-  {
-    "id": 535,
-    "videoId": "eiNDidFVXxc",
-    "title": "ELA VIRA MORTAL [ Versión Slowed ] \\\\\\ part 2////",
-    "artist": "VE_04",
-    "duration": "2:49",
-    "seconds": 169,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "image": "covers/eiNDidFVXxc.webp",
-    "yadiskPath": "disk:/NikridRadio/eiNDidFVXxc.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/T8-G3SyZ4zecLg"
   },
   {
     "id": 536,
@@ -8535,59 +8489,11 @@
     "moods": [
       "Весёлая"
     ],
-    "source": "wave",
-    "liked": false,
+    "source": "playlist",
+    "liked": true,
     "image": "covers/xBFtJyL0TWk.webp",
     "yadiskPath": "disk:/NikridRadio/xBFtJyL0TWk.webm",
     "yadiskPublicUrl": "https://yadi.sk/d/-ADKVTwsZtaHpw"
-  },
-  {
-    "id": 537,
-    "videoId": "Uz8POJmcibA",
-    "title": "Tabi (Super Slowed)",
-    "artist": "𝐊𝐢𝐲𝐨𝐭𝐚𝐤𝐚 | 清隆",
-    "duration": "2:19",
-    "seconds": 139,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "image": "covers/Uz8POJmcibA.webp",
-    "yadiskPath": "disk:/NikridRadio/Uz8POJmcibA.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/QIUaUMqARUrn0A"
-  },
-  {
-    "id": 538,
-    "videoId": "TJxeLP0VSPs",
-    "title": "LXNGVX, DJ FKU, Skorde - PLUS VIBE ~ (SUPER SLOWED + REVERB) [BRAZILIAN PHONK]",
-    "artist": "𝙣𝙖𝙤𝙢𝙞",
-    "duration": "2:06",
-    "seconds": 126,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "image": "covers/TJxeLP0VSPs.webp",
-    "yadiskPath": "disk:/NikridRadio/TJxeLP0VSPs.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/YBv1OyYDWRUj5w"
-  },
-  {
-    "id": 539,
-    "videoId": "k_ga6oztfj4",
-    "title": "𝙈𝙊𝙉𝙏𝘼𝙂𝙀𝙈 𝙄𝙂𝙉𝙄𝙏𝙀 - ( 𝙎𝙪𝙥𝙚𝙧 𝙎𝙡𝙤𝙬𝙚𝙙 ) 𝙓 𝘼𝙞𝙯𝙚𝙣",
-    "artist": "HunterCdk 🎼",
-    "duration": "2:12",
-    "seconds": 132,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "image": "covers/k_ga6oztfj4.webp",
-    "yadiskPath": "disk:/NikridRadio/k_ga6oztfj4.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/6iOgG16VUrfJkQ"
   },
   {
     "id": 540,
@@ -8599,27 +8505,11 @@
     "moods": [
       "Весёлая"
     ],
-    "source": "wave",
-    "liked": false,
+    "source": "playlist",
+    "liked": true,
     "image": "covers/1Rq4UQUsMHU.webp",
     "yadiskPath": "disk:/NikridRadio/1Rq4UQUsMHU.webm",
     "yadiskPublicUrl": "https://yadi.sk/d/Ze-xlUSP8hCBcw"
-  },
-  {
-    "id": 541,
-    "videoId": "oD_BD6Q-Rb8",
-    "title": "6YNTHMANE,LXGHTXNG- 🎧//FINA LANA//🎧 [ULTRA SLOWED] 🥶 [BAAS BOOSTED]🎧🔥💀",
-    "artist": "Phonk_hellツ",
-    "duration": "2:04",
-    "seconds": 124,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "image": "covers/oD_BD6Q-Rb8.webp",
-    "yadiskPath": "disk:/NikridRadio/oD_BD6Q-Rb8.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/Yx4Ds-LLT5NfCg"
   },
   {
     "id": 543,
@@ -8631,75 +8521,11 @@
     "moods": [
       "Весёлая"
     ],
-    "source": "wave",
-    "liked": false,
+    "source": "playlist",
+    "liked": true,
     "image": "covers/mviHmKPHSQU.webp",
     "yadiskPath": "disk:/NikridRadio/mviHmKPHSQU.webm",
     "yadiskPublicUrl": "https://yadi.sk/d/CXL6JymhUiJ4Yg"
-  },
-  {
-    "id": 544,
-    "videoId": "ibEuUePyxUQ",
-    "title": "𝙈𝙊𝙉𝙏𝘼𝙂𝙀𝙈 𝙔𝙊𝙐 𝘾𝙊𝙈𝙀 𝙋𝘼𝙍𝙏𝙔 - ( 𝙎𝙪𝙥𝙚𝙧 𝙎𝙡𝙤𝙬𝙚𝙙 ) 𝙓 𝙎𝙖𝙚 𝙄𝙩𝙤𝙨𝙝𝙞",
-    "artist": "HunterCdk 🎼",
-    "duration": "1:39",
-    "seconds": 99,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "image": "covers/ibEuUePyxUQ.webp",
-    "yadiskPath": "disk:/NikridRadio/ibEuUePyxUQ.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/vf7d1JwSb6jPVw"
-  },
-  {
-    "id": 545,
-    "videoId": "fGUxN66l4Tg",
-    "title": "Shape Of You Hardtekk  Slowed + Reverb",
-    "artist": "Juker Does Music",
-    "duration": "4:17",
-    "seconds": 257,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "image": "covers/fGUxN66l4Tg.webp",
-    "yadiskPath": "disk:/NikridRadio/fGUxN66l4Tg.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/AqXTr7Zua5IzCg"
-  },
-  {
-    "id": 546,
-    "videoId": "qvb9klSilew",
-    "title": "BLADE × INTO THE VOID × “SPEED IS LIFE” — NAOYA ZENIN ⚡",
-    "artist": "BGX Reverb🎧",
-    "duration": "2:11",
-    "seconds": 131,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "image": "covers/qvb9klSilew.webp",
-    "yadiskPath": "disk:/NikridRadio/qvb9klSilew.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/GC2-Se_9a7AgOA"
-  },
-  {
-    "id": 547,
-    "videoId": "d2ebl_qtfDQ",
-    "driveId": "1lnzyqGrYVqzfqdj9qqqLv8j0uXXYQ-vu",
-    "title": "MONTAGEM XONADA (Super Slowed)",
-    "artist": "MXZI, Dj Samir, DJ Javi26",
-    "duration": "1:35",
-    "seconds": 95,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "playlist",
-    "liked": true,
-    "image": "covers/d2ebl_qtfDQ.webp",
-    "audioUrl": "https://drive.google.com/uc?export=download&id=1lnzyqGrYVqzfqdj9qqqLv8j0uXXYQ-vu"
   },
   {
     "id": 548,
@@ -8718,166 +8544,6 @@
     "yadiskPublicUrl": "https://yadi.sk/d/pUHwcgZUVFBB0g"
   },
   {
-    "id": 549,
-    "videoId": "XomAKYR9ee4",
-    "driveId": "1s97gGrqlDu6y9zjnZcSWud4cf6Wgp7nC",
-    "title": "Секрет или тайна (Remix)",
-    "artist": "YННВ",
-    "duration": "2:09",
-    "seconds": 129,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "playlist",
-    "liked": true,
-    "image": "covers/XomAKYR9ee4.webp",
-    "audioUrl": "https://drive.google.com/uc?export=download&id=1s97gGrqlDu6y9zjnZcSWud4cf6Wgp7nC"
-  },
-  {
-    "id": 550,
-    "videoId": "-ScNXiAr2r4",
-    "driveId": "1SCaPBmtAy79m2k4H-5P-vzo19OARRzhS",
-    "title": "скидка",
-    "artist": "тёмный принц",
-    "duration": "1:29",
-    "seconds": 89,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "playlist",
-    "liked": true,
-    "image": "covers/-ScNXiAr2r4.webp",
-    "audioUrl": "https://drive.google.com/uc?export=download&id=1SCaPBmtAy79m2k4H-5P-vzo19OARRzhS"
-  },
-  {
-    "id": 551,
-    "videoId": "XGjq0RgC9N0",
-    "driveId": "133B9vhgrm2Wy05Zw7At6WPAcabMIeaQJ",
-    "title": "LIKE I LOVE YOU",
-    "artist": "Amirchik, МОТ",
-    "duration": "2:21",
-    "seconds": 141,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "playlist",
-    "liked": true,
-    "image": "covers/XGjq0RgC9N0.webp",
-    "audioUrl": "https://drive.google.com/uc?export=download&id=133B9vhgrm2Wy05Zw7At6WPAcabMIeaQJ"
-  },
-  {
-    "id": 552,
-    "videoId": "EXeXTc7IqJE",
-    "driveId": "1sk6gYN6JK4Vtgf2TZHEGqSYnzAMXj7Lv",
-    "title": "Rock That Body",
-    "artist": "The Black Eyed Peas",
-    "duration": "4:29",
-    "seconds": 269,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "playlist",
-    "liked": true,
-    "image": "covers/EXeXTc7IqJE.webp",
-    "audioUrl": "https://drive.google.com/uc?export=download&id=1sk6gYN6JK4Vtgf2TZHEGqSYnzAMXj7Lv"
-  },
-  {
-    "id": 553,
-    "videoId": "ncDnG4753Ps",
-    "driveId": "1lFpKJMCIwNZsmhT71-6lVEYlSU0H8w8Z",
-    "title": "ПОВОД",
-    "artist": "MORGENSHTERN",
-    "duration": "2:34",
-    "seconds": 154,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "playlist",
-    "liked": true,
-    "image": "covers/ncDnG4753Ps.webp",
-    "audioUrl": "https://drive.google.com/uc?export=download&id=1lFpKJMCIwNZsmhT71-6lVEYlSU0H8w8Z"
-  },
-  {
-    "id": 554,
-    "videoId": "2pkFQ7c6s3s",
-    "title": "𝘝𝘜𝘛𝘙𝘈 - 𝘋𝘌𝘊𝘈𝘠 𝘚𝘓𝘖𝘞𝘌𝘋 𝘈𝘕𝘋 𝘙𝘌𝘝𝘌𝘙𝘉 𝘟 𝘉𝘈𝘋𝘈𝘚𝘚 𝘌𝘋𝘐𝘛",
-    "artist": "𝙽𝙾𝙱𝙱𝙾𝙳𝙳𝚈.𝙴𝚇𝚇𝙴",
-    "duration": "2:04",
-    "seconds": 124,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "image": "covers/2pkFQ7c6s3s.webp",
-    "yadiskPath": "disk:/NikridRadio/2pkFQ7c6s3s.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/zKadls1enAGmYg"
-  },
-  {
-    "id": 555,
-    "videoId": "nn9BQq_mAn0",
-    "title": "𝑷𝑰𝑵𝑲𝒀 𝑺𝑴𝑨𝑺𝑯 - 𝑹𝑬𝑫𝑳𝑰𝑵𝑬 𝑺𝑳𝑶𝑾𝑬𝑫 𝑨𝑵𝑫 𝑹𝑬𝑽𝑬𝑹𝑩 𝑿 𝑩𝑨𝑲𝑰 𝑯𝑨𝑵𝑴𝑨 𝑬𝑫𝑰𝑻",
-    "artist": "𝙽𝙾𝙱𝙱𝙾𝙳𝙳𝚈.𝙴𝚇𝚇𝙴",
-    "duration": "3:33",
-    "seconds": 213,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "image": "covers/nn9BQq_mAn0.webp",
-    "yadiskPath": "disk:/NikridRadio/nn9BQq_mAn0.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/qm8qjROCLbmuuQ"
-  },
-  {
-    "id": 556,
-    "videoId": "yee6Z88NQRY",
-    "title": "FUNK DO BALKAN x MONTAGEM THRAGG || [BRAZILIAN FUNK MASHUP]",
-    "artist": "Nosequel",
-    "duration": "1:24",
-    "seconds": 84,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "image": "covers/yee6Z88NQRY.webp",
-    "yadiskPath": "disk:/NikridRadio/yee6Z88NQRY.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/5xvQhv_iCDX5Gg"
-  },
-  {
-    "id": 557,
-    "videoId": "bT3lNEpsG_w",
-    "title": "𝑴𝑶𝑵𝑻𝑨𝑮𝑬𝑴 𝑬𝑺𝑷𝑰𝑹𝑨𝑳 (𝑺𝑳𝑶𝑾𝑬𝑫 & 𝑹𝑬𝑽𝑬𝑹𝑩) - 𝑨𝑻𝑰𝑪 | 𝑺𝑴𝑶𝑲𝑰𝑵𝑮 𝑩𝑬𝑯𝑰𝑵𝑫 𝑻𝑯𝑬 𝑺𝑼𝑷𝑬𝑹𝑴𝑨𝑹𝑲𝑬𝑻 𝑾𝑰𝑻𝑯 𝒀𝑶𝑼",
-    "artist": "WAVELYTH",
-    "duration": "1:57",
-    "seconds": 117,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "image": "covers/bT3lNEpsG_w.webp",
-    "yadiskPath": "disk:/NikridRadio/bT3lNEpsG_w.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/hZ4CSvCJZs6nCQ"
-  },
-  {
-    "id": 558,
-    "videoId": "wzDL7yEfECI",
-    "title": "TIKI TAKA",
-    "artist": "DAEGHO, NGXT",
-    "duration": "3:02",
-    "seconds": 182,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "image": "covers/wzDL7yEfECI.webp",
-    "yadiskPath": "disk:/NikridRadio/wzDL7yEfECI.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/xsVhMvPkENWkeA"
-  },
-  {
     "id": 559,
     "videoId": "12JG7H-3Q8Q",
     "title": "MTG PRISM (Ultra Slowed)",
@@ -8887,75 +8553,11 @@
     "moods": [
       "Весёлая"
     ],
-    "source": "wave",
-    "liked": false,
+    "source": "playlist",
+    "liked": true,
     "image": "covers/12JG7H-3Q8Q.webp",
     "yadiskPath": "disk:/NikridRadio/12JG7H-3Q8Q.webm",
     "yadiskPublicUrl": "https://yadi.sk/d/8ej2zm1VZPmlUw"
-  },
-  {
-    "id": 560,
-    "videoId": "gKnKmo1pgjk",
-    "title": "𝐈𝐍𝐒𝐓𝐈𝐍𝐂𝐓.𝟒𝟎𝟒 (𝐒𝐥𝐨𝐰𝐞𝐝)",
-    "artist": "RaudyCult",
-    "duration": "1:40",
-    "seconds": 100,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "image": "covers/gKnKmo1pgjk.webp",
-    "yadiskPath": "disk:/NikridRadio/gKnKmo1pgjk.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/SkMznDiE_CoDOg"
-  },
-  {
-    "id": 561,
-    "videoId": "4PUwwrLv42g",
-    "title": "A-WHAT - RELYCT & ARKEA ( Slowed ) | TikTok Version | Arshavin Prime",
-    "artist": "Alphoeus 🎼",
-    "duration": "1:02",
-    "seconds": 62,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "image": "covers/4PUwwrLv42g.webp",
-    "yadiskPath": "disk:/NikridRadio/4PUwwrLv42g.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/AXAAZrqhhSPb6A"
-  },
-  {
-    "id": 562,
-    "videoId": "FN32SbD7woA",
-    "title": "TUBA HARDTEKK - ( PANDEMXNIUM )",
-    "artist": "APOSTAL",
-    "duration": "1:39",
-    "seconds": 99,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "image": "covers/FN32SbD7woA.webp",
-    "yadiskPath": "disk:/NikridRadio/FN32SbD7woA.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/SuZKfI5EEAHZ8g"
-  },
-  {
-    "id": 563,
-    "videoId": "dPy0Vb8TR38",
-    "title": "Manlikefdot - MTG PUNK ETERNO 2.0 ~ (SUPER SLOWED + REVERB) [BRAZILIAN PHONK]",
-    "artist": "𝙣𝙖𝙤𝙢𝙞",
-    "duration": "2:03",
-    "seconds": 123,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "image": "covers/dPy0Vb8TR38.webp",
-    "yadiskPath": "disk:/NikridRadio/dPy0Vb8TR38.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/GDY3mJfyVTMN5w"
   },
   {
     "id": 564,
@@ -8967,43 +8569,11 @@
     "moods": [
       "Весёлая"
     ],
-    "source": "wave",
-    "liked": false,
+    "source": "playlist",
+    "liked": true,
     "image": "covers/VIl_qAen_GE.webp",
     "yadiskPath": "disk:/NikridRadio/VIl_qAen_GE.webm",
     "yadiskPublicUrl": "https://yadi.sk/d/07-o8WXKI5QMag"
-  },
-  {
-    "id": 565,
-    "videoId": "2oqPYdLE8T4",
-    "title": "UNSLEPT FUNK (Slowed + Reverb) x YUJI ITADORI",
-    "artist": "Neutro BWW",
-    "duration": "1:47",
-    "seconds": 107,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "image": "covers/2oqPYdLE8T4.webp",
-    "yadiskPath": "disk:/NikridRadio/2oqPYdLE8T4.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/cOpyoJPJoTqazw"
-  },
-  {
-    "id": 566,
-    "videoId": "jPiRt_srCbo",
-    "title": "𝑫𝑱 𝑺𝑨𝑴𝑰𝑹 - 𝑨𝑩𝒀𝑺5 (𝑼𝑳𝑻𝑹𝑨 𝑺𝑳𝑶𝑾𝑬𝑫 + 𝑹𝑬𝑽𝑬𝑹𝑩)",
-    "artist": "NYX",
-    "duration": "2:45",
-    "seconds": 165,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "image": "covers/jPiRt_srCbo.webp",
-    "yadiskPath": "disk:/NikridRadio/jPiRt_srCbo.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/T8bHfEDd4uSsjQ"
   },
   {
     "id": 567,
@@ -9015,27 +8585,11 @@
     "moods": [
       "Весёлая"
     ],
-    "source": "wave",
-    "liked": false,
+    "source": "playlist",
+    "liked": true,
     "image": "covers/zt9EMHpNXso.webp",
     "yadiskPath": "disk:/NikridRadio/zt9EMHpNXso.webm",
     "yadiskPublicUrl": "https://yadi.sk/d/mfQ00EVS9v8nkg"
-  },
-  {
-    "id": 568,
-    "videoId": "PF5TINj8jdw",
-    "title": "Grioten x HXI - YOU A BOT! [AMV]",
-    "artist": "Day$okee, Sayfalse, Grioten",
-    "duration": "2:09",
-    "seconds": 129,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "image": "covers/PF5TINj8jdw.webp",
-    "yadiskPath": "disk:/NikridRadio/PF5TINj8jdw.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/v5Cj_nNq7dl9qA"
   },
   {
     "id": 569,
@@ -9100,22 +8654,6 @@
     "image": "covers/lgtcAFL3XYs.webp",
     "yadiskPath": "disk:/NikridRadio/lgtcAFL3XYs.webm",
     "yadiskPublicUrl": "https://yadi.sk/d/_jsNnrL4kO4jXQ"
-  },
-  {
-    "id": 573,
-    "videoId": "MNMx8dAePRo",
-    "title": "2KE, TREN - HIIT 2 ~ (SUPER SLOWED + REVERB) [BRAZILIAN PHONK]",
-    "artist": "𝙣𝙖𝙤𝙢𝙞",
-    "duration": "2:16",
-    "seconds": 136,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "image": "covers/MNMx8dAePRo.webp",
-    "yadiskPath": "disk:/NikridRadio/MNMx8dAePRo.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/G0m_S3W7A41g2A"
   },
   {
     "id": 574,
@@ -9326,22 +8864,6 @@
     "yadiskPublicUrl": "https://yadi.sk/d/bk-u74TiM2gItA"
   },
   {
-    "id": 587,
-    "videoId": "-lKSN2TYajY",
-    "title": "MTG EMPURRA (Slowed & Reverb)",
-    "artist": "PHNKR",
-    "duration": "1:55",
-    "seconds": 115,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "image": "covers/-lKSN2TYajY.webp",
-    "yadiskPath": "disk:/NikridRadio/-lKSN2TYajY.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/3TwhaLO6OJ7XGw"
-  },
-  {
     "id": 588,
     "videoId": "MWcw1WV9-n8",
     "title": "O MELHOR NO QUE FAZ 3.0 - DJ BRYAN 7 ~ (SUPER SLOWED + REVERB) [BRAZILIAN PHONK]",
@@ -9415,8 +8937,8 @@
     "moods": [
       "Весёлая"
     ],
-    "source": "wave",
-    "liked": false,
+    "source": "playlist",
+    "liked": true,
     "image": "covers/afyJSx8loI8.webp",
     "yadiskPath": "disk:/NikridRadio/afyJSx8loI8.webm",
     "yadiskPublicUrl": "https://yadi.sk/d/7xKhIfMdd8trFw"
@@ -9614,22 +9136,6 @@
     "yadiskPublicUrl": "https://yadi.sk/d/n-DVZl2H6nQV3g"
   },
   {
-    "id": 605,
-    "videoId": "yxe0s0XobBs",
-    "title": "fıgural (slowed)",
-    "artist": "DudePlaya",
-    "duration": "2:10",
-    "seconds": 130,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "image": "covers/yxe0s0XobBs.webp",
-    "yadiskPath": "disk:/NikridRadio/yxe0s0XobBs.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/7-wBMxZETsCnjQ"
-  },
-  {
     "id": 606,
     "videoId": "CNO6tzIXrIM",
     "title": "DERNIERE DANCE HARDTEKK",
@@ -9806,22 +9312,6 @@
     "yadiskPublicUrl": "https://yadi.sk/d/sf_68HigW5EXMg"
   },
   {
-    "id": 617,
-    "videoId": "JiPvBd6t1ds",
-    "title": "ELOY (Ultra Slowed) - NVXUS",
-    "artist": "NVXUS",
-    "duration": "1:57",
-    "seconds": 117,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "image": "covers/JiPvBd6t1ds.webp",
-    "yadiskPath": "disk:/NikridRadio/JiPvBd6t1ds.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/cybGMyLrziHkug"
-  },
-  {
     "id": 618,
     "videoId": "bsTsMZcWYOY",
     "title": "ENTITY.096 (SLOWED)",
@@ -9943,7 +9433,7 @@
     "moods": [
       "Весёлая"
     ],
-    "source": "wave",
+    "source": "playlist",
     "liked": true,
     "image": "covers/hK2--OTQANU.webp",
     "yadiskPath": "disk:/NikridRadio/hK2--OTQANU.webm",
@@ -10012,22 +9502,6 @@
     "image": "covers/QW08L1t3cCw.webp",
     "yadiskPath": "disk:/NikridRadio/QW08L1t3cCw.webm",
     "yadiskPublicUrl": "https://yadi.sk/d/9N53NV3y-g-dKA"
-  },
-  {
-    "id": 632,
-    "videoId": "T-UDC7BKVp4",
-    "title": "Fixupboy - tesla (slowed electro mix)",
-    "artist": "Isekai Records",
-    "duration": "2:35",
-    "seconds": 155,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "image": "covers/T-UDC7BKVp4.webp",
-    "yadiskPath": "disk:/NikridRadio/T-UDC7BKVp4.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/HIxIrPuojeh7XA"
   },
   {
     "id": 633,
@@ -10190,38 +9664,6 @@
     "yadiskPublicUrl": "https://yadi.sk/d/ahLZsrWNETYELA"
   },
   {
-    "id": 643,
-    "videoId": "bm9TlHLVs2Q",
-    "title": "FICA DE 4 - Kordhell, DJ FKU ~ (SLOWED + REVERB) [BRAZILIAN PHONK]",
-    "artist": "𝙣𝙖𝙤𝙢𝙞",
-    "duration": "1:55",
-    "seconds": 115,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "image": "covers/bm9TlHLVs2Q.webp",
-    "yadiskPath": "disk:/NikridRadio/bm9TlHLVs2Q.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/icUq-gw6Wz48oQ"
-  },
-  {
-    "id": 644,
-    "videoId": "gbOAmdjfBNw",
-    "title": "BUILD IT - ( SLOWED )",
-    "artist": "APOSTAL",
-    "duration": "1:49",
-    "seconds": 109,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "image": "covers/gbOAmdjfBNw.webp",
-    "yadiskPath": "disk:/NikridRadio/gbOAmdjfBNw.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/8MUz-jrswZLpcg"
-  },
-  {
     "id": 645,
     "videoId": "Uyt6_qQtF-M",
     "title": "CURE FOR ME HARDTEKK \"SEA SHEPHERDS\" [TIKTOK VERSION EXTENDED]",
@@ -10327,7 +9769,7 @@
     "moods": [
       "Весёлая"
     ],
-    "source": "wave",
+    "source": "playlist",
     "liked": true,
     "image": "covers/fu_baHELX80.webp",
     "yadiskPath": "disk:/NikridRadio/fu_baHELX80.webm",
@@ -10455,7 +9897,7 @@
     "moods": [
       "Весёлая"
     ],
-    "source": "wave",
+    "source": "playlist",
     "liked": true,
     "image": "covers/IDsOSjhdkcQ.webp",
     "yadiskPath": "disk:/NikridRadio/IDsOSjhdkcQ.webm",
@@ -10476,22 +9918,6 @@
     "image": "covers/u6ifzzYWle8.webp",
     "yadiskPath": "disk:/NikridRadio/u6ifzzYWle8.webm",
     "yadiskPublicUrl": "https://yadi.sk/d/i3e14jf8Z_fzjw"
-  },
-  {
-    "id": 662,
-    "videoId": "I2ivspCjzbY",
-    "title": "𝙎𝙀𝙈 𝘾𝙊𝙉𝙏𝙍𝙊𝙇𝙀 - 𝙣𝙞𝙜𝙝𝙩𝙛𝙭𝙧𝙘𝙚 (𝙎𝙪𝙥𝙚𝙧 𝙎𝙡𝙤𝙬𝙚𝙙) 𝙓 𝙋𝙧𝙤𝙢𝙚𝙞𝙖",
-    "artist": "𝘼𝙀𝙏𝙃𝙀𝙍",
-    "duration": "1:41",
-    "seconds": 101,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "image": "covers/I2ivspCjzbY.webp",
-    "yadiskPath": "disk:/NikridRadio/I2ivspCjzbY.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/TUX_84lof6xkWw"
   },
   {
     "id": 663,
@@ -10551,8 +9977,8 @@
     "moods": [
       "Весёлая"
     ],
-    "source": "wave",
-    "liked": false,
+    "source": "playlist",
+    "liked": true,
     "image": "covers/g0lvorLqeiY.webp",
     "yadiskPath": "disk:/NikridRadio/g0lvorLqeiY.webm",
     "yadiskPublicUrl": "https://yadi.sk/d/lg09jHsk5QKR8g"
@@ -10572,22 +9998,6 @@
     "image": "covers/1h6SbbbWdEg.webp",
     "yadiskPath": "disk:/NikridRadio/1h6SbbbWdEg.webm",
     "yadiskPublicUrl": "https://yadi.sk/d/z0Xbd7erImcaqg"
-  },
-  {
-    "id": 668,
-    "videoId": "SXJMhRHXZa8",
-    "title": "140",
-    "artist": "IOWA",
-    "duration": "3:38",
-    "seconds": 218,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "image": "covers/SXJMhRHXZa8.webp",
-    "yadiskPath": "disk:/NikridRadio/SXJMhRHXZa8.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/drxadK7J1ORBeA"
   },
   {
     "id": 669,
@@ -10846,38 +10256,6 @@
     "yadiskPublicUrl": "https://yadi.sk/d/1z55PwgFcpx7GA"
   },
   {
-    "id": 686,
-    "videoId": "D758gwu3rus",
-    "title": "Утро",
-    "artist": "Дайте танк (!)",
-    "duration": "2:27",
-    "seconds": 147,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "image": "covers/D758gwu3rus.webp",
-    "yadiskPath": "disk:/NikridRadio/D758gwu3rus.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/Xrb8_-SlMR0adg"
-  },
-  {
-    "id": 687,
-    "videoId": "2NXU2LQCUSU",
-    "title": "Мало тебя",
-    "artist": "SEREBRO",
-    "duration": "3:46",
-    "seconds": 226,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "image": "covers/2NXU2LQCUSU.webp",
-    "yadiskPath": "disk:/NikridRadio/2NXU2LQCUSU.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/vxwWLs_JfOfw3A"
-  },
-  {
     "id": 688,
     "videoId": "F0Gkr4MBEO0",
     "title": "There is nothing we can do.. | Napoleon Song (Amour Plastique - slowed to perfection & loop)",
@@ -10892,22 +10270,6 @@
     "image": "covers/F0Gkr4MBEO0.webp",
     "yadiskPath": "disk:/NikridRadio/F0Gkr4MBEO0.webm",
     "yadiskPublicUrl": "https://yadi.sk/d/DERaPmxDcph8_A"
-  },
-  {
-    "id": 689,
-    "videoId": "-ZcOITmoMYo",
-    "title": "Батареи",
-    "artist": "Нервы",
-    "duration": "2:49",
-    "seconds": 169,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "image": "covers/-ZcOITmoMYo.webp",
-    "yadiskPath": "disk:/NikridRadio/-ZcOITmoMYo.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/CikbXOnMapPhQg"
   },
   {
     "id": 690,
@@ -10942,22 +10304,6 @@
     "yadiskPublicUrl": "https://yadi.sk/d/TkUmA5Ke9XXOMw"
   },
   {
-    "id": 692,
-    "videoId": "JHC26mvSiQI",
-    "title": "Чайлдфри (feat. Монеточка)",
-    "artist": "Noize MC",
-    "duration": "4:04",
-    "seconds": 244,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "image": "covers/JHC26mvSiQI.webp",
-    "yadiskPath": "disk:/NikridRadio/JHC26mvSiQI.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/pXmbkjvOPL5m_g"
-  },
-  {
     "id": 693,
     "videoId": "1QWB1OFpcMo",
     "title": "Я твой номер один",
@@ -10972,22 +10318,6 @@
     "image": "covers/1QWB1OFpcMo.webp",
     "yadiskPath": "disk:/NikridRadio/1QWB1OFpcMo.m4a",
     "yadiskPublicUrl": "https://yadi.sk/d/6CMHALYnoRwJeg"
-  },
-  {
-    "id": 694,
-    "videoId": "eN_YiZ4uBe8",
-    "title": "ИСКАЛА",
-    "artist": "Земфира",
-    "duration": "3:34",
-    "seconds": 214,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "image": "covers/eN_YiZ4uBe8.webp",
-    "yadiskPath": "disk:/NikridRadio/eN_YiZ4uBe8.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/HI6EuRCQQJ-tXQ"
   },
   {
     "id": 695,
@@ -11047,8 +10377,8 @@
     "moods": [
       "Весёлая"
     ],
-    "source": "wave",
-    "liked": false,
+    "source": "playlist",
+    "liked": true,
     "image": "covers/_FtS8L_hzk0.webp",
     "yadiskPath": "disk:/NikridRadio/_FtS8L_hzk0.webm",
     "yadiskPublicUrl": "https://yadi.sk/d/h87fMldFLQDqZg"
@@ -11102,22 +10432,6 @@
     "yadiskPublicUrl": "https://yadi.sk/d/kTDbX6u2eWAJhg"
   },
   {
-    "id": 702,
-    "videoId": "C-EgLq8ZI80",
-    "driveId": "1j39rbzHC5SRC-FP1qCiQ6OzoALDsZs98",
-    "title": "да пошло всё",
-    "artist": "dabbackwood, volhey",
-    "duration": "1:39",
-    "seconds": 99,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "image": "covers/C-EgLq8ZI80.webp",
-    "audioUrl": "https://drive.google.com/uc?export=download&id=1j39rbzHC5SRC-FP1qCiQ6OzoALDsZs98"
-  },
-  {
     "id": 703,
     "videoId": "Tj6hA_2rXzM",
     "title": "Мужчина должен",
@@ -11132,22 +10446,6 @@
     "image": "covers/Tj6hA_2rXzM.webp",
     "yadiskPath": "disk:/NikridRadio/Tj6hA_2rXzM.webm",
     "yadiskPublicUrl": "https://yadi.sk/d/jNAUdzFwVrChmw"
-  },
-  {
-    "id": 704,
-    "videoId": "BuJKPH65QsA",
-    "title": "ФРУКТОВЫЙ",
-    "artist": "ЭЛЕВЕН ЭЙТ",
-    "duration": "2:05",
-    "seconds": 125,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "image": "covers/BuJKPH65QsA.webp",
-    "yadiskPath": "disk:/NikridRadio/BuJKPH65QsA.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/YAtOaiWrVfULgg"
   },
   {
     "id": 705,
@@ -11223,8 +10521,8 @@
     "moods": [
       "Весёлая"
     ],
-    "source": "wave",
-    "liked": false,
+    "source": "playlist",
+    "liked": true,
     "image": "covers/sNqUZoQcTIs.webp",
     "yadiskPath": "disk:/NikridRadio/sNqUZoQcTIs.webm",
     "yadiskPublicUrl": "https://yadi.sk/d/dZsJFL0uAu5lTg"
@@ -11278,22 +10576,6 @@
     "yadiskPublicUrl": "https://yadi.sk/d/etxIhzYQVPKQ-g"
   },
   {
-    "id": 713,
-    "videoId": "y18vFQL5nOA",
-    "title": "Subeme la radio (Parody) (feat. Yendry Fiorentino)",
-    "artist": "PanPers",
-    "duration": "3:26",
-    "seconds": 206,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "image": "covers/y18vFQL5nOA.webp",
-    "yadiskPath": "disk:/NikridRadio/y18vFQL5nOA.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/nsxyjrqu1cxrRQ"
-  },
-  {
     "id": 714,
     "videoId": "CZYnvn-hM5A",
     "title": "Именно та",
@@ -11308,22 +10590,6 @@
     "image": "covers/CZYnvn-hM5A.webp",
     "yadiskPath": "disk:/NikridRadio/CZYnvn-hM5A.webm",
     "yadiskPublicUrl": "https://yadi.sk/d/MTC6q5way6IWAA"
-  },
-  {
-    "id": 715,
-    "videoId": "lwvHPhG0mT8",
-    "title": "you have a way with words",
-    "artist": "iris",
-    "duration": "2:59",
-    "seconds": 179,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "image": "covers/lwvHPhG0mT8.webp",
-    "yadiskPath": "disk:/NikridRadio/lwvHPhG0mT8.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/i0Gkygak7d51rA"
   },
   {
     "id": 716,
@@ -11358,22 +10624,6 @@
     "yadiskPublicUrl": "https://yadi.sk/d/1bAL5mpIoPwkIg"
   },
   {
-    "id": 718,
-    "videoId": "oJt4SwhLjCU",
-    "title": "Непохожие",
-    "artist": "Quest Pistols Show",
-    "duration": "3:02",
-    "seconds": 182,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "image": "covers/oJt4SwhLjCU.webp",
-    "yadiskPath": "disk:/NikridRadio/oJt4SwhLjCU.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/3f0V90LrEjFktg"
-  },
-  {
     "id": 719,
     "videoId": "raZhOpHybOU",
     "title": "Чёрный бумер",
@@ -11390,38 +10640,6 @@
     "yadiskPublicUrl": "https://yadi.sk/d/9qXLWTY4sR47eg"
   },
   {
-    "id": 720,
-    "videoId": "MnoSlJbOtk4",
-    "title": "Балалайка (feat. Ленинград)",
-    "artist": "ST",
-    "duration": "2:59",
-    "seconds": 179,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "image": "covers/MnoSlJbOtk4.webp",
-    "yadiskPath": "disk:/NikridRadio/MnoSlJbOtk4.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/fjlyktwMVgr99w"
-  },
-  {
-    "id": 721,
-    "videoId": "8urQyzkBdrU",
-    "title": "Bien Buena",
-    "artist": "Bombotunes, Dennys the Black",
-    "duration": "4:04",
-    "seconds": 244,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "image": "covers/8urQyzkBdrU.webp",
-    "yadiskPath": "disk:/NikridRadio/8urQyzkBdrU.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/1XlYunKd8KCOvA"
-  },
-  {
     "id": 722,
     "videoId": "HQs0jYG3a6w",
     "title": "Canto pé dispietto (feat. Nuova Compagnia Di Canto Popolare) (feat. Nuova Compagnia Di Canto Popolare)",
@@ -11436,22 +10654,6 @@
     "image": "covers/HQs0jYG3a6w.webp",
     "yadiskPath": "disk:/NikridRadio/HQs0jYG3a6w.webm",
     "yadiskPublicUrl": "https://yadi.sk/d/lciNwFK7M25sCQ"
-  },
-  {
-    "id": 723,
-    "videoId": "RlHxwcGKQT8",
-    "driveId": "1X4FT3PiPIdQXWHyEAAbWJ0QhyfR_QLSE",
-    "title": "Моя девочка Айко",
-    "artist": "Screamteen",
-    "duration": "3:30",
-    "seconds": 210,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "image": "covers/RlHxwcGKQT8.webp",
-    "audioUrl": "https://drive.google.com/uc?export=download&id=1X4FT3PiPIdQXWHyEAAbWJ0QhyfR_QLSE"
   },
   {
     "id": 724,
@@ -11534,22 +10736,6 @@
     "yadiskPublicUrl": "https://yadi.sk/d/qEIJaVnV6MUD2Q"
   },
   {
-    "id": 729,
-    "videoId": "o_rGP7CQ20A",
-    "driveId": "11PDEUrZxNxf0okOiAWwM21pKGIfQ0TEu",
-    "title": "Патимэйкер",
-    "artist": "Пика",
-    "duration": "2:04",
-    "seconds": 124,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "image": "covers/o_rGP7CQ20A.webp",
-    "audioUrl": "https://drive.google.com/uc?export=download&id=11PDEUrZxNxf0okOiAWwM21pKGIfQ0TEu"
-  },
-  {
     "id": 730,
     "videoId": "fztgQfquQmw",
     "title": "Не было печали",
@@ -11598,22 +10784,6 @@
     "yadiskPublicUrl": "https://yadi.sk/d/RKe3ge8h0b4g0Q"
   },
   {
-    "id": 733,
-    "videoId": "6wgOWF4vkQ8",
-    "title": "Devochka v trende",
-    "artist": "Miko",
-    "duration": "2:32",
-    "seconds": 152,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "image": "covers/6wgOWF4vkQ8.webp",
-    "yadiskPath": "disk:/NikridRadio/6wgOWF4vkQ8.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/6xGkJYQ-DE5iWg"
-  },
-  {
     "id": 734,
     "videoId": "0iPCfvUWSZ8",
     "title": "Macarena (Super Slowed / Operation Desert Storm Edition)",
@@ -11660,22 +10830,6 @@
     "image": "covers/YUnxsX9XsgY.webp",
     "yadiskPath": "disk:/NikridRadio/YUnxsX9XsgY.webm",
     "yadiskPublicUrl": "https://yadi.sk/d/K6YiNN9KYKG0LA"
-  },
-  {
-    "id": 737,
-    "videoId": "sRDCIND0MA4",
-    "title": "VEM! - MAXPVNK ~ (SLOWED + REVERB) [BRAZILIAN PHONK]",
-    "artist": "𝙣𝙖𝙤𝙢𝙞",
-    "duration": "1:57",
-    "seconds": 117,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "image": "covers/sRDCIND0MA4.webp",
-    "yadiskPath": "disk:/NikridRadio/sRDCIND0MA4.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/jL8rI9ulka7n6g"
   },
   {
     "id": 738,
@@ -11916,5 +11070,805 @@
     "source": "playlist",
     "liked": true,
     "image": "covers/q_aycOPGB0s.webp"
+  },
+  {
+    "id": 753,
+    "videoId": "nw3Pbqpnq_I",
+    "yadiskPath": "disk:/NikridRadio/nw3Pbqpnq_I.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/sUPbdn10Wjl84A",
+    "title": "CALA BOCA PXTA (Slowed)",
+    "artist": "2KE",
+    "duration": "1:22",
+    "seconds": 82,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "image": "covers/nw3Pbqpnq_I.webp"
+  },
+  {
+    "id": 754,
+    "videoId": "0mLBcVS77XY",
+    "yadiskPath": "disk:/NikridRadio/0mLBcVS77XY.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/ACMxfOYgEtZXVA",
+    "title": "Её парень (Ultra Slowed)",
+    "artist": "farvarmusic",
+    "duration": "1:44",
+    "seconds": 104,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "image": "covers/0mLBcVS77XY.webp"
+  },
+  {
+    "id": 755,
+    "videoId": "94c8J3OQJco",
+    "yadiskPath": "disk:/NikridRadio/94c8J3OQJco.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/-TXrC9cHa8Lz8g",
+    "title": "MONTAGEM ECLIPSE (Slowed)",
+    "artist": "Rozer_rev, SPXCTR, fate",
+    "duration": "2:01",
+    "seconds": 121,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "image": "covers/94c8J3OQJco.webp"
+  },
+  {
+    "id": 756,
+    "videoId": "CKv2xj66hGY",
+    "yadiskPath": "disk:/NikridRadio/CKv2xj66hGY.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/3m9WcqDhJPy5fA",
+    "title": "MECHANOFOLIA (Super Slowed)",
+    "artist": "dxwaste",
+    "duration": "1:42",
+    "seconds": 102,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "image": "covers/CKv2xj66hGY.webp"
+  },
+  {
+    "id": 757,
+    "videoId": "9YJmv3ZPVx8",
+    "yadiskPath": "disk:/NikridRadio/9YJmv3ZPVx8.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/_qpqCdtgewuKcg",
+    "title": "ZAKHELO (Ultra Slowed)",
+    "artist": "Rushex",
+    "duration": "2:22",
+    "seconds": 142,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "image": "covers/9YJmv3ZPVx8.webp"
+  },
+  {
+    "id": 758,
+    "videoId": "qhrk5GlIRUA",
+    "yadiskPath": "disk:/NikridRadio/qhrk5GlIRUA.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/WhzOYz6VfaNS_Q",
+    "title": "AGRESSÃO (SLOWED)",
+    "artist": "VUTRA",
+    "duration": "1:23",
+    "seconds": 83,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "image": "covers/qhrk5GlIRUA.webp"
+  },
+  {
+    "id": 759,
+    "videoId": "rzks-ZDzpEU",
+    "yadiskPath": "disk:/NikridRadio/rzks-ZDzpEU.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/guxVut1AVk6osA",
+    "title": "FURIA OBSCURA",
+    "artist": "nightfxrce",
+    "duration": "1:29",
+    "seconds": 89,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "image": "covers/rzks-ZDzpEU.webp"
+  },
+  {
+    "id": 760,
+    "videoId": "nQx2DIRCH1w",
+    "yadiskPath": "disk:/NikridRadio/nQx2DIRCH1w.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/6BVfcyFatG5VzA",
+    "title": "Athlete (Slowed)",
+    "artist": "MXRGUEL",
+    "duration": "1:13",
+    "seconds": 73,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "image": "covers/nQx2DIRCH1w.webp"
+  },
+  {
+    "id": 761,
+    "videoId": "6id2V16vS3E",
+    "yadiskPath": "disk:/NikridRadio/6id2V16vS3E.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/NYXyFE-Wfud6tg",
+    "title": "dança zip",
+    "artist": "Ariis, Duduzinho",
+    "duration": "1:50",
+    "seconds": 110,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "image": "covers/6id2V16vS3E.webp"
+  },
+  {
+    "id": 762,
+    "videoId": "fQWKKS55GZI",
+    "yadiskPath": "disk:/NikridRadio/fQWKKS55GZI.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/2To2fw12zaTPcw",
+    "title": "HEAVYTEKK (Slowed)",
+    "artist": "Vincce",
+    "duration": "2:02",
+    "seconds": 122,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "image": "covers/fQWKKS55GZI.webp"
+  },
+  {
+    "id": 763,
+    "videoId": "05BlWMBWEAA",
+    "yadiskPath": "disk:/NikridRadio/05BlWMBWEAA.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/JQmpLdxvQ3dV-A",
+    "title": "MONTAGEM REINO",
+    "artist": "Codet, voyre",
+    "duration": "1:03",
+    "seconds": 63,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "image": "covers/05BlWMBWEAA.webp"
+  },
+  {
+    "id": 764,
+    "videoId": "jVaSQJ8MLfY",
+    "yadiskPath": "disk:/NikridRadio/jVaSQJ8MLfY.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/cZF3xhvaPvCDtw",
+    "title": "Sexy And I Know It (Slowed)",
+    "artist": "Elliot Sutton",
+    "duration": "1:32",
+    "seconds": 92,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "image": "covers/jVaSQJ8MLfY.webp"
+  },
+  {
+    "id": 765,
+    "videoId": "qQITDPhqw_w",
+    "yadiskPath": "disk:/NikridRadio/qQITDPhqw_w.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/9FX7DJD_befVsA",
+    "title": "empurra (Super Slowed)",
+    "artist": "prodbydxm, ZomboBox!, vxnrsh",
+    "duration": "1:54",
+    "seconds": 114,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "image": "covers/qQITDPhqw_w.webp"
+  },
+  {
+    "id": 766,
+    "videoId": "Y5D7LLG21UA",
+    "yadiskPath": "disk:/NikridRadio/Y5D7LLG21UA.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/BvykhzjL8ad_Wg",
+    "title": "MONTAGEM THOMAS - SUPER SLOWED",
+    "artist": "Wendeng Music, MC LONE",
+    "duration": "1:45",
+    "seconds": 105,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "image": "covers/Y5D7LLG21UA.webp"
+  },
+  {
+    "id": 767,
+    "videoId": "PFy0pf9kQtg",
+    "yadiskPath": "disk:/NikridRadio/PFy0pf9kQtg.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/dq-en-gdI3baQw",
+    "title": "tabi - Super Slowed",
+    "artist": "gunbaou",
+    "duration": "2:19",
+    "seconds": 139,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "image": "covers/PFy0pf9kQtg.webp"
+  },
+  {
+    "id": 768,
+    "videoId": "RWkKIrg8UUE",
+    "yadiskPath": "disk:/NikridRadio/RWkKIrg8UUE.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/ph8BKhWbN5SMAg",
+    "title": "Watch me",
+    "artist": "Diseleit",
+    "duration": "1:42",
+    "seconds": 102,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "image": "covers/RWkKIrg8UUE.webp"
+  },
+  {
+    "id": 769,
+    "videoId": "MTRYpyJitFg",
+    "yadiskPath": "disk:/NikridRadio/MTRYpyJitFg.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/IuI519rodTH1Lw",
+    "title": "ALERTA! (Slowed)",
+    "artist": "SCRXXCH",
+    "duration": "1:22",
+    "seconds": 82,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "image": "covers/MTRYpyJitFg.webp"
+  },
+  {
+    "id": 770,
+    "videoId": "DD94HSl0Rxg",
+    "yadiskPath": "disk:/NikridRadio/DD94HSl0Rxg.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/cnbZHlwHdMnn0g",
+    "title": "𝐓𝐢𝐩𝐨 𝐢𝐧𝐬𝐭𝐚 𝐝𝐨 𝐁𝐮𝐳𝐞𝐢𝐫𝐚 (𝐔𝐋𝐓𝐑𝐀 𝐒𝐋𝐎𝐖𝐄𝐃 + 𝐑𝐄𝐕𝐄𝐑𝐁)",
+    "artist": "vrun1m",
+    "duration": "3:07",
+    "seconds": 187,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "image": "covers/DD94HSl0Rxg.webp"
+  },
+  {
+    "id": 771,
+    "videoId": "8zuzIgC-R6I",
+    "yadiskPath": "disk:/NikridRadio/8zuzIgC-R6I.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/mEZIgRZJWvdIQQ",
+    "title": "Y119 (Slowed Down)",
+    "artist": "SXRKIN",
+    "duration": "1:32",
+    "seconds": 92,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "image": "covers/8zuzIgC-R6I.webp"
+  },
+  {
+    "id": 772,
+    "videoId": "_603SIrujb4",
+    "yadiskPath": "disk:/NikridRadio/_603SIrujb4.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/SL9kjo22MhwkCw",
+    "title": "GLADIATOR (SLOWED)",
+    "artist": "Ar1s",
+    "duration": "1:55",
+    "seconds": 115,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "image": "covers/_603SIrujb4.webp"
+  },
+  {
+    "id": 773,
+    "videoId": "M0aRqa7WB2U",
+    "yadiskPath": "disk:/NikridRadio/M0aRqa7WB2U.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/4RSP-UGwATFxvg",
+    "title": "HU HU HU HU",
+    "artist": "2KE",
+    "duration": "1:08",
+    "seconds": 68,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "image": "covers/M0aRqa7WB2U.webp"
+  },
+  {
+    "id": 774,
+    "videoId": "lqT31tSJVn0",
+    "yadiskPath": "disk:/NikridRadio/lqT31tSJVn0.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/gYOec5TyD8O4Bw",
+    "title": "MONTAGEM INFERNIA (Slowed)",
+    "artist": "Artefxct",
+    "duration": "1:31",
+    "seconds": 91,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "image": "covers/lqT31tSJVn0.webp"
+  },
+  {
+    "id": 775,
+    "videoId": "HSE070r5EhA",
+    "yadiskPath": "disk:/NikridRadio/HSE070r5EhA.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/gp1nV66ZYtLdPQ",
+    "title": "TRANCE SENSACIO (Ultra Slowed)",
+    "artist": "YOUTHISENDING",
+    "duration": "1:25",
+    "seconds": 85,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "image": "covers/HSE070r5EhA.webp"
+  },
+  {
+    "id": 776,
+    "videoId": "0KkOUyMZKfw",
+    "yadiskPath": "disk:/NikridRadio/0KkOUyMZKfw.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/-yrmVDzG0AYpbQ",
+    "title": "6 WRATH (Slowed)",
+    "artist": "APOSTAL",
+    "duration": "1:37",
+    "seconds": 97,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "image": "covers/0KkOUyMZKfw.webp"
+  },
+  {
+    "id": 777,
+    "videoId": "UoBQbgnjP9o",
+    "yadiskPath": "disk:/NikridRadio/UoBQbgnjP9o.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/FfGJBJafGKY-4A",
+    "title": "BRUXO PSYCHO - Slowed",
+    "artist": "LVGHTER, SNAX!",
+    "duration": "1:42",
+    "seconds": 102,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "image": "covers/UoBQbgnjP9o.webp"
+  },
+  {
+    "id": 778,
+    "videoId": "K_PEwouaIgM",
+    "yadiskPath": "disk:/NikridRadio/K_PEwouaIgM.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/rWJ6RVoLhDjPUg",
+    "title": "DECAPITATOR (Slowed)",
+    "artist": "DJ ZENITE, DJ TKG, DJ Ice",
+    "duration": "1:55",
+    "seconds": 115,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "image": "covers/K_PEwouaIgM.webp"
+  },
+  {
+    "id": 779,
+    "videoId": "T19ouZHwWnw",
+    "yadiskPath": "disk:/NikridRadio/T19ouZHwWnw.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/Ya_bdmAlu2sziw",
+    "title": "TRIPPLEX (Ultra Slowed)",
+    "artist": "HR, XEOE",
+    "duration": "2:07",
+    "seconds": 127,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "image": "covers/T19ouZHwWnw.webp"
+  },
+  {
+    "id": 780,
+    "videoId": "V0hl0TuW6lg",
+    "yadiskPath": "disk:/NikridRadio/V0hl0TuW6lg.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/qTocbQBm1mnFRg",
+    "title": "h4rdjump_1988 (Super Slowed)",
+    "artist": "$werve",
+    "duration": "2:14",
+    "seconds": 134,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "image": "covers/V0hl0TuW6lg.webp"
+  },
+  {
+    "id": 781,
+    "videoId": "UTHZs8DyOtc",
+    "yadiskPath": "disk:/NikridRadio/UTHZs8DyOtc.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/smJd27H4KrjINw",
+    "title": "ATROP! (Slowed)",
+    "artist": "Wintherduud, STARNXVA",
+    "duration": "1:31",
+    "seconds": 91,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "image": "covers/UTHZs8DyOtc.webp"
+  },
+  {
+    "id": 782,
+    "videoId": "86gvxQEOCXc",
+    "yadiskPath": "disk:/NikridRadio/86gvxQEOCXc.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/lA9vfpzek821nQ",
+    "title": "HU HU HU HU - SLOWED",
+    "artist": "2KE",
+    "duration": "1:17",
+    "seconds": 77,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "image": "covers/86gvxQEOCXc.webp"
+  },
+  {
+    "id": 783,
+    "videoId": "awi3Bcx0OOY",
+    "yadiskPath": "disk:/NikridRadio/awi3Bcx0OOY.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/cRO6JvzJ10PjVQ",
+    "title": "TESTCORE",
+    "artist": "SAPFIR MADE IT",
+    "duration": "1:05",
+    "seconds": 65,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "image": "covers/awi3Bcx0OOY.webp"
+  },
+  {
+    "id": 784,
+    "videoId": "7GDG39HZXt0",
+    "yadiskPath": "disk:/NikridRadio/7GDG39HZXt0.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/XzTwi9ncOAGUeQ",
+    "title": "S4nri0 x launch13 x rodricci - MONTAGEM BOTA HIPNOSIS 1.0 (LYKYOR REMIX)┃EXTREME SLOWED & REVERB",
+    "artist": "LYKYOR",
+    "duration": "2:09",
+    "seconds": 129,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "image": "covers/7GDG39HZXt0.webp"
+  },
+  {
+    "id": 785,
+    "videoId": "CzorSAhPbW8",
+    "yadiskPath": "disk:/NikridRadio/CzorSAhPbW8.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/zMoL24oCto-vBQ",
+    "title": "GROK",
+    "artist": "VUKEINE, Mc Maroladão",
+    "duration": "1:13",
+    "seconds": 73,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "image": "covers/CzorSAhPbW8.webp"
+  },
+  {
+    "id": 786,
+    "videoId": "SNRRbs2khfk",
+    "yadiskPath": "disk:/NikridRadio/SNRRbs2khfk.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/DQ0xSWmEJRtWgQ",
+    "title": "WHAT THE FRICK (Super Slowed)",
+    "artist": "DJ HARDWICK",
+    "duration": "1:24",
+    "seconds": 84,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "image": "covers/SNRRbs2khfk.webp"
+  },
+  {
+    "id": 787,
+    "videoId": "vytRF-h0MYw",
+    "yadiskPath": "disk:/NikridRadio/vytRF-h0MYw.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/y_wJWP87gIm64A",
+    "title": "Rushex - Zakhelo ( ultra slowed ) Visualizer",
+    "artist": "J!NKXA",
+    "duration": "2:22",
+    "seconds": 142,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "image": "covers/vytRF-h0MYw.webp"
+  },
+  {
+    "id": 788,
+    "videoId": "ATrXS5XMqLE",
+    "yadiskPath": "disk:/NikridRadio/ATrXS5XMqLE.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/O5J6yZ9Q5qyqyA",
+    "title": "ULTRATEKK (Slowed)",
+    "artist": "ZXDD",
+    "duration": "1:31",
+    "seconds": 91,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "image": "covers/ATrXS5XMqLE.webp"
+  },
+  {
+    "id": 789,
+    "videoId": "lgp8jb6T9NM",
+    "yadiskPath": "disk:/NikridRadio/lgp8jb6T9NM.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/gQyw1n-7u6uxhA",
+    "title": "decay (Slowed)",
+    "artist": "VUTRA",
+    "duration": "1:23",
+    "seconds": 83,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "image": "covers/lgp8jb6T9NM.webp"
+  },
+  {
+    "id": 790,
+    "videoId": "hWJaYEsYOvA",
+    "yadiskPath": "disk:/NikridRadio/hWJaYEsYOvA.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/Azrq6xT8LiPNlQ",
+    "title": "Death Rattle (Slowed)",
+    "artist": "NOUNOHDRVRS",
+    "duration": "1:14",
+    "seconds": 74,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "image": "covers/hWJaYEsYOvA.webp"
+  },
+  {
+    "id": 791,
+    "videoId": "soXfFqrvOzk",
+    "yadiskPath": "disk:/NikridRadio/soXfFqrvOzk.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/9E-gZo6bysFYxg",
+    "title": "VIOLENTO",
+    "artist": "Kobe Mane",
+    "duration": "1:32",
+    "seconds": 92,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "image": "covers/soXfFqrvOzk.webp"
+  },
+  {
+    "id": 792,
+    "videoId": "vpDO_GSOCG0",
+    "yadiskPath": "disk:/NikridRadio/vpDO_GSOCG0.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/44K24cDTYBCFQQ",
+    "title": "CICADATEKK (Super Slowed)",
+    "artist": "Effrey, BUXRA, Atash",
+    "duration": "2:23",
+    "seconds": 143,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "image": "covers/vpDO_GSOCG0.webp"
+  },
+  {
+    "id": 793,
+    "videoId": "JlJ5_2xmAK0",
+    "yadiskPath": "disk:/NikridRadio/JlJ5_2xmAK0.m4a",
+    "yadiskPublicUrl": "https://yadi.sk/d/EjLFu8xqeeB-bw",
+    "title": "RITMO AGRESSIVO",
+    "artist": "NEXUZ",
+    "duration": "1:24",
+    "seconds": 84,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "image": "covers/JlJ5_2xmAK0.webp"
+  },
+  {
+    "id": 794,
+    "videoId": "HD8aoq5R05k",
+    "yadiskPath": "disk:/NikridRadio/HD8aoq5R05k.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/LImLYq6vmN-kEw",
+    "title": "ELOY (Ultra Slowed)",
+    "artist": "NVXUS",
+    "duration": "1:57",
+    "seconds": 117,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "image": "covers/HD8aoq5R05k.webp"
+  },
+  {
+    "id": 795,
+    "videoId": "DzyOEuyC1K8",
+    "yadiskPath": "disk:/NikridRadio/DzyOEuyC1K8.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/ehH79QzaI9uCfw",
+    "title": "SAD ABOUT FUNK",
+    "artist": "KVNYSH, VXN!SH, ESOW",
+    "duration": "1:11",
+    "seconds": 71,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "image": "covers/DzyOEuyC1K8.webp"
+  },
+  {
+    "id": 796,
+    "videoId": "bE_y8nc8anI",
+    "yadiskPath": "disk:/NikridRadio/bE_y8nc8anI.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/8eQpG2dDIw_mpQ",
+    "title": "ultrakill de funk (Sped Up)",
+    "artist": "slxughter, Crazy Mano",
+    "duration": "1:26",
+    "seconds": 86,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "image": "covers/bE_y8nc8anI.webp"
+  },
+  {
+    "id": 797,
+    "videoId": "Y4gTF_6gmOM",
+    "yadiskPath": "disk:/NikridRadio/Y4gTF_6gmOM.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/rRAuY10-o377OQ",
+    "title": "CREED FUNK",
+    "artist": "Fangiobeats",
+    "duration": "2:28",
+    "seconds": 148,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "image": "covers/Y4gTF_6gmOM.webp"
+  },
+  {
+    "id": 798,
+    "videoId": "icmn3GTlTp8",
+    "yadiskPath": "disk:/NikridRadio/icmn3GTlTp8.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/8aV0qX8DVuKzQA",
+    "title": "COLOCAD4O (ULTRA SLOWED)",
+    "artist": "M4GN, M4XXX",
+    "duration": "3:14",
+    "seconds": 194,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "image": "covers/icmn3GTlTp8.webp"
+  },
+  {
+    "id": 799,
+    "videoId": "fcM8dtr83Rk",
+    "yadiskPath": "disk:/NikridRadio/fcM8dtr83Rk.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/iPslk0D0p5lXlQ",
+    "title": "BANDITAS (SUPER SLOWED)",
+    "artist": "2KE, MC K.K",
+    "duration": "1:54",
+    "seconds": 114,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "image": "covers/fcM8dtr83Rk.webp"
+  },
+  {
+    "id": 800,
+    "videoId": "i1fGEMP3HwM",
+    "yadiskPath": "disk:/NikridRadio/i1fGEMP3HwM.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/YSafZ2s2ODSEww",
+    "title": "MONTAGEM DALE",
+    "artist": "VXDA, FORGOTTEN K8D",
+    "duration": "1:28",
+    "seconds": 88,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "image": "covers/i1fGEMP3HwM.webp"
+  },
+  {
+    "id": 801,
+    "videoId": "T1jhh5v-Lk0",
+    "yadiskPath": "disk:/NikridRadio/T1jhh5v-Lk0.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/pVJOgoFZ4w0nJA",
+    "title": "Её парень (Speed up Hardtekk)",
+    "artist": "Shluzov, DJ SENSX, qwzbtw0",
+    "duration": "1:23",
+    "seconds": 83,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "image": "covers/T1jhh5v-Lk0.webp"
+  },
+  {
+    "id": 802,
+    "videoId": "PkKd_OIfqaY",
+    "yadiskPath": "disk:/NikridRadio/PkKd_OIfqaY.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/-uy_SETzTWeLdQ",
+    "title": "RAMPAGE (SLOWED)",
+    "artist": "ZMAJOR, Lurk, SEKIMANE",
+    "duration": "1:34",
+    "seconds": 94,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "image": "covers/PkKd_OIfqaY.webp"
   }
 ]
