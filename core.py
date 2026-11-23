@@ -534,6 +534,54 @@ def load_cloud_sync_state() -> dict:
         return empty
 
 
+def clear_cloud_sync_buffer(processed_like_ids: set, processed_dislike_ids: set, processed_listened_ids: set):
+    if not (processed_like_ids or processed_dislike_ids or processed_listened_ids):
+        return
+    if not SYNC_CONFIG_PATH.exists():
+        return
+    try:
+        cfg = json.loads(SYNC_CONFIG_PATH.read_text(encoding="utf-8"))
+        token = cfg.get("token", "").strip()
+        gist_id = cfg.get("gistId", "").strip()
+        if not token or not gist_id:
+            return
+
+        current = load_cloud_sync_state()
+        rem_likes = [x for x in current.get("likeIds", []) if x not in processed_like_ids]
+        rem_dislikes = [x for x in current.get("dislikeIds", []) if x not in processed_dislike_ids]
+        rem_listened = [x for x in current.get("waveListenedIds", []) if x not in processed_listened_ids]
+        rem_like_titles = [x for x in current.get("likeTitles", []) if x.get("id") not in processed_like_ids]
+        rem_dislike_titles = [x for x in current.get("dislikeTitles", []) if x.get("id") not in processed_dislike_ids]
+
+        now_iso = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+        payload = {
+            "updatedAt": now_iso,
+            "clearedAt": now_iso,
+            "likeIds": rem_likes,
+            "dislikeIds": rem_dislikes,
+            "waveListenedIds": rem_listened,
+            "likeTitles": rem_like_titles,
+            "dislikeTitles": rem_dislike_titles,
+        }
+        body = json.dumps({"files": {"nikrid_sync.json": {"content": json.dumps(payload, ensure_ascii=False, indent=2)}}}).encode("utf-8")
+        req = urllib.request.Request(
+            f"https://api.github.com/gists/{gist_id}",
+            data=body,
+            headers={
+                "Authorization": f"token {token}",
+                "Accept": "application/vnd.github+json",
+                "Content-Type": "application/json",
+                "User-Agent": "Nikrid-Radio-Sync",
+            },
+            method="PATCH",
+        )
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            if resp.status in (200, 201):
+                ui_line("✓", "Облачный буфер лайков/дизлайков очищен в Gist", _ANSI_GREEN, step="gist_sync")
+    except Exception as e:
+        ui_line("!", f"Не удалось очистить буфер в Gist ({_compact_err(e, 90)})", _ANSI_YELLOW, step="gist_sync", log_level="WARN")
+
+
 # =========================================================
 # БЫСТРОЕ И НАДЁЖНОЕ СКАЧИВАНИЕ АУДИО (YT-DLP)
 # =========================================================
@@ -578,10 +626,11 @@ def download_audio_robust(video_id: str, unavailable_ids: set[str] | None = None
     ]
 
     if os.getenv("GITHUB_ACTIONS") == "true" and has_cookies:
-        # На серверах GitHub сразу ставим cookies первым, чтобы не тратить время на bot-check
+        # На серверах GitHub сразу ставим cookies первым + гибкий выбор формата и EJS-решатель (Deno)
         profiles = [
-            {"name": "cookies_ci", "clients": None, "use_cookies": True, "fmt": "251/140/bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio/best"},
-            {"name": "visionos_vr", "clients": ["visionos", "android_vr"], "use_cookies": False, "fmt": "bestaudio/best"},
+            {"name": "cookies_ci", "clients": None, "use_cookies": True, "fmt": "bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio/best"},
+            {"name": "cookies_tv", "clients": ["tv", "web_safari"], "use_cookies": True, "fmt": "bestaudio/best"},
+            {"name": "android_vr", "clients": ["android_vr", "visionos"], "use_cookies": False, "fmt": "bestaudio/best"},
         ]
 
     permanent_unavailable = False
@@ -605,6 +654,7 @@ def download_audio_robust(video_id: str, unavailable_ids: set[str] | None = None
             "socket_timeout": 12,
             "nocheckcertificate": True,
             "geo_bypass": True,
+            "remote_components": ["ejs:github"],
         }
 
         if prof["clients"]:
@@ -632,11 +682,15 @@ def download_audio_robust(video_id: str, unavailable_ids: set[str] | None = None
                 or "private video" in lower_err
                 or "removed by the uploader" in lower_err
                 or "account associated with this video has been terminated" in lower_err
+                or "copyright" in lower_err
+                or "members-only" in lower_err
+                or "join this channel" in lower_err
             ):
                 permanent_unavailable = True
                 break
             if "age-restricted" in lower_err or "sign in to confirm your age" in lower_err:
-                permanent_unavailable = not has_cookies
+                if prof["use_cookies"] or not has_cookies:
+                    permanent_unavailable = True
             time.sleep(0.3)
 
     if permanent_unavailable:
@@ -794,17 +848,28 @@ def main():
 
             if tid in liked_ids:
                 t["liked"] = True
-                if t.get("source") != "wave":
-                    t["source"] = "playlist"
+                t["source"] = "playlist"
             cleaned_tracks.append(t)
 
         existing_tracks = cleaned_tracks
         if removed_count > 0:
             ui_line("•", f"Очищено по буферу/волне: {removed_count} трек(ов)", _ANSI_DIM, step="cleanup")
 
+        unavailable_ids = load_unavailable_ids()
+        before_bl = len(existing_tracks)
+        kept_tracks = []
+        for t in existing_tracks:
+            vid_t = t.get("videoId", "")
+            if vid_t and vid_t in unavailable_ids and not t.get("yadiskPublicUrl"):
+                delete_local_cover(vid_t)
+                continue
+            kept_tracks.append(t)
+        if len(kept_tracks) < before_bl:
+            ui_line("•", f"Удалено нерабочих треков по чёрному списку: {before_bl - len(kept_tracks)}", _ANSI_DIM, step="cleanup")
+        existing_tracks = kept_tracks
+
         by_vid = {t.get("videoId"): t for t in existing_tracks if t.get("videoId")}
         next_numeric_id = max((t.get("id", 0) for t in existing_tracks), default=0) + 1
-        unavailable_ids = load_unavailable_ids()
 
         # 3. Локальные обложки 512x512 WebP в covers/ (параллельно)
         ui_section("Обложки (512×512 WebP)")
@@ -840,6 +905,10 @@ def main():
                         ui_progress("Обложки", completed_c, len(covers_missing), _format_track_name(t_item, 32))
 
             ui_clear_inline()
+            existing_tracks = [
+                t for t in existing_tracks
+                if not (t.get("videoId") in unavailable_ids and not t.get("yadiskPublicUrl"))
+            ]
             save_playlist_json(existing_tracks)
             ui_line("✓", f"Обложки готовы: скачано/сжато {stats['covers_ok']} шт.", _ANSI_GREEN, step="covers")
 
@@ -1057,6 +1126,8 @@ def main():
             except Exception as e:
                 ui_line("!", f"Сбой авторизации/запроса YouTube Music: {_compact_err(e, 140)}", _ANSI_RED, step="yt_sync", log_level="ERROR")
 
+        clear_cloud_sync_buffer(liked_ids, disliked_ids, wave_listened_ids)
+
     except KeyboardInterrupt:
         ui_line("!", "Остановлено пользователем (Ctrl+C) — сохраняю прогресс...", _ANSI_YELLOW, step="interrupt", log_level="INFO")
     finally:
@@ -1076,4 +1147,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main()  

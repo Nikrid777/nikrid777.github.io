@@ -474,6 +474,8 @@
       playRequestId: 0,
       stallTimerId: null,
       reconnectAttempts: 0,
+      consecutiveErrors: 0,
+      lastSyncClearedAt: '',
       bufferLikes: [],
       bufferDislikes: [],
       waveListenedIds: [],
@@ -551,10 +553,30 @@
     // ЯНДЕКС ДИСК: ПРЯМЫЕ ССЫЛКИ, ПОСЛЕДОВАТЕЛЬНЫЙ ПРЕФЕТЧ (3 ТРЕКА) И РЕКОННЕКТ ПРИ VPN
     // =========================================================
     const PREFETCH_THREE_COUNT = 3;
-    
     const prefetchedAudioCache = new Map(); // videoId -> HTMLAudioElement
     let _prefetchChainRunning = false;
     let _prefetchForTrackId = null;
+
+    function getTrackPrefetchKey(track) {
+      if (!track) return '';
+      return track.videoId || String(track.id);
+    }
+
+    function renderPrefetchDot(track) {
+      const key = getTrackPrefetchKey(track);
+      const isCached = prefetchedAudioCache.has(key);
+      return `<span data-prefetch-key="${key}" class="w-1.5 h-1.5 rounded-full neon-bg shrink-0 transition-opacity duration-300 ${isCached ? 'opacity-100' : 'opacity-0 hidden'}" title="Предзагружен в кэш"></span>`;
+    }
+
+    function updatePrefetchDots() {
+      document.querySelectorAll('[data-prefetch-key]').forEach(el => {
+        const key = el.getAttribute('data-prefetch-key');
+        const isCached = prefetchedAudioCache.has(key);
+        el.classList.toggle('hidden', !isCached);
+        el.classList.toggle('opacity-100', isCached);
+        el.classList.toggle('opacity-0', !isCached);
+      });
+    }
 
     async function resolveYadiskAudioUrl(track, forceRefresh = false) {
       if (!track) return null;
@@ -631,6 +653,7 @@
                 }
                 prefetchedAudioCache.delete(firstKey);
               }
+              updatePrefetchDots();
             } else {
               try { preAudio.src = ''; } catch (e) {}
             }
@@ -730,9 +753,13 @@
         pulling = false;
 
         if (readyToReload) {
-          ptrText.textContent = 'Перезагрузка...';
+          ptrText.textContent = 'Обновление данных...';
           ptrSpinner.classList.add('animate-spin');
-          setTimeout(() => location.reload(), 220);
+          refreshAppData().finally(() => {
+            ptrSpinner.classList.remove('animate-spin');
+            ptrEl.style.opacity = '0';
+            ptrEl.style.transform = 'translate(-50%, -48px)';
+          });
         } else {
           ptrEl.style.opacity = '0';
           ptrEl.style.transform = 'translate(-50%, -48px)';
@@ -816,19 +843,37 @@
       if (!remote || typeof remote !== 'object') return;
       rawRemoteSyncCache = remote;
 
-      if (Array.isArray(remote.likeIds)) {
-        const mergedLikes = new Set([...state.bufferLikes.map(t => t.id), ...remote.likeIds]);
-        state.bufferLikes = Array.from(mergedLikes).map(id => TRACKS.find(t => t.id === id)).filter(Boolean);
+      const remoteClearedAt = typeof remote.clearedAt === 'string' ? remote.clearedAt : '';
+      const wasClearedByBot = Boolean(remoteClearedAt && remoteClearedAt !== state.lastSyncClearedAt);
+
+      if (wasClearedByBot) {
+        state.lastSyncClearedAt = remoteClearedAt;
+        state.bufferLikes = Array.isArray(remote.likeIds)
+          ? remote.likeIds.map(id => TRACKS.find(t => t.id === id)).filter(Boolean)
+          : [];
+        state.bufferDislikes = Array.isArray(remote.dislikeIds)
+          ? remote.dislikeIds.map(id => TRACKS.find(t => t.id === id)).filter(Boolean)
+          : [];
+        state.waveListenedIds = Array.isArray(remote.waveListenedIds)
+          ? [...remote.waveListenedIds]
+          : [];
+      } else {
+        if (Array.isArray(remote.likeIds)) {
+          const mergedLikes = new Set([...state.bufferLikes.map(t => t.id), ...remote.likeIds]);
+          state.bufferLikes = Array.from(mergedLikes).map(id => TRACKS.find(t => t.id === id)).filter(Boolean);
+        }
+        if (Array.isArray(remote.dislikeIds)) {
+          const mergedDislikes = new Set([...state.bufferDislikes.map(t => t.id), ...remote.dislikeIds]);
+          state.bufferDislikes = Array.from(mergedDislikes).map(id => TRACKS.find(t => t.id === id)).filter(Boolean);
+        }
+        if (Array.isArray(remote.waveListenedIds)) {
+          state.waveListenedIds = Array.from(new Set([...state.waveListenedIds, ...remote.waveListenedIds]));
+        }
       }
-      if (Array.isArray(remote.dislikeIds)) {
-        const mergedDislikes = new Set([...state.bufferDislikes.map(t => t.id), ...remote.dislikeIds]);
-        state.bufferDislikes = Array.from(mergedDislikes).map(id => TRACKS.find(t => t.id === id)).filter(Boolean);
-        const disSet = new Set(state.bufferDislikes.map(t => t.id));
-        state.bufferLikes = state.bufferLikes.filter(t => !disSet.has(t.id));
-      }
-      if (Array.isArray(remote.waveListenedIds)) {
-        state.waveListenedIds = Array.from(new Set([...state.waveListenedIds, ...remote.waveListenedIds]));
-      }
+
+      // Убираем из буфера лайков треки, которые core.py уже перенёс в основной плейлист
+      const disSet = new Set(state.bufferDislikes.map(t => t.id));
+      state.bufferLikes = state.bufferLikes.filter(t => t && t.source !== 'playlist' && !disSet.has(t.id));
     }
 
     async function pushCloudState(silent = true) {
@@ -899,6 +944,8 @@
     function saveState(triggerCloud = true) {
       try {
         const payload = {
+          activeTab: state.activeTab,
+          lastSyncClearedAt: state.lastSyncClearedAt,
           mood: 'Весёлая',
           theme: state.theme,
           currentTrackId: state.currentTrack ? state.currentTrack.id : 1,
@@ -925,6 +972,12 @@
         if (!raw) return;
         const data = JSON.parse(raw);
 
+        if (data.activeTab && ['wave', 'playlist', 'buffer-like', 'buffer-dislike'].includes(data.activeTab)) {
+          state.activeTab = data.activeTab;
+        }
+        if (typeof data.lastSyncClearedAt === 'string') {
+          state.lastSyncClearedAt = data.lastSyncClearedAt;
+        }
         if (data.theme) {
           state.theme = data.theme;
           document.documentElement.style.setProperty('--neon', data.theme);
@@ -965,39 +1018,59 @@
     }
 
     function parsePlaylistArray(json) {
-      return json.map((item, idx) => {
-        const vid = (item.videoId || '').trim();
-        const source = item.source === 'wave' ? 'wave' : 'playlist';
-        const isLikedDefault = source === 'playlist' ? true : Boolean(item.liked);
+      return json
+        .filter(item => item && typeof item.yadiskPublicUrl === 'string' && item.yadiskPublicUrl.trim().length > 0)
+        .map((item, idx) => {
+          const vid = (item.videoId || '').trim();
+          const source = item.source === 'wave' ? 'wave' : 'playlist';
+          const isLikedDefault = source === 'playlist' ? true : Boolean(item.liked);
 
-        return {
-          id: item.id || idx + 1,
-          videoId: vid,
-          yadiskPath: (item.yadiskPath || '').trim(),
-          yadiskPublicUrl: (item.yadiskPublicUrl || '').trim(),
-          title: item.title || 'Без названия',
-          artist: item.artist || 'Неизвестный исполнитель',
-          duration: item.duration || '3:30',
-          seconds: item.seconds || 210,
-          moods: ['Весёлая'],
-          source: source,
-          liked: isLikedDefault,
-          image: resolveLocalCover(item.image || item.cover || '')
-        };
-      });
+          return {
+            id: item.id || idx + 1,
+            videoId: vid,
+            yadiskPath: (item.yadiskPath || '').trim(),
+            yadiskPublicUrl: item.yadiskPublicUrl.trim(),
+            title: item.title || 'Без названия',
+            artist: item.artist || 'Неизвестный исполнитель',
+            duration: item.duration || '3:30',
+            seconds: item.seconds || 210,
+            moods: ['Весёлая'],
+            source: source,
+            liked: isLikedDefault,
+            image: resolveLocalCover(item.image || item.cover || '')
+          };
+        });
     }
 
-    function applyTracksData(parsedTracks) {
+    function applyTracksData(parsedTracks, isSoftRefresh = false) {
+      if (!Array.isArray(parsedTracks) || parsedTracks.length === 0) return;
+
+      const prevPlayingTrackId = state.currentTrack ? state.currentTrack.id : null;
+      const wasPlaying = state.isPlaying;
+
       TRACKS = parsedTracks;
-      const waveInit = getWaveTracks();
-      state.queue = waveInit.length > 0 ? [...waveInit] : [...TRACKS];
-      state.customQueueOrder = state.queue.map(t => t.id);
-      state.currentTrack = state.queue[0] || TRACKS[0];
-      state.history = [];
-      loadState();
+
+      if (!isSoftRefresh) {
+        const waveInit = getWaveTracks();
+        state.queue = waveInit.length > 0 ? [...waveInit] : [...TRACKS];
+        state.customQueueOrder = state.queue.map(t => t.id);
+        state.currentTrack = state.queue[0] || TRACKS[0];
+        state.history = [];
+        loadState();
+      }
+
       if (rawRemoteSyncCache) applyRemoteSyncData(rawRemoteSyncCache);
 
+      // Убираем из буфера лайков треки, которые уже перенесены в основной плейлист
       const dislikedSet = new Set(state.bufferDislikes.map(t => t.id));
+      state.bufferLikes = state.bufferLikes
+        .map(l => TRACKS.find(t => t.id === l.id))
+        .filter(t => t && t.source !== 'playlist' && !dislikedSet.has(t.id));
+
+      state.bufferDislikes = state.bufferDislikes
+        .map(d => TRACKS.find(t => t.id === d.id))
+        .filter(Boolean);
+
       TRACKS.forEach(t => {
         if (t.source === 'playlist' && !dislikedSet.has(t.id)) {
           t.liked = true;
@@ -1006,8 +1079,53 @@
         }
       });
 
+      // Очищаем очередь от удалённых/нерабочих/дизлайкнутых треков
+      state.queue = state.queue
+        .map(q => TRACKS.find(t => t.id === q.id))
+        .filter(t => t && !dislikedSet.has(t.id));
+
+      if (state.queue.length === 0) {
+        const fallbackPool = state.activeTab === 'playlist' ? getPlaylistTracks() : getWaveTracks();
+        state.queue = fallbackPool.length > 0 ? [...fallbackPool] : [...TRACKS];
+      }
+
+      // Сохраняем текущий играющий трек при мягком обновлении
+      if (isSoftRefresh && prevPlayingTrackId) {
+        const stillExists = TRACKS.find(t => t.id === prevPlayingTrackId);
+        if (stillExists) {
+          state.currentTrack = stillExists;
+          state.isPlaying = wasPlaying;
+        }
+      } else if (!state.currentTrack || !TRACKS.some(t => t.id === state.currentTrack.id)) {
+        state.currentTrack = state.queue[0] || TRACKS[0];
+      }
+
+      syncNavTabsUI();
       renderContent();
       updatePlayerUI();
+    }
+
+    async function refreshAppData() {
+      if (!navigator.onLine) {
+        showToast('Нет подключения к интернету', 'warn');
+        return;
+      }
+      try {
+        const controller = new AbortController();
+        const tid = setTimeout(() => controller.abort(), 12000);
+        const res = await fetch(`playlist.json?t=${Date.now()}`, { cache: 'no-store', signal: controller.signal });
+        clearTimeout(tid);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const json = await res.json();
+        if (Array.isArray(json) && json.length > 0) {
+          try { localStorage.setItem(PLAYLIST_CACHE_KEY, JSON.stringify(json)); } catch (e) {}
+          applyTracksData(parsePlaylistArray(json), true);
+        }
+        await pullCloudState(false);
+        showToast('Данные обновлены', 'ok', null, null, 2000);
+      } catch (e) {
+        showToast('Не удалось обновить данные', 'warn', null, null, 2500);
+      }
     }
 
     async function tryLoadLocalPlaylistJson() {
@@ -1064,8 +1182,13 @@
 
     function getPlaylistTracks() {
       const dislikedIds = new Set(state.bufferDislikes.map(t => t.id));
-      const likedIds = new Set(state.bufferLikes.map(t => t.id));
-      return TRACKS.filter(t => (t.source === 'playlist' || likedIds.has(t.id)) && !dislikedIds.has(t.id));
+      const freshLiked = [...state.bufferLikes]
+        .reverse()
+        .map(l => TRACKS.find(t => t.id === l.id))
+        .filter(t => t && !dislikedIds.has(t.id));
+      const freshIds = new Set(freshLiked.map(t => t.id));
+      const mainPlaylist = TRACKS.filter(t => t.source === 'playlist' && !dislikedIds.has(t.id) && !freshIds.has(t.id));
+      return [...freshLiked, ...mainPlaylist];
     }
 
     function markTrackAsListened(track) {
@@ -1076,35 +1199,53 @@
       }
     }
 
+    function skipBrokenTrack(reasonMsg = 'Ошибка трека') {
+      clearTimeout(state.stallTimerId);
+      state.consecutiveErrors = (state.consecutiveErrors || 0) + 1;
+
+      if (state.consecutiveErrors >= 5) {
+        state.isPlaying = false;
+        updatePlayerUI();
+        showToast('Несколько треков подряд не запустились. Проверьте сеть.', 'error', 'Повторить', () => {
+          state.consecutiveErrors = 0;
+          if (state.currentTrack) playTrack(state.currentTrack.id, false);
+        }, 0);
+        return;
+      }
+
+      if (state.currentTrack && state.currentTrack.source === 'wave') {
+        markTrackAsListened(state.currentTrack);
+      }
+
+      showToast(`${reasonMsg} — переключаю на следующий`, 'warn', null, null, 2400);
+      nextTrack(true);
+    }
+
     async function reconnectCurrentStream() {
       if (!state.isPlaying || !state.currentTrack) return;
 
-      if (state.reconnectAttempts >= 6) {
-        updatePlayerUI();
-        showToast('Сеть/VPN нестабильны — поток поставлен на паузу.', 'error', 'Продолжить', () => {
-          state.reconnectAttempts = 0;
-          state.isPlaying = true;
-          reconnectCurrentStream();
-        }, 0);
-        state.isPlaying = false;
-        updatePlayerUI();
+      if (state.reconnectAttempts >= 2) {
+        skipBrokenTrack('Трек не отвечает');
         return;
       }
 
       state.reconnectAttempts++;
       const resumeTime = audio.currentTime || 0;
       const reqId = state.playRequestId;
-      const backoffMs = Math.min(2500, 450 * state.reconnectAttempts);
+      const backoffMs = state.reconnectAttempts === 1 ? 450 : 1100;
 
-      showToast(`Переключение маршрута/VPN — восстанавливаю поток (${state.reconnectAttempts}/6)...`, 'warn', null, null, 2500);
+      showToast(`Восстанавливаю поток (${state.reconnectAttempts}/2)...`, 'warn', null, null, 2000);
 
       await new Promise(r => setTimeout(r, backoffMs));
       if (reqId !== state.playRequestId || !state.isPlaying || !state.currentTrack) return;
 
       try {
-        const forceFresh = state.reconnectAttempts >= 2;
-        const freshUrl = await resolveYadiskAudioUrl(state.currentTrack, forceFresh);
-        if (reqId !== state.playRequestId || !state.isPlaying || !freshUrl) return;
+        const freshUrl = await resolveYadiskAudioUrl(state.currentTrack, true);
+        if (reqId !== state.playRequestId || !state.isPlaying) return;
+        if (!freshUrl) {
+          skipBrokenTrack('Нет ссылки на трек');
+          return;
+        }
 
         audio.pause();
         audio.src = freshUrl;
@@ -1117,11 +1258,12 @@
             try { audio.currentTime = resumeTime; } catch (e) {}
           }
           audio.play().catch(() => {
-            if (state.isPlaying) scheduleStallWatchdog();
+            if (state.isPlaying) reconnectCurrentStream();
           });
         }, { once: true });
+        scheduleStallWatchdog();
       } catch (e) {
-        if (state.isPlaying) scheduleStallWatchdog();
+        if (state.isPlaying) reconnectCurrentStream();
       }
     }
 
@@ -1132,14 +1274,14 @@
         if (state.isPlaying && (audio.paused || audio.readyState < 2)) {
           reconnectCurrentStream();
         }
-      }, 5000);
+      }, 4500);
     }
 
     function initAudioEngine() {
       audio.addEventListener('timeupdate', () => {
         if (state.isDraggingProgress || !audio.duration || isNaN(audio.duration)) return;
         state.progress = (audio.currentTime / audio.duration) * 100;
-        if (state.progress > 45 && state.currentTrack && state.currentTrack.source === 'wave') {
+        if (audio.currentTime >= 3 && state.currentTrack && state.currentTrack.source === 'wave') {
           markTrackAsListened(state.currentTrack);
         }
         syncProgressUI();
@@ -1148,6 +1290,7 @@
       audio.addEventListener('playing', () => {
         clearTimeout(state.stallTimerId);
         state.reconnectAttempts = 0;
+        state.consecutiveErrors = 0;
         prefetchNextThreeSequential();
       });
 
@@ -1175,8 +1318,8 @@
       });
 
       audio.addEventListener('error', () => {
-        if (state.isPlaying && state.currentTrack && state.currentTrack.yadiskPublicUrl) {
-          scheduleStallWatchdog();
+        if (state.isPlaying && state.currentTrack) {
+          reconnectCurrentStream();
         }
       });
 
@@ -1229,6 +1372,7 @@
         }
       });
 
+      syncNavTabsUI();
       syncToggleButtonsUI();
       renderContent();
       updatePlayerUI();
@@ -1272,13 +1416,8 @@
       updatePlayerUI();
     }
 
-    function switchTab(tabId) {
-      if (document.activeElement && document.activeElement !== document.body) {
-        document.activeElement.blur();
-      }
-      state.activeTab = tabId;
-      if (state.isSongPageOpen) toggleSongPage(false);
-
+    function syncNavTabsUI() {
+      const tabId = state.activeTab || 'wave';
       ['wave', 'playlist', 'like', 'dislike'].forEach(id => {
         const isActive = (tabId === id || tabId === `buffer-${id}`);
         const deskEl = document.getElementById('tab-' + id);
@@ -1287,7 +1426,17 @@
         const mobEl = document.getElementById('mob-tab-' + id);
         if (mobEl) mobEl.classList.toggle('neon-nav-active', isActive);
       });
+    }
 
+    function switchTab(tabId) {
+      if (document.activeElement && document.activeElement !== document.body) {
+        document.activeElement.blur();
+      }
+      state.activeTab = tabId;
+      if (state.isSongPageOpen) toggleSongPage(false);
+
+      syncNavTabsUI();
+      saveState(false);
       renderContent();
     }
 
@@ -1460,7 +1609,10 @@
             <div class="text-sm truncate transition-colors ${isCur ? 'active-track-title' : 'font-semibold text-white'}">${track.title}</div>
             <div class="text-[12px] sm:text-[13px] mt-0.5 truncate text-white/50">${track.artist}</div>
           </div>
-          <span class="text-xs text-white/30 tabular-nums pr-1">${track.duration}</span>
+          <div class="flex items-center gap-2 shrink-0 pr-1">
+            ${renderPrefetchDot(track)}
+            <span class="text-xs text-white/30 tabular-nums">${track.duration}</span>
+          </div>
         </div>
       `;
     }
@@ -1493,7 +1645,8 @@
               <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="${isDisliked ? 'currentColor' : 'none'}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-3"></path></svg>
             </button>
           </div>
-          <div class="flex items-center shrink-0 w-[38px] sm:w-[55px] justify-end">
+          <div class="flex items-center gap-2 shrink-0 min-w-[46px] sm:min-w-[64px] justify-end">
+            ${renderPrefetchDot(track)}
             <span class="text-xs sm:text-sm tabular-nums text-white/40">${track.duration}</span>
           </div>
         </div>
@@ -1585,6 +1738,11 @@
       const found = state.queue.find(t => t.id === id) || TRACKS.find(t => t.id === id);
       if (!found) return;
 
+      // Если переключаем с трека Моей волны — сразу считаем его прослушанным
+      if (state.currentTrack && state.currentTrack.id !== found.id && state.currentTrack.source === 'wave' && state.isPlaying) {
+        markTrackAsListened(state.currentTrack);
+      }
+
       const reqId = ++state.playRequestId;
       clearTimeout(state.stallTimerId);
 
@@ -1605,9 +1763,7 @@
       }
 
       if (!found.yadiskPublicUrl) {
-        showToast('Трек ещё не перенесён на Яндекс Диск (запустите core.py)', 'warn');
-        state.isPlaying = false;
-        updatePlayerUI();
+        skipBrokenTrack('Трек недоступен');
         return;
       }
 
@@ -1655,8 +1811,14 @@
       renderContent();
     }
 
-    function nextTrack() {
+    function nextTrack(fromError = false) {
       if (!state.queue.length) return;
+      if (!fromError) {
+        state.consecutiveErrors = 0;
+        if (state.currentTrack && state.currentTrack.source === 'wave') {
+          markTrackAsListened(state.currentTrack);
+        }
+      }
       const idx = state.queue.findIndex(t => t.id === (state.currentTrack && state.currentTrack.id));
       const nextIdx = (idx + 1) % state.queue.length;
       playTrack(state.queue[nextIdx].id);
@@ -2120,7 +2282,10 @@
                <button type="button" onclick="moveQueueItem(${idx}, -1)" class="p-1.5 hover:text-white active:scale-90"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/></svg></button>
                <button type="button" onclick="moveQueueItem(${idx}, 1)" class="p-1.5 hover:text-white active:scale-90"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg></button>
              </div>
-             <div class="text-xs tabular-nums text-gray-500 w-9 text-right">${track.duration}</div>
+             <div class="flex items-center gap-1.5 justify-end shrink-0">
+               ${renderPrefetchDot(track)}
+               <span class="text-xs tabular-nums text-gray-500 w-9 text-right">${track.duration}</span>
+             </div>
           </div>
         `;
       }).join('');
