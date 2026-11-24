@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="referrer" content="no-referrer">
   <title>Nikrid — Sci-Fi Music Player</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png">
+  <meta property="og:title" content="Nikrid Radio">
+  <meta property="og:image" content="site-cover.webp">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" media="print" onload="this.media='all'">
 
@@ -464,6 +468,8 @@
     let state = {
       activeTab: 'wave',
       playlistSort: 'added_desc',
+      waveSessionId: 1,
+      likedAtMap: {},
       mood: 'Весёлая',
       theme: '#10B981',
       currentTrack: TRACKS[0],
@@ -868,11 +874,27 @@
       if (!remote || typeof remote !== 'object') return;
       rawRemoteSyncCache = remote;
 
+      const remoteSyncedAt = typeof remote.bufferSyncedAt === 'string' ? remote.bufferSyncedAt : '';
+      const serverReconciled = Boolean(remoteSyncedAt && remoteSyncedAt !== state.lastSyncClearedAt);
+      const syncedMs = remoteSyncedAt ? Date.parse(remoteSyncedAt) || 0 : 0;
+
       if (Array.isArray(remote.likeIds)) {
-        const mergedLikes = new Set([...state.bufferLikes.map(t => t.id), ...remote.likeIds]);
-        state.bufferLikes = Array.from(mergedLikes)
-          .map(id => resolveTrackOrStub(id, remote.likeTitles))
-          .filter(Boolean);
+        if (serverReconciled) {
+          state.lastSyncClearedAt = remoteSyncedAt;
+          // Берём сверенный с YTMusic список с сервера + локальные лайки, поставленные ПОСЛЕ сверки
+          const freshLocalIds = state.bufferLikes
+            .filter(t => ((state.likedAtMap && state.likedAtMap[t.id]) || 0) > syncedMs)
+            .map(t => t.id);
+          const combinedLikeIds = new Set([...remote.likeIds, ...freshLocalIds]);
+          state.bufferLikes = Array.from(combinedLikeIds)
+            .map(id => resolveTrackOrStub(id, remote.likeTitles))
+            .filter(Boolean);
+        } else {
+          const mergedLikes = new Set([...state.bufferLikes.map(t => t.id), ...remote.likeIds]);
+          state.bufferLikes = Array.from(mergedLikes)
+            .map(id => resolveTrackOrStub(id, remote.likeTitles))
+            .filter(Boolean);
+        }
       }
       if (Array.isArray(remote.dislikeIds)) {
         const mergedDislikes = new Set([...state.bufferDislikes.map(t => t.id), ...remote.dislikeIds]);
@@ -881,7 +903,9 @@
           .filter(Boolean);
       }
       if (Array.isArray(remote.waveListenedIds)) {
-        state.waveListenedIds = Array.from(new Set([...state.waveListenedIds, ...remote.waveListenedIds]));
+        state.waveListenedIds = serverReconciled
+          ? [...remote.waveListenedIds]
+          : Array.from(new Set([...state.waveListenedIds, ...remote.waveListenedIds]));
       }
 
       const disSet = new Set(state.bufferDislikes.map(t => t.id));
@@ -970,6 +994,8 @@
         const payload = {
           activeTab: state.activeTab,
           playlistSort: state.playlistSort,
+          waveSessionId: state.waveSessionId,
+          likedAtMap: state.likedAtMap,
           lastSyncClearedAt: state.lastSyncClearedAt,
           mood: 'Весёлая',
           theme: state.theme,
@@ -1002,6 +1028,12 @@
         }
         if (data.playlistSort && ['added_desc', 'added_asc', 'title_asc'].includes(data.playlistSort)) {
           state.playlistSort = data.playlistSort;
+        }
+        if (typeof data.waveSessionId === 'number' && data.waveSessionId > 0) {
+          state.waveSessionId = data.waveSessionId;
+        }
+        if (data.likedAtMap && typeof data.likedAtMap === 'object') {
+          state.likedAtMap = data.likedAtMap;
         }
         if (typeof data.lastSyncClearedAt === 'string') {
           state.lastSyncClearedAt = data.lastSyncClearedAt;
@@ -1065,6 +1097,8 @@
             moods: ['Весёлая'],
             source: source,
             liked: isLikedDefault,
+            inYtmLiked: item.inYtmLiked === true,
+            playlistOrder: typeof item.playlistOrder === 'number' ? item.playlistOrder : null,
             image: resolveLocalCover(item.image || item.cover || '', vid)
           };
         });
@@ -1078,6 +1112,7 @@
 
       TRACKS = parsedTracks;
 
+      const prevSession = state.waveSessionId;
       if (!isSoftRefresh) {
         const waveInit = getWaveTracks();
         state.queue = waveInit.length > 0 ? [...waveInit] : [...TRACKS];
@@ -1085,6 +1120,15 @@
         state.currentTrack = state.queue[0] || TRACKS[0];
         state.history = [];
         loadState();
+      } else if (state.waveSessionId !== prevSession) {
+        const waveInit = getWaveTracks();
+        if (waveInit.length > 0) {
+          state.queue = [...waveInit];
+          state.customQueueOrder = state.queue.map(t => t.id);
+          if (!state.isPlaying) {
+            state.currentTrack = waveInit[0];
+          }
+        }
       }
 
       if (rawRemoteSyncCache) applyRemoteSyncData(rawRemoteSyncCache);
@@ -1213,27 +1257,51 @@
       renderContent();
     }
 
+    function compareNewestFirst(a, b, likedBufIds) {
+      // 1. Свежелайкнутые на сайте (ещё не в YTMusic или в буфере) — всегда наверху
+      const aUnsynced = (!a.inYtmLiked && likedBufIds.has(a.id));
+      const bUnsynced = (!b.inYtmLiked && likedBufIds.has(b.id));
+      if (aUnsynced !== bUnsynced) return aUnsynced ? -1 : 1;
+      if (aUnsynced && bUnsynced) {
+        const tsA = (state.likedAtMap && state.likedAtMap[a.id]) || 0;
+        const tsB = (state.likedAtMap && state.likedAtMap[b.id]) || 0;
+        if (tsA !== tsB) return tsB - tsA;
+        return (b.id || 0) - (a.id || 0);
+      }
+
+      // 2. Реальный порядок из YouTube Music Liked Songs (playlistOrder: 0 = самый новый лайк!)
+      const hasOrdA = typeof a.playlistOrder === 'number';
+      const hasOrdB = typeof b.playlistOrder === 'number';
+      if (hasOrdA && hasOrdB) {
+        if (a.playlistOrder !== b.playlistOrder) return a.playlistOrder - b.playlistOrder;
+      } else if (hasOrdA !== hasOrdB) {
+        return hasOrdA ? -1 : 1;
+      }
+
+      // 3. Фолбэк для старых записей без playlistOrder
+      const tsA = (state.likedAtMap && state.likedAtMap[a.id]) || 0;
+      const tsB = (state.likedAtMap && state.likedAtMap[b.id]) || 0;
+      if (tsA !== tsB) return tsB - tsA;
+      return (b.id || 0) - (a.id || 0);
+    }
+
     function getPlaylistTracks() {
       const dislikedIds = new Set(state.bufferDislikes.map(t => t.id));
-      const freshLiked = [...state.bufferLikes]
-        .reverse()
-        .map(l => TRACKS.find(t => t.id === l.id))
-        .filter(t => t && !dislikedIds.has(t.id));
-      const freshIds = new Set(freshLiked.map(t => t.id));
-      const mainPlaylist = TRACKS.filter(t => t.source === 'playlist' && !dislikedIds.has(t.id) && !freshIds.has(t.id));
+      const likedBufIds = new Set(state.bufferLikes.map(t => t.id));
+      const combined = TRACKS.filter(t =>
+        (t.source === 'playlist' || likedBufIds.has(t.id)) && !dislikedIds.has(t.id)
+      );
 
       if (state.playlistSort === 'title_asc') {
-        return [...freshLiked, ...mainPlaylist].sort((a, b) =>
+        return [...combined].sort((a, b) =>
           (a.title || '').localeCompare(b.title || '', 'ru', { sensitivity: 'base' })
         );
       }
       if (state.playlistSort === 'added_asc') {
-        const sortedMain = [...mainPlaylist].sort((a, b) => (a.id || 0) - (b.id || 0));
-        return [...sortedMain, ...freshLiked.reverse()];
+        return [...combined].sort((a, b) => compareNewestFirst(b, a, likedBufIds));
       }
-      // По умолчанию: added_desc (сначала свежелайкнутые, затем новые по id сверху)
-      const sortedMain = [...mainPlaylist].sort((a, b) => (b.id || 0) - (a.id || 0));
-      return [...freshLiked, ...sortedMain];
+      // По умолчанию: added_desc (свежие лайки сайта + порядок YouTube Music сверху)
+      return [...combined].sort((a, b) => compareNewestFirst(a, b, likedBufIds));
     }
 
     function markTrackAsListened(track) {
@@ -1535,20 +1603,31 @@
                   <span class="text-xs text-white/45 font-medium">${waveTracks.length} треков • Прослушано: ${listenedCount}</span>
                 </div>
                 <h1 class="text-2xl sm:text-4xl font-extrabold text-white tracking-tight drop-shadow-md mb-4 sm:mb-6">Моя волна</h1>
-                <button type="button" onclick="startWaveStream()" class="px-5 sm:px-8 py-2.5 sm:py-3.5 bg-white text-black text-xs sm:text-sm font-extrabold rounded-full hover:scale-105 active:scale-95 transition-transform shadow-[0_0_20px_rgba(255,255,255,0.2)] flex items-center gap-2">
-                  <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 24 24">
-                    ${state.isPlaying ? '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>' : '<path d="M8 5v14l11-7z"/>'}
-                  </svg>
-                  <span>${state.isPlaying ? 'ПАУЗА ПОТОКА' : 'СЛУШАТЬ ПОТОК'}</span>
-                </button>
+                <div class="flex flex-wrap items-center gap-2.5">
+                  <button type="button" onclick="startWaveStream()" class="px-5 sm:px-8 py-2.5 sm:py-3.5 bg-white text-black text-xs sm:text-sm font-extrabold rounded-full hover:scale-105 active:scale-95 transition-transform shadow-[0_0_20px_rgba(255,255,255,0.2)] flex items-center gap-2">
+                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 24 24">
+                      ${state.isPlaying ? '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>' : '<path d="M8 5v14l11-7z"/>'}
+                    </svg>
+                    <span>${state.isPlaying ? 'ПАУЗА ПОТОКА' : 'СЛУШАТЬ ПОТОК'}</span>
+                  </button>
+                  <button type="button" onclick="refreshWaveNow()" class="px-4 py-2.5 sm:py-3.5 bg-white/10 hover:bg-white/15 text-white text-xs sm:text-sm font-semibold rounded-full transition flex items-center gap-1.5" title="Пересобрать волну из новых треков">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                    <span>Обновить волну</span>
+                  </button>
+                </div>
               </div>
 
-              <div class="relative z-10 flex items-center gap-1.5 sm:gap-2.5 mr-1 sm:mr-6 opacity-90 shrink-0">
+              <div class="relative z-10 flex items-center gap-3 sm:gap-5 mr-1 sm:mr-4 shrink-0">
+                <div class="w-16 h-16 sm:w-24 sm:h-24 rounded-full overflow-hidden shadow-[0_0_30px_rgba(56,189,248,0.35)] bg-black shrink-0">
+                  <img src="site-cover.webp" alt="Nikrid Cover" class="w-full h-full object-cover" onerror="this.style.display='none'">
+                </div>
+                <div class="hidden sm:flex items-center gap-2 opacity-90">
                 <div class="w-1.5 sm:w-2.5 h-5 rounded-full neon-bg"></div>
                 <div class="w-1.5 sm:w-2.5 h-8 sm:h-9 rounded-full neon-bg"></div>
                 <div class="w-1.5 sm:w-2.5 h-10 sm:h-12 rounded-full neon-bg"></div>
                 <div class="w-1.5 sm:w-2.5 h-6 sm:h-7 rounded-full neon-bg"></div>
                 <div class="w-1.5 sm:w-2.5 h-4 rounded-full neon-bg"></div>
+                </div>
               </div>
             </div>
 
@@ -1605,7 +1684,7 @@
               <h1 class="text-2xl sm:text-4xl font-bold tracking-tight drop-shadow-md neon-color">Буфер: Лайк</h1>
               ${state.bufferLikes.length > 0 ? `<button type="button" onclick="clearBuffer('like')" class="px-4 py-1.5 rounded-full bg-white/5 hover:bg-white/15 text-xs font-semibold text-white/70 hover:text-white transition">Очистить буфер</button>` : ''}
             </div>
-            <p class="text-xs sm:text-sm text-white/50 mb-5 sm:mb-6 px-1">Нажмите на трек, чтобы открыть его в YouTube Music. Буфер не стирается сам — очищайте вручную, когда отметите треки.</p>
+            <p class="text-xs sm:text-sm text-white/50 mb-5 sm:mb-6 px-1">Сюда автоматически попадают все треки, лайкнутые на сайте, которых ещё нет в ваших лайках YouTube Music. Нажмите на трек, чтобы открыть его в YTMusic — после лайка там и синхронизации он сам исчезнет из буфера.</p>
             <div class="flex flex-col gap-2">
               ${state.bufferLikes.length === 0 ? '<p class="text-white/30 italic px-1">Буфер пуст</p>' : state.bufferLikes.map(t => renderBufferRow(t, 'like')).join('')}
             </div>
@@ -1626,6 +1705,22 @@
           </div>
         `;
       }
+    }
+
+    function refreshWaveNow() {
+      const waveTracks = getWaveTracks();
+      if (!waveTracks.length) {
+        showToast('Нет треков для волны', 'warn');
+        return;
+      }
+      state.queue = [...waveTracks];
+      state.customQueueOrder = waveTracks.map(t => t.id);
+      state.currentTrack = waveTracks[0];
+      state.progress = 0;
+      saveState(false);
+      renderContent();
+      updatePlayerUI();
+      showToast(`Волна обновлена (${waveTracks.length} треков)`, 'ok', null, null, 2200);
     }
 
     function startWaveStream() {
@@ -1962,9 +2057,11 @@
       const exists = state.bufferLikes.some(t => t.id === id);
       if (exists) {
         state.bufferLikes = state.bufferLikes.filter(t => t.id !== id);
+        if (state.likedAtMap) delete state.likedAtMap[id];
         if (track.source !== 'playlist') track.liked = false;
       } else {
-        state.bufferLikes.push(track);
+        state.bufferLikes = [...state.bufferLikes.filter(t => t.id !== id), track];
+        state.likedAtMap = { ...(state.likedAtMap || {}), [id]: Date.now() };
         track.liked = true;
         state.bufferDislikes = state.bufferDislikes.filter(t => t.id !== id);
       }

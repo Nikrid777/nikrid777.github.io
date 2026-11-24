@@ -14,6 +14,10 @@ on:
         description: 'Только добить миграцию текущего playlist.json (true/false)'
         required: false
         default: 'false'
+      reset_wave:
+        description: 'Полностью сбросить и пересобрать Мою волну с нуля (true/false)'
+        required: false
+        default: 'false'
 
 permissions:
   contents: write
@@ -60,6 +64,7 @@ jobs:
         env:
           INPUT_LIMIT: ${{ github.event.inputs.limit }}
           INPUT_SKIP_YT: ${{ github.event.inputs.skip_yt_sync }}
+          INPUT_RESET_WAVE: ${{ github.event.inputs.reset_wave }}
         run: |
           ARGS="--workers 5"
           LIMIT="${INPUT_LIMIT:-50}"
@@ -68,6 +73,9 @@ jobs:
           fi
           if [ "$INPUT_SKIP_YT" = "true" ]; then
             ARGS="$ARGS --skip-yt-sync"
+          fi
+          if [ "$INPUT_RESET_WAVE" = "true" ]; then
+            ARGS="$ARGS --reset-wave"
           fi
           python core.py $ARGS
 

@@ -1,6 +1,7 @@
 import io
 import os
 import re
+import random
 import sys
 import json
 import time
@@ -582,6 +583,109 @@ def clear_cloud_sync_buffer(processed_like_ids: set, processed_dislike_ids: set,
         ui_line("!", f"Не удалось очистить буфер в Gist ({_compact_err(e, 90)})", _ANSI_YELLOW, step="gist_sync", log_level="WARN")
 
 
+def reconcile_like_buffer_in_gist(
+    existing_tracks: list[dict],
+    ytm_liked_vids: set[str],
+    disliked_ids: set,
+    processed_listened_ids: set,
+    reset_wave: bool = False,
+):
+    """
+    Сверяет лайки на сайте с реальными лайками в YouTube Music:
+    - Если трек лайкнут на сайте (liked=True или source='playlist'), но его НЕТ в лайках YTMusic -> помещает в Буфер: Лайк.
+    - Если трек УЖЕ есть в лайках YTMusic -> убирает из Буфера: Лайк (перенос завершён).
+    """
+    if not SYNC_CONFIG_PATH.exists():
+        return
+    try:
+        cfg = json.loads(SYNC_CONFIG_PATH.read_text(encoding="utf-8"))
+        token = cfg.get("token", "").strip()
+        gist_id = cfg.get("gistId", "").strip()
+        if not token or not gist_id:
+            return
+
+        current = load_cloud_sync_state()
+        by_id = {t.get("id"): t for t in existing_tracks if t.get("id") is not None}
+
+        # Сначала оставляем из текущего буфера только те треки, которых ещё нет в YTMusic
+        new_like_ids = []
+        new_like_titles = []
+        seen_ids = set()
+
+        for tid in current.get("likeIds", []):
+            if tid in disliked_ids or tid in seen_ids:
+                continue
+            t_obj = by_id.get(tid)
+            if t_obj:
+                vid = t_obj.get("videoId", "")
+                if vid and vid in ytm_liked_vids:
+                    continue  # Уже лайкнут в YouTube Music -> убираем из буфера
+                seen_ids.add(tid)
+                new_like_ids.append(tid)
+                new_like_titles.append({
+                    "id": tid,
+                    "videoId": vid,
+                    "title": t_obj.get("title", ""),
+                    "artist": t_obj.get("artist", ""),
+                })
+
+        # Добавляем в буфер все треки с сайта с liked=True, которых нет в плейлисте лайков YTMusic
+        added_missing = 0
+        for t_obj in existing_tracks:
+            tid = t_obj.get("id")
+            vid = t_obj.get("videoId", "")
+            if tid is None or not vid or tid in disliked_ids or tid in seen_ids:
+                continue
+            is_site_liked = bool(t_obj.get("liked")) or (t_obj.get("source") == "playlist")
+            if is_site_liked and vid not in ytm_liked_vids:
+                seen_ids.add(tid)
+                new_like_ids.append(tid)
+                new_like_titles.append({
+                    "id": tid,
+                    "videoId": vid,
+                    "title": t_obj.get("title", ""),
+                    "artist": t_obj.get("artist", ""),
+                })
+                added_missing += 1
+
+        rem_listened = [] if reset_wave else [
+            x for x in current.get("waveListenedIds", []) if x not in processed_listened_ids
+        ]
+
+        now_iso = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+        payload = {
+            "updatedAt": now_iso,
+            "bufferSyncedAt": now_iso,
+            "likeIds": new_like_ids,
+            "dislikeIds": current.get("dislikeIds", []),
+            "waveListenedIds": rem_listened,
+            "likeTitles": new_like_titles,
+            "dislikeTitles": current.get("dislikeTitles", []),
+        }
+        body = json.dumps({"files": {"nikrid_sync.json": {"content": json.dumps(payload, ensure_ascii=False, indent=2)}}}).encode("utf-8")
+        req = urllib.request.Request(
+            f"https://api.github.com/gists/{gist_id}",
+            data=body,
+            headers={
+                "Authorization": f"token {token}",
+                "Accept": "application/vnd.github+json",
+                "Content-Type": "application/json",
+                "User-Agent": "Nikrid-Radio-Sync",
+            },
+            method="PATCH",
+        )
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            if resp.status in (200, 201):
+                ui_line(
+                    "✓",
+                    f"Буфер лайков сверен с YTMusic: в буфере {len(new_like_ids)} (добавлено новых без лайка в YTM: {added_missing})",
+                    _ANSI_GREEN,
+                    step="gist_sync",
+                )
+    except Exception as e:
+        ui_line("!", f"Не удалось сверить буфер в Gist ({_compact_err(e, 90)})", _ANSI_YELLOW, step="gist_sync", log_level="WARN")
+
+
 # =========================================================
 # БЫСТРОЕ И НАДЁЖНОЕ СКАЧИВАНИЕ АУДИО (YT-DLP)
 # =========================================================
@@ -780,6 +884,7 @@ def main():
     parser.add_argument("--workers", type=int, default=MAX_WORKERS, help=f"Количество параллельных потоков (по умолчанию {MAX_WORKERS})")
     parser.add_argument("--covers-only", action="store_true", help="Скачать/сжать только локальные обложки 512x512 в covers/")
     parser.add_argument("--skip-yt-sync", action="store_true", help="Не запрашивать новые треки из YouTube Music")
+    parser.add_argument("--reset-wave", action="store_true", help="Полностью сбросить старую волну и набрать свежие треки")
     args = parser.parse_args()
 
     workers = max(1, min(10, args.workers))
@@ -1017,19 +1122,48 @@ def main():
                 yt_liked_raw = yt.get_liked_songs(limit=1000).get("tracks", [])
                 liked_metas = []
                 liked_vids = []
-                for item in yt_liked_raw:
+                for idx_l, item in enumerate(yt_liked_raw):
                     meta = extract_track_meta(item, source="playlist")
                     if meta and meta["videoId"] not in disliked_vids:
+                        meta["playlistOrder"] = idx_l
+                        meta["inYtmLiked"] = True
                         liked_metas.append(meta)
                         liked_vids.append(meta["videoId"])
+
+                ytm_liked_vids_set = set(liked_vids)
+                for t_ex in existing_tracks:
+                    vid_ex = t_ex.get("videoId", "")
+                    if vid_ex in ytm_liked_vids_set:
+                        t_ex["inYtmLiked"] = True
+                    else:
+                        t_ex["inYtmLiked"] = False
+
+                dropped_wave_vids = set()
+                if args.reset_wave:
+                    kept_non_wave = []
+                    for t_w in existing_tracks:
+                        if t_w.get("source") == "wave" and not t_w.get("liked") and t_w.get("id") not in liked_ids:
+                            vid_w = t_w.get("videoId", "")
+                            if vid_w:
+                                dropped_wave_vids.add(vid_w)
+                                delete_local_cover(vid_w)
+                            if t_w.get("yadiskPath"):
+                                delete_from_yadisk(yadisk_token, t_w["yadiskPath"])
+                            continue
+                        kept_non_wave.append(t_w)
+                    existing_tracks = kept_non_wave
+                    by_vid = {t.get("videoId"): t for t in existing_tracks if t.get("videoId")}
+                    ui_line("✓", f"Волна сброшена: удалено старых wave-треков {len(dropped_wave_vids)}", _ANSI_GREEN, step="yt_sync")
 
                 current_wave_total = [t for t in existing_tracks if t.get("source") == "wave"]
                 need_wave = max(0, WAVE_TARGET_COUNT - len(current_wave_total))
                 wave_metas = []
                 if need_wave > 0:
                     ui_status("↻", f"Подбираю «Мою волну» ({need_wave} треков)...", _ANSI_CYAN, step="yt_sync")
-                    exclude_set = set(liked_vids) | disliked_vids | set(by_vid.keys())
-                    wave_metas = fetch_wave_200(yt, liked_vids, exclude_set)[:need_wave]
+                    exclude_set = ytm_liked_vids_set | disliked_vids | set(by_vid.keys()) | dropped_wave_vids
+                    seed_pool = list(liked_vids)
+                    random.shuffle(seed_pool)
+                    wave_metas = fetch_wave_200(yt, seed_pool, exclude_set)[:need_wave]
 
                 ui_clear_inline()
                 ui_line("✓", f"YTMusic: лайков {len(liked_metas)}, новых в волну {len(wave_metas)}", _ANSI_GREEN, step="yt_sync")
@@ -1041,6 +1175,8 @@ def main():
                         if meta["source"] == "playlist":
                             by_vid[vid_m]["source"] = "playlist"
                             by_vid[vid_m]["liked"] = True
+                            by_vid[vid_m]["inYtmLiked"] = True
+                            by_vid[vid_m]["playlistOrder"] = meta.get("playlistOrder")
                         by_vid[vid_m]["moods"] = ["Весёлая"]
                     else:
                         to_process.append(meta)
@@ -1100,6 +1236,8 @@ def main():
                                         "moods": ["Весёлая"],
                                         "source": m_item["source"],
                                         "liked": m_item["liked"],
+                                        "inYtmLiked": bool(m_item.get("inYtmLiked", False)),
+                                        "playlistOrder": m_item.get("playlistOrder"),
                                         "image": cov_p
                                     }
                                     next_numeric_id += 1
@@ -1126,7 +1264,16 @@ def main():
             except Exception as e:
                 ui_line("!", f"Сбой авторизации/запроса YouTube Music: {_compact_err(e, 140)}", _ANSI_RED, step="yt_sync", log_level="ERROR")
 
-        clear_cloud_sync_buffer(set(), set(), wave_listened_ids)
+        if not args.skip_yt_sync and "ytm_liked_vids_set" in locals():
+            reconcile_like_buffer_in_gist(
+                existing_tracks,
+                ytm_liked_vids_set,
+                disliked_ids,
+                wave_listened_ids,
+                reset_wave=args.reset_wave,
+            )
+        else:
+            clear_cloud_sync_buffer(set(), set(), wave_listened_ids)
 
     except KeyboardInterrupt:
         ui_line("!", "Остановлено пользователем (Ctrl+C) — сохраняю прогресс...", _ANSI_YELLOW, step="interrupt", log_level="INFO")
