@@ -1,0 +1,13 @@
+@"
+.venv/
+temp_audio/
+yadisk_token.txt
+sync_config.json
+browser.json
+cookies.txt
+token.json
+credentials.json
+client_secret.json
+headers.txt
+failed_tracks.log
+"@ | Out-File -Encoding utf8 .gitignore

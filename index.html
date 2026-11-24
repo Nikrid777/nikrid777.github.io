@@ -446,13 +446,14 @@
 
     const yadiskUrlCache = new Map();
 
-    function resolveLocalCover(rawImg) {
+    function resolveLocalCover(rawImg, videoId = '') {
       if (typeof rawImg === 'string') {
         const s = rawImg.trim();
-        if (s.startsWith('covers/') || s.startsWith('./covers/') || s.startsWith('data:')) {
+        if (s.startsWith('covers/') || s.startsWith('./covers/') || s.startsWith('data:') || s.startsWith('http')) {
           return s;
         }
       }
+      if (videoId) return `covers/${videoId}.webp`;
       return DEFAULT_COVER_SVG;
     }
 
@@ -462,6 +463,7 @@
 
     let state = {
       activeTab: 'wave',
+      playlistSort: 'added_desc',
       mood: 'Весёлая',
       theme: '#10B981',
       currentTrack: TRACKS[0],
@@ -839,41 +841,51 @@
       };
     }
 
+    function resolveTrackOrStub(id, titlesList) {
+      const found = TRACKS.find(t => t.id === id);
+      if (found) return found;
+      if (Array.isArray(titlesList)) {
+        const stub = titlesList.find(x => x && x.id === id);
+        if (stub) {
+          return {
+            id: stub.id,
+            videoId: stub.videoId || '',
+            title: stub.title || 'Без названия',
+            artist: stub.artist || 'Исполнитель',
+            duration: '—',
+            seconds: 0,
+            source: 'wave',
+            liked: false,
+            yadiskPublicUrl: '',
+            image: resolveLocalCover('', stub.videoId || '')
+          };
+        }
+      }
+      return null;
+    }
+
     function applyRemoteSyncData(remote) {
       if (!remote || typeof remote !== 'object') return;
       rawRemoteSyncCache = remote;
 
-      const remoteClearedAt = typeof remote.clearedAt === 'string' ? remote.clearedAt : '';
-      const wasClearedByBot = Boolean(remoteClearedAt && remoteClearedAt !== state.lastSyncClearedAt);
-
-      if (wasClearedByBot) {
-        state.lastSyncClearedAt = remoteClearedAt;
-        state.bufferLikes = Array.isArray(remote.likeIds)
-          ? remote.likeIds.map(id => TRACKS.find(t => t.id === id)).filter(Boolean)
-          : [];
-        state.bufferDislikes = Array.isArray(remote.dislikeIds)
-          ? remote.dislikeIds.map(id => TRACKS.find(t => t.id === id)).filter(Boolean)
-          : [];
-        state.waveListenedIds = Array.isArray(remote.waveListenedIds)
-          ? [...remote.waveListenedIds]
-          : [];
-      } else {
-        if (Array.isArray(remote.likeIds)) {
-          const mergedLikes = new Set([...state.bufferLikes.map(t => t.id), ...remote.likeIds]);
-          state.bufferLikes = Array.from(mergedLikes).map(id => TRACKS.find(t => t.id === id)).filter(Boolean);
-        }
-        if (Array.isArray(remote.dislikeIds)) {
-          const mergedDislikes = new Set([...state.bufferDislikes.map(t => t.id), ...remote.dislikeIds]);
-          state.bufferDislikes = Array.from(mergedDislikes).map(id => TRACKS.find(t => t.id === id)).filter(Boolean);
-        }
-        if (Array.isArray(remote.waveListenedIds)) {
-          state.waveListenedIds = Array.from(new Set([...state.waveListenedIds, ...remote.waveListenedIds]));
-        }
+      if (Array.isArray(remote.likeIds)) {
+        const mergedLikes = new Set([...state.bufferLikes.map(t => t.id), ...remote.likeIds]);
+        state.bufferLikes = Array.from(mergedLikes)
+          .map(id => resolveTrackOrStub(id, remote.likeTitles))
+          .filter(Boolean);
+      }
+      if (Array.isArray(remote.dislikeIds)) {
+        const mergedDislikes = new Set([...state.bufferDislikes.map(t => t.id), ...remote.dislikeIds]);
+        state.bufferDislikes = Array.from(mergedDislikes)
+          .map(id => resolveTrackOrStub(id, remote.dislikeTitles))
+          .filter(Boolean);
+      }
+      if (Array.isArray(remote.waveListenedIds)) {
+        state.waveListenedIds = Array.from(new Set([...state.waveListenedIds, ...remote.waveListenedIds]));
       }
 
-      // Убираем из буфера лайков треки, которые core.py уже перенёс в основной плейлист
       const disSet = new Set(state.bufferDislikes.map(t => t.id));
-      state.bufferLikes = state.bufferLikes.filter(t => t && t.source !== 'playlist' && !disSet.has(t.id));
+      state.bufferLikes = state.bufferLikes.filter(t => t && !disSet.has(t.id));
     }
 
     async function pushCloudState(silent = true) {
@@ -936,7 +948,19 @@
       state.cloudSyncDebounce = setTimeout(() => pushCloudState(true), 2000);
     }
 
-    function handleImgError(imgEl) {
+    function handleImgError(imgEl, videoId = '') {
+      const vid = (videoId || imgEl.dataset.vid || '').trim();
+      const stage = parseInt(imgEl.dataset.errStage || '0', 10);
+      if (vid && stage === 0) {
+        imgEl.dataset.errStage = '1';
+        imgEl.src = `https://i.ytimg.com/vi/${vid}/hqdefault.jpg`;
+        return;
+      }
+      if (vid && stage === 1) {
+        imgEl.dataset.errStage = '2';
+        imgEl.src = `https://i.ytimg.com/vi/${vid}/mqdefault.jpg`;
+        return;
+      }
       imgEl.onerror = null;
       imgEl.src = DEFAULT_COVER_SVG;
     }
@@ -945,6 +969,7 @@
       try {
         const payload = {
           activeTab: state.activeTab,
+          playlistSort: state.playlistSort,
           lastSyncClearedAt: state.lastSyncClearedAt,
           mood: 'Весёлая',
           theme: state.theme,
@@ -974,6 +999,9 @@
 
         if (data.activeTab && ['wave', 'playlist', 'buffer-like', 'buffer-dislike'].includes(data.activeTab)) {
           state.activeTab = data.activeTab;
+        }
+        if (data.playlistSort && ['added_desc', 'added_asc', 'title_asc'].includes(data.playlistSort)) {
+          state.playlistSort = data.playlistSort;
         }
         if (typeof data.lastSyncClearedAt === 'string') {
           state.lastSyncClearedAt = data.lastSyncClearedAt;
@@ -1037,7 +1065,7 @@
             moods: ['Весёлая'],
             source: source,
             liked: isLikedDefault,
-            image: resolveLocalCover(item.image || item.cover || '')
+            image: resolveLocalCover(item.image || item.cover || '', vid)
           };
         });
     }
@@ -1061,14 +1089,13 @@
 
       if (rawRemoteSyncCache) applyRemoteSyncData(rawRemoteSyncCache);
 
-      // Убираем из буфера лайков треки, которые уже перенесены в основной плейлист
       const dislikedSet = new Set(state.bufferDislikes.map(t => t.id));
       state.bufferLikes = state.bufferLikes
-        .map(l => TRACKS.find(t => t.id === l.id))
-        .filter(t => t && t.source !== 'playlist' && !dislikedSet.has(t.id));
+        .map(l => TRACKS.find(t => t.id === l.id) || l)
+        .filter(t => t && !dislikedSet.has(t.id));
 
       state.bufferDislikes = state.bufferDislikes
-        .map(d => TRACKS.find(t => t.id === d.id))
+        .map(d => TRACKS.find(t => t.id === d.id) || d)
         .filter(Boolean);
 
       TRACKS.forEach(t => {
@@ -1180,6 +1207,12 @@
       return [...unlistened, ...listened].slice(0, WAVE_LIMIT);
     }
 
+    function setPlaylistSort(mode) {
+      state.playlistSort = mode;
+      saveState(false);
+      renderContent();
+    }
+
     function getPlaylistTracks() {
       const dislikedIds = new Set(state.bufferDislikes.map(t => t.id));
       const freshLiked = [...state.bufferLikes]
@@ -1188,7 +1221,19 @@
         .filter(t => t && !dislikedIds.has(t.id));
       const freshIds = new Set(freshLiked.map(t => t.id));
       const mainPlaylist = TRACKS.filter(t => t.source === 'playlist' && !dislikedIds.has(t.id) && !freshIds.has(t.id));
-      return [...freshLiked, ...mainPlaylist];
+
+      if (state.playlistSort === 'title_asc') {
+        return [...freshLiked, ...mainPlaylist].sort((a, b) =>
+          (a.title || '').localeCompare(b.title || '', 'ru', { sensitivity: 'base' })
+        );
+      }
+      if (state.playlistSort === 'added_asc') {
+        const sortedMain = [...mainPlaylist].sort((a, b) => (a.id || 0) - (b.id || 0));
+        return [...sortedMain, ...freshLiked.reverse()];
+      }
+      // По умолчанию: added_desc (сначала свежелайкнутые, затем новые по id сверху)
+      const sortedMain = [...mainPlaylist].sort((a, b) => (b.id || 0) - (a.id || 0));
+      return [...freshLiked, ...sortedMain];
     }
 
     function markTrackAsListened(track) {
@@ -1531,11 +1576,21 @@
       }
       else if (state.activeTab === 'playlist') {
         const playlistTracks = getPlaylistTracks();
+        const isAddedDesc = state.playlistSort === 'added_desc';
+        const isAddedAsc = state.playlistSort === 'added_asc';
+        const isTitleAsc = state.playlistSort === 'title_asc';
         container.innerHTML = `
           <div class="w-full max-w-[1600px] mx-auto">
-            <div class="flex items-baseline justify-between mb-4 sm:mb-8 px-1">
-              <h1 class="text-2xl sm:text-4xl font-bold tracking-tight drop-shadow-md">Плейлист</h1>
-              <span class="text-xs sm:text-sm text-white/45">${playlistTracks.length} треков из YouTube Music</span>
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-4 sm:mb-8 px-1">
+              <div class="flex items-baseline gap-3">
+                <h1 class="text-2xl sm:text-4xl font-bold tracking-tight drop-shadow-md">Плейлист</h1>
+                <span class="text-xs sm:text-sm text-white/45">${playlistTracks.length} треков</span>
+              </div>
+              <div class="flex items-center gap-1.5 bg-white/5 p-1 rounded-full">
+                <button type="button" onclick="setPlaylistSort('added_desc')" class="px-3 py-1.5 rounded-full text-xs font-semibold transition ${isAddedDesc ? 'neon-bg text-black' : 'text-white/60 hover:text-white'}">Новые</button>
+                <button type="button" onclick="setPlaylistSort('added_asc')" class="px-3 py-1.5 rounded-full text-xs font-semibold transition ${isAddedAsc ? 'neon-bg text-black' : 'text-white/60 hover:text-white'}">Старые</button>
+                <button type="button" onclick="setPlaylistSort('title_asc')" class="px-3 py-1.5 rounded-full text-xs font-semibold transition ${isTitleAsc ? 'neon-bg text-black' : 'text-white/60 hover:text-white'}">По имени</button>
+              </div>
             </div>
             <div class="flex flex-col gap-2">
               ${playlistTracks.map(t => renderListRow(t)).join('')}
@@ -1546,10 +1601,13 @@
       else if (state.activeTab === 'buffer-like') {
         container.innerHTML = `
           <div class="w-full max-w-[1600px] mx-auto">
-            <h1 class="text-2xl sm:text-4xl font-bold mb-2 sm:mb-4 tracking-tight drop-shadow-md neon-color px-1">Буфер: Лайк</h1>
-            <p class="text-xs sm:text-sm text-white/50 mb-5 sm:mb-6 px-1">Общий буфер устройств. Скрипт core.py добавит эти треки в основной плейлист.</p>
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-2 sm:mb-4 px-1">
+              <h1 class="text-2xl sm:text-4xl font-bold tracking-tight drop-shadow-md neon-color">Буфер: Лайк</h1>
+              ${state.bufferLikes.length > 0 ? `<button type="button" onclick="clearBuffer('like')" class="px-4 py-1.5 rounded-full bg-white/5 hover:bg-white/15 text-xs font-semibold text-white/70 hover:text-white transition">Очистить буфер</button>` : ''}
+            </div>
+            <p class="text-xs sm:text-sm text-white/50 mb-5 sm:mb-6 px-1">Нажмите на трек, чтобы открыть его в YouTube Music. Буфер не стирается сам — очищайте вручную, когда отметите треки.</p>
             <div class="flex flex-col gap-2">
-              ${state.bufferLikes.length === 0 ? '<p class="text-white/30 italic px-1">Буфер пуст</p>' : state.bufferLikes.map(t => renderListRow(t, 'buffer-like')).join('')}
+              ${state.bufferLikes.length === 0 ? '<p class="text-white/30 italic px-1">Буфер пуст</p>' : state.bufferLikes.map(t => renderBufferRow(t, 'like')).join('')}
             </div>
           </div>
         `;
@@ -1557,10 +1615,13 @@
       else if (state.activeTab === 'buffer-dislike') {
         container.innerHTML = `
           <div class="w-full max-w-[1600px] mx-auto">
-            <h1 class="text-2xl sm:text-4xl font-bold mb-2 sm:mb-4 tracking-tight drop-shadow-md text-red-500 px-1">Буфер: Дизлайк</h1>
-            <p class="text-xs sm:text-sm text-white/50 mb-5 sm:mb-6 px-1">Общий буфер устройств. Скрипт core.py удалит эти треки с Яндекс Диска и исключит из волны.</p>
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-2 sm:mb-4 px-1">
+              <h1 class="text-2xl sm:text-4xl font-bold tracking-tight drop-shadow-md text-red-500">Буфер: Дизлайк</h1>
+              ${state.bufferDislikes.length > 0 ? `<button type="button" onclick="clearBuffer('dislike')" class="px-4 py-1.5 rounded-full bg-white/5 hover:bg-white/15 text-xs font-semibold text-white/70 hover:text-white transition">Очистить буфер</button>` : ''}
+            </div>
+            <p class="text-xs sm:text-sm text-white/50 mb-5 sm:mb-6 px-1">Нажмите на трек, чтобы открыть его в YouTube Music. Буфер не стирается сам — очищайте вручную.</p>
             <div class="flex flex-col gap-2">
-              ${state.bufferDislikes.length === 0 ? '<p class="text-white/30 italic px-1">Буфер пуст</p>' : state.bufferDislikes.map(t => renderListRow(t, 'buffer-dislike')).join('')}
+              ${state.bufferDislikes.length === 0 ? '<p class="text-white/30 italic px-1">Буфер пуст</p>' : state.bufferDislikes.map(t => renderBufferRow(t, 'dislike')).join('')}
             </div>
           </div>
         `;
@@ -1600,7 +1661,7 @@
       return `
         <div onclick="playTrack(${track.id}, true, '${context}')" class="p-3 sm:p-3.5 rounded-3xl flex items-center gap-3.5 sm:gap-4 cursor-pointer transition-colors duration-200 hover:bg-white/10 group ${isCur ? 'bg-white/[0.12] shadow-lg' : 'bg-white/[0.04]'} ${isReady ? '' : 'opacity-60'}">
           <div class="relative rounded-2xl shrink-0 overflow-hidden shadow-md bg-white/5" style="width: 56px; height: 56px;">
-            <img src="${track.image}" alt="${track.title}" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="handleImgError(this)">
+            <img src="${track.image}" alt="${track.title}" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-vid="${typeof track !== 'undefined' && track ? (track.videoId || '') : (typeof t !== 'undefined' && t ? (t.videoId || '') : '')}" onerror="handleImgError(this)">
             <div class="absolute inset-0 bg-black/45 flex items-center justify-center ${isCur ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'} transition-opacity text-sm font-bold text-white">
               ${isCur && state.isPlaying ? '❚❚' : '▶'}
             </div>
@@ -1627,7 +1688,7 @@
         <div onclick="playTrack(${track.id}, true, '${context}')" class="px-3.5 sm:px-5 py-2.5 sm:py-3 rounded-3xl flex items-center justify-between gap-2.5 sm:gap-5 cursor-pointer transition-colors duration-200 hover:bg-white/10 group ${isCur ? 'bg-white/[0.12] shadow-lg' : 'bg-white/[0.04]'} ${isReady ? '' : 'opacity-60'}">
           <div class="flex items-center gap-3.5 sm:gap-5 min-w-0 flex-1">
             <div class="relative w-11 h-11 sm:w-12 sm:h-12 rounded-xl shrink-0 overflow-hidden shadow-md bg-white/5">
-              <img src="${track.image}" alt="${track.title}" loading="lazy" decoding="async" class="w-full h-full object-cover" onerror="handleImgError(this)">
+              <img src="${track.image}" alt="${track.title}" loading="lazy" decoding="async" class="w-full h-full object-cover" data-vid="${typeof track !== 'undefined' && track ? (track.videoId || '') : (typeof t !== 'undefined' && t ? (t.videoId || '') : '')}" onerror="handleImgError(this)">
               <div class="absolute inset-0 bg-black/45 flex items-center justify-center ${isCur ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'} transition-opacity text-sm font-bold text-white">
                 ${isCur && state.isPlaying ? '❚❚' : '▶'}
               </div>
@@ -1653,6 +1714,55 @@
       `;
     }
 
+
+    function openInYouTubeMusic(videoId) {
+      if (!videoId) {
+        showToast('У этого трека нет videoId для YouTube Music', 'warn');
+        return;
+      }
+      window.open(`https://music.youtube.com/watch?v=${encodeURIComponent(videoId)}`, '_blank', 'noopener,noreferrer');
+    }
+
+    function clearBuffer(kind) {
+      if (kind === 'like') {
+        state.bufferLikes = [];
+      } else if (kind === 'dislike') {
+        state.bufferDislikes = [];
+      }
+      saveState(true);
+      updatePlayerUI();
+      renderContent();
+      showToast('Буфер очищен', 'ok', null, null, 2000);
+    }
+
+    function renderBufferRow(track, kind) {
+      const isCur = track.id === (state.currentTrack && state.currentTrack.id);
+      const vid = track.videoId || '';
+      const removeFn = kind === 'like' ? `actionLikeBtn(${track.id})` : `actionDislikeBtn(${track.id})`;
+      return `
+        <div onclick="openInYouTubeMusic('${vid}')" class="px-3.5 sm:px-5 py-2.5 sm:py-3 rounded-3xl flex items-center justify-between gap-2.5 sm:gap-5 cursor-pointer transition-colors duration-200 hover:bg-white/10 group ${isCur ? 'bg-white/[0.12] shadow-lg' : 'bg-white/[0.04]'}">
+          <div class="flex items-center gap-3.5 sm:gap-5 min-w-0 flex-1">
+            <div class="relative w-11 h-11 sm:w-12 sm:h-12 rounded-xl shrink-0 overflow-hidden shadow-md bg-white/5">
+              <img src="${track.image}" alt="${track.title}" loading="lazy" decoding="async" class="w-full h-full object-cover" data-vid="${vid}" onerror="handleImgError(this)">
+            </div>
+            <div class="flex flex-col sm:flex-row sm:items-center min-w-0 flex-1 gap-0.5 sm:gap-4">
+              <div class="text-[13px] sm:text-[15px] truncate sm:w-1/2 font-semibold text-white group-hover:text-[var(--neon)] transition-colors">${track.title}</div>
+              <div class="text-[11px] sm:text-[14px] truncate text-white/50 sm:w-1/2">${track.artist}</div>
+            </div>
+          </div>
+          <div class="flex items-center shrink-0 gap-1.5 sm:gap-2.5">
+            <span class="hidden sm:inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/5 text-[11px] font-semibold text-white/70 group-hover:text-white">
+              YT Music ↗
+            </span>
+            ${track.yadiskPublicUrl ? `<button type="button" title="Слушать здесь" onclick="event.stopPropagation(); playTrack(${track.id}, true, 'buffer-${kind}')" class="p-2 rounded-full bg-white/5 hover:bg-white/15 text-white/70 hover:text-white transition"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>` : ''}
+            <button type="button" title="Убрать из буфера" onclick="event.stopPropagation(); ${removeFn}" class="p-2 rounded-full bg-white/5 hover:bg-red-500/20 text-white/50 hover:text-red-400 transition">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
     function handleSearch(query) {
       const q = query.toLowerCase().trim();
       const dropdown = document.getElementById('searchDropdown');
@@ -1670,7 +1780,7 @@
         resultsContainer.innerHTML = results.map(t => `
           <button type="button" onclick="playTrack(${t.id}); clearSearch();" class="w-full flex items-center gap-3.5 px-5 py-2.5 hover:bg-white/10 active:bg-white/15 transition-colors text-left group">
             <div class="w-10 h-10 rounded-xl overflow-hidden shrink-0 bg-white/5">
-              <img src="${t.image}" alt="${t.title}" loading="lazy" class="w-full h-full object-cover" onerror="handleImgError(this)">
+              <img src="${t.image}" alt="${t.title}" loading="lazy" class="w-full h-full object-cover" data-vid="${typeof track !== 'undefined' && track ? (track.videoId || '') : (typeof t !== 'undefined' && t ? (t.videoId || '') : '')}" onerror="handleImgError(this)">
             </div>
             <div class="min-w-0 flex-1">
               <div class="font-medium text-sm truncate text-white/90 group-hover:text-white">${t.title}</div>
@@ -1970,9 +2080,19 @@
 
       document.getElementById('player-title').textContent = t.title;
       document.getElementById('player-artist').textContent = t.artist;
-      document.getElementById('player-cover-img').src = t.image || DEFAULT_COVER_SVG;
+      const pImg = document.getElementById('player-cover-img');
+      pImg.dataset.errStage = '0';
+      pImg.dataset.vid = t.videoId || '';
+      pImg.onerror = function() { handleImgError(this, t.videoId || ''); };
+      pImg.src = t.image || DEFAULT_COVER_SVG;
+
       document.getElementById('time-total').textContent = t.duration;
-      document.getElementById('sp-cover-img').src = t.image || DEFAULT_COVER_SVG;
+
+      const spImg = document.getElementById('sp-cover-img');
+      spImg.dataset.errStage = '0';
+      spImg.dataset.vid = t.videoId || '';
+      spImg.onerror = function() { handleImgError(this, t.videoId || ''); };
+      spImg.src = t.image || DEFAULT_COVER_SVG;
 
       document.getElementById('sp-main-title').textContent = t.title;
       document.getElementById('sp-main-artist').textContent = t.artist;
@@ -2271,7 +2391,7 @@
                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M11 18c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zm-2-8c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6 4c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
              </div>
              <div class="relative w-10 h-10 sm:w-11 sm:h-11 rounded-xl shadow flex-shrink-0 overflow-hidden bg-white/5">
-               <img src="${track.image}" alt="${track.title}" loading="lazy" decoding="async" class="w-full h-full object-cover" onerror="handleImgError(this)">
+               <img src="${track.image}" alt="${track.title}" loading="lazy" decoding="async" class="w-full h-full object-cover" data-vid="${typeof track !== 'undefined' && track ? (track.videoId || '') : (typeof t !== 'undefined' && t ? (t.videoId || '') : '')}" onerror="handleImgError(this)">
                ${isCur ? (state.isPlaying ? '<div class="absolute inset-0 bg-black/60 flex items-center justify-center"><svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg></div>' : '<div class="absolute inset-0 bg-black/60 flex items-center justify-center"><svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>') : '<div class="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"><svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>'}
              </div>
              <div class="flex flex-col flex-1 min-w-0">
