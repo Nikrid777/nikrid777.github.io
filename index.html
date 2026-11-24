@@ -306,11 +306,11 @@
     </div>
 
     <div class="w-full flex-1 max-w-[1550px] mx-auto flex flex-col lg:flex-row items-center gap-4 lg:gap-14 overflow-hidden">
-      <div id="sp-left-panel" class="flex lg:!flex flex-1 flex-col items-center justify-start pt-1 lg:pt-0 lg:justify-center w-full h-full overflow-hidden">
-        <div class="relative flex items-center justify-center mt-1 mb-3 lg:my-4 shrink-0">
+      <div id="sp-left-panel" class="flex lg:!flex flex-1 flex-col items-center justify-start pt-[7vh] lg:pt-0 lg:justify-center w-full h-full overflow-hidden">
+        <div class="relative flex items-center justify-center mt-2 mb-3 lg:my-4 shrink-0">
           <div id="sp-cover-glow" class="absolute -inset-6 rounded-[2.8rem] opacity-30 blur-2xl pointer-events-none will-change-transform" style="background: var(--neon);"></div>
 
-          <div id="sp-cover-wrap" class="relative w-[62vw] h-[62vw] max-w-[260px] max-h-[260px] sm:max-w-[300px] sm:max-h-[300px] lg:max-w-[430px] lg:max-h-[430px] lg:w-[44vh] lg:h-[44vh] rounded-[2rem] overflow-hidden shadow-[0_25px_70px_rgba(0,0,0,0.9)] bg-white/5 shrink-0 z-10">
+          <div id="sp-cover-wrap" class="relative w-[58vw] h-[58vw] max-w-[250px] max-h-[250px] sm:max-w-[290px] sm:max-h-[290px] lg:max-w-[430px] lg:max-h-[430px] lg:w-[44vh] lg:h-[44vh] rounded-[2rem] overflow-hidden shadow-[0_25px_70px_rgba(0,0,0,0.9)] bg-white/5 shrink-0 z-10">
             <img id="sp-cover-img" src="" alt="Album Cover" class="w-full h-full object-cover" onerror="handleImgError(this)">
             <div id="sp-cover-mood" class="absolute top-3.5 left-3.5 px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-black/65 backdrop-blur-md text-[var(--neon)]">
               Весёлая
@@ -322,12 +322,12 @@
           <h2 id="sp-main-title" class="text-xl sm:text-2xl lg:text-3xl font-extrabold text-white tracking-tight truncate w-full drop-shadow">Выберите трек</h2>
           <p id="sp-main-artist" class="text-xs sm:text-sm lg:text-base text-white/60 font-medium truncate w-full mt-1">Исполнитель</p>
 
-          <div class="w-44 sm:w-64 h-6 sm:h-9 mt-2.5 flex items-center justify-center">
+          <div class="w-44 sm:w-64 h-6 sm:h-9 mt-2 flex items-center justify-center">
             <canvas id="audio-visualizer" width="260" height="40" class="w-full h-full"></canvas>
           </div>
 
           <!-- МОБИЛЬНАЯ СТРОКА ПРОИГРЫВАНИЯ -->
-          <div class="flex lg:hidden flex-col w-full mt-4 px-1">
+          <div class="flex lg:hidden flex-col w-full mt-3 px-1">
             <div class="relative w-full h-7 flex items-center">
               <div class="w-full h-[4px] bg-white/15 rounded-full relative">
                 <div id="sp-progress-fill" class="absolute top-0 left-0 h-full neon-bg rounded-full" style="width: 0%;"></div>
@@ -345,33 +345,33 @@
             </div>
           </div>
 
-          <!-- МОБИЛЬНОЕ БОЛЬШОЕ УПРАВЛЕНИЕ: Перемешать | Пред | Плей/Пауза | След | Повтор -->
-          <div class="flex lg:hidden items-center justify-between w-full mt-3 px-1">
+          <!-- МОБИЛЬНОЕ БОЛЬШОЕ УПРАВЛЕНИЕ (+30%): Перемешать | Пред | Плей/Пауза | След | Повтор -->
+          <div class="flex lg:hidden items-center justify-between w-full mt-3 px-0.5">
             <button type="button" onclick="toggleShuffle()" id="sp-mob-shuffle" class="p-3 rounded-full text-gray-400 active:scale-90 transition" title="Перемешать">
-              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>
             </button>
-            <button type="button" onclick="prevTrack()" class="p-3 text-white active:scale-90 transition" title="Предыдущий">
-              <svg class="w-9 h-9" fill="currentColor" viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+            <button type="button" onclick="prevTrack()" class="p-2.5 text-white active:scale-90 transition" title="Предыдущий">
+              <svg class="w-12 h-12" fill="currentColor" viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
             </button>
-            <button type="button" onclick="togglePlay()" class="w-16 h-16 rounded-full bg-white text-black flex items-center justify-center shadow-[0_0_28px_rgba(255,255,255,0.3)] active:scale-95 transition shrink-0" title="Воспроизвести / Пауза">
-              <svg id="sp-mob-play" class="w-8 h-8 ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-              <svg id="sp-mob-pause" class="w-8 h-8 hidden" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+            <button type="button" onclick="togglePlay()" class="w-[84px] h-[84px] rounded-full bg-white text-black flex items-center justify-center shadow-[0_0_32px_rgba(255,255,255,0.32)] active:scale-95 transition shrink-0" title="Воспроизвести / Пауза">
+              <svg id="sp-mob-play" class="w-11 h-11 ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              <svg id="sp-mob-pause" class="w-11 h-11 hidden" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
             </button>
-            <button type="button" onclick="nextTrack()" class="p-3 text-white active:scale-90 transition" title="Следующий">
-              <svg class="w-9 h-9" fill="currentColor" viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+            <button type="button" onclick="nextTrack()" class="p-2.5 text-white active:scale-90 transition" title="Следующий">
+              <svg class="w-12 h-12" fill="currentColor" viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
             </button>
             <button type="button" onclick="toggleRepeat()" id="mob-btn-repeat" class="p-3 rounded-full text-gray-400 active:scale-90 transition" title="Повтор">
-              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/></svg>
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/></svg>
             </button>
           </div>
 
           <!-- ЛАЙК И ДИЗЛАЙК НИЖЕ УПРАВЛЕНИЯ -->
-          <div class="flex lg:hidden items-center justify-center gap-8 mt-4">
-            <button type="button" onclick="actionLike()" id="sp-mob-like" class="flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/[0.06] text-gray-300 active:scale-95 transition" title="Нравится">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg>
+          <div class="flex lg:hidden items-center justify-center gap-10 mt-7">
+            <button type="button" onclick="actionLike()" id="sp-mob-like" class="flex items-center justify-center px-6 py-3 rounded-full bg-white/[0.07] text-gray-300 active:scale-95 transition" title="Нравится">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg>
             </button>
-            <button type="button" onclick="actionDislike()" id="sp-mob-dislike" class="flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/[0.06] text-gray-300 active:scale-95 transition" title="Не нравится">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-3"></path></svg>
+            <button type="button" onclick="actionDislike()" id="sp-mob-dislike" class="flex items-center justify-center px-6 py-3 rounded-full bg-white/[0.07] text-gray-300 active:scale-95 transition" title="Не нравится">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-3"></path></svg>
             </button>
           </div>
         </div>
@@ -624,7 +624,7 @@
     function renderPrefetchDot(track) {
       const key = getTrackPrefetchKey(track);
       const isCached = prefetchedAudioCache.has(key);
-      return `<span data-prefetch-key="${key}" class="w-1.5 h-1.5 rounded-full neon-bg shrink-0 transition-opacity duration-300 ${isCached ? 'opacity-100' : 'opacity-0 hidden'}" title="Предзагружен в кэш"></span>`;
+      return `<span data-prefetch-key="${key}" class="inline-block w-2 h-2 rounded-full neon-bg shrink-0 transition-opacity duration-300 ${isCached ? 'opacity-100' : 'opacity-0 hidden'}" title="Предзагружен в кэш"></span>`;
     }
 
     function updatePrefetchDots() {
@@ -672,63 +672,111 @@
       }
     }
 
-    function warmupSingleTrackSequential(track) {
-      return new Promise((resolve) => {
-        if (!track || !track.yadiskPublicUrl) {
-          resolve(false);
-          return;
-        }
-        const key = track.videoId || String(track.id);
-        if (prefetchedAudioCache.has(key)) {
-          resolve(true);
-          return;
-        }
-
-        resolveYadiskAudioUrl(track, false).then((directUrl) => {
-          if (!directUrl) {
-            resolve(false);
-            return;
+    function trimPrefetchCache() {
+      while (prefetchedAudioCache.size > 6) {
+        const firstKey = prefetchedAudioCache.keys().next().value;
+        const oldEntry = prefetchedAudioCache.get(firstKey);
+        if (oldEntry) {
+          if (oldEntry.blobUrl) {
+            try { URL.revokeObjectURL(oldEntry.blobUrl); } catch (e) {}
           }
+          if (oldEntry.audio) {
+            try { oldEntry.audio.src = ''; oldEntry.audio.load(); } catch (e) {}
+          }
+        }
+        prefetchedAudioCache.delete(firstKey);
+      }
+    }
 
-          const preAudio = new Audio();
-          preAudio.preload = 'auto';
-          preAudio.muted = true;
-          let settled = false;
+    async function warmupSingleTrackSequential(track) {
+      if (!track || !track.yadiskPublicUrl) return false;
+      const key = getTrackPrefetchKey(track);
+      if (prefetchedAudioCache.has(key)) {
+        updatePrefetchDots();
+        return true;
+      }
 
-          const finish = (ok) => {
-            if (settled) return;
-            settled = true;
-            clearTimeout(timer);
-            preAudio.removeEventListener('canplay', onReady);
-            preAudio.removeEventListener('canplaythrough', onReady);
-            preAudio.removeEventListener('error', onFail);
-            if (ok) {
-              prefetchedAudioCache.set(key, preAudio);
-              if (prefetchedAudioCache.size > 6) {
-                const firstKey = prefetchedAudioCache.keys().next().value;
-                const oldEl = prefetchedAudioCache.get(firstKey);
-                if (oldEl) {
-                  try { oldEl.src = ''; oldEl.load(); } catch (e) {}
-                }
-                prefetchedAudioCache.delete(firstKey);
-              }
-              updatePrefetchDots();
-            } else {
-              try { preAudio.src = ''; } catch (e) {}
+      let directUrl = '';
+      try {
+        directUrl = await resolveYadiskAudioUrl(track, false);
+      } catch (e) {
+        return false;
+      }
+      if (!directUrl) return false;
+
+      // 1. Пробуем реальную загрузку в Blob-кэш (работает офлайн на телефоне и ПК)
+      try {
+        const ctrl = new AbortController();
+        const tid = setTimeout(() => ctrl.abort(), 16000);
+        const res = await fetch(directUrl, { signal: ctrl.signal, cache: 'force-cache' });
+        clearTimeout(tid);
+        if (res.ok) {
+          const blob = await res.blob();
+          if (blob && blob.size > 8000) {
+            const blobUrl = URL.createObjectURL(blob);
+            prefetchedAudioCache.set(key, { blobUrl, directUrl });
+            trimPrefetchCache();
+            updatePrefetchDots();
+            return true;
+          }
+        }
+      } catch (e) {
+        // Если CORS не разрешён — переходим на прогрев через Audio + no-cors fetch
+      }
+
+      // 2. Фолбэк для мобильных и ПК: прогрев через Audio (loadeddata/canplay/progress)
+      return new Promise((resolve) => {
+        const preAudio = new Audio();
+        preAudio.preload = 'auto';
+        preAudio.muted = true;
+        let settled = false;
+
+        const finish = (ok) => {
+          if (settled) return;
+          settled = true;
+          clearTimeout(timer);
+          preAudio.removeEventListener('canplay', onReady);
+          preAudio.removeEventListener('canplaythrough', onReady);
+          preAudio.removeEventListener('loadeddata', onReady);
+          preAudio.removeEventListener('progress', onProgress);
+          preAudio.removeEventListener('error', onFail);
+          if (ok) {
+            prefetchedAudioCache.set(key, { audio: preAudio, directUrl });
+            trimPrefetchCache();
+            updatePrefetchDots();
+          } else {
+            try { preAudio.src = ''; } catch (e) {}
+          }
+          resolve(ok);
+        };
+
+        const onReady = () => finish(true);
+        const onProgress = () => {
+          try {
+            if (preAudio.buffered && preAudio.buffered.length > 0 && preAudio.buffered.end(0) > 1) {
+              finish(true);
             }
-            resolve(ok);
-          };
+          } catch (e) {}
+        };
+        const onFail = () => finish(false);
+        const timer = setTimeout(() => {
+          // На мобильном Safari/Chrome если метаданные или буфер уже есть — считаем прогретым
+          const hasData = preAudio.readyState >= 1 || (preAudio.buffered && preAudio.buffered.length > 0);
+          finish(hasData);
+        }, 7000);
 
-          const onReady = () => finish(true);
-          const onFail = () => finish(false);
-          const timer = setTimeout(() => finish(false), 12000);
+        preAudio.addEventListener('canplay', onReady, { once: true });
+        preAudio.addEventListener('canplaythrough', onReady, { once: true });
+        preAudio.addEventListener('loadeddata', onReady, { once: true });
+        preAudio.addEventListener('progress', onProgress);
+        preAudio.addEventListener('error', onFail, { once: true });
+        preAudio.src = directUrl;
+        preAudio.load();
 
-          preAudio.addEventListener('canplay', onReady, { once: true });
-          preAudio.addEventListener('canplaythrough', onReady, { once: true });
-          preAudio.addEventListener('error', onFail, { once: true });
-          preAudio.src = directUrl;
-          preAudio.load();
-        }).catch(() => resolve(false));
+        // Дополнительно прогреваем HTTP-кэш на мобильных браузерах
+        fetch(directUrl, { mode: 'no-cors', cache: 'force-cache' }).then(() => {
+          if (!settled) finish(true);
+        }).catch(() => {});
       });
     }
 
@@ -1318,8 +1366,8 @@
 
     function compareNewestFirst(a, b, siteLikedSet) {
       // 1. Свежелайкнутые на сайте (ещё не в YTMusic или в буфере) — всегда наверху
-      const aUnsynced = (!a.inYtmLiked && likedBufIds.has(a.id));
-      const bUnsynced = (!b.inYtmLiked && likedBufIds.has(b.id));
+      const aUnsynced = (!a.inYtmLiked && siteLikedSet.has(a.id));
+      const bUnsynced = (!b.inYtmLiked && siteLikedSet.has(b.id));
       if (aUnsynced !== bUnsynced) return aUnsynced ? -1 : 1;
       if (aUnsynced && bUnsynced) {
         const tsA = (state.likedAtMap && state.likedAtMap[a.id]) || 0;
@@ -1360,7 +1408,7 @@
         return [...combined].sort((a, b) => compareNewestFirst(b, a, siteLikedSet));
       }
       // По умолчанию: added_desc (свежие лайки сайта + порядок YouTube Music сверху)
-      return [...combined].sort((a, b) => compareNewestFirst(a, b, likedBufIds));
+      return [...combined].sort((a, b) => compareNewestFirst(a, b, siteLikedSet));
     }
 
     function markTrackAsListened(track) {
@@ -1642,6 +1690,36 @@
         }
         currentDy = 0;
       });
+
+      // Свайп вверх с нижней плашки плеера открывает страницу трека
+      const footer = document.getElementById('player-footer');
+      if (footer) {
+        let fStartY = 0;
+        let fStartX = 0;
+        let fTracking = false;
+
+        footer.addEventListener('touchstart', (e) => {
+          if (state.isSongPageOpen || e.touches.length !== 1) return;
+          if (e.target.closest('input[type="range"]')) return;
+          fStartY = e.touches[0].clientY;
+          fStartX = e.touches[0].clientX;
+          fTracking = true;
+        }, { passive: true });
+
+        footer.addEventListener('touchmove', (e) => {
+          if (!fTracking || state.isSongPageOpen) return;
+          const dy = e.touches[0].clientY - fStartY;
+          const dx = Math.abs(e.touches[0].clientX - fStartX);
+          if (dy < -36 && Math.abs(dy) > dx) {
+            fTracking = false;
+            toggleSongPage(true);
+          }
+        }, { passive: true });
+
+        footer.addEventListener('touchend', () => {
+          fTracking = false;
+        }, { passive: true });
+      }
     }
 
     function init() {
@@ -2181,9 +2259,13 @@
 
       try {
         scheduleStallWatchdog();
-        const directUrl = await resolveYadiskAudioUrl(found, false);
+        const prefKey = getTrackPrefetchKey(found);
+        const cachedObj = prefetchedAudioCache.get(prefKey);
+        const srcToPlay = (cachedObj && cachedObj.blobUrl)
+          ? cachedObj.blobUrl
+          : await resolveYadiskAudioUrl(found, false);
         if (reqId !== state.playRequestId || !state.isPlaying) return;
-        await startAudioSource(directUrl, reqId);
+        await startAudioSource(srcToPlay, reqId);
       } catch (e) {
         if (reqId !== state.playRequestId) return;
         if (state.isPlaying) {
