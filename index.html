@@ -115,6 +115,14 @@
       box-shadow: inset 0 0 0 1px var(--neon);
     }
 
+    @media (max-width: 1023px) {
+      #player-footer.footer-hidden-left {
+        transform: translateX(-160%) !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+      }
+    }
+
     #ptr-indicator {
       transition: transform 0.18s ease, opacity 0.18s ease;
       will-change: transform, opacity;
@@ -180,8 +188,28 @@
       </div>
     </div>
 
+    <!-- МОБИЛЬНАЯ НАВИГАЦИЯ (2-я строка в шапке) -->
+    <nav id="mobile-nav" class="order-3 md:hidden w-full h-[46px] rounded-full bg-white/[0.05] backdrop-blur-xl flex items-center justify-between px-1 gap-1">
+      <button type="button" onclick="switchTab('wave')" id="mob-tab-wave" class="nav-btn neon-nav-active flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full text-[11px] font-semibold">
+        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2z"/></svg>
+        <span>Волна</span>
+      </button>
+      <button type="button" onclick="switchTab('playlist')" id="mob-tab-playlist" class="nav-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full text-[11px] font-semibold">
+        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h10"/></svg>
+        <span>Плейлист</span>
+      </button>
+      <button type="button" onclick="switchTab('buffer-like')" id="mob-tab-like" class="nav-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full text-[11px] font-semibold">
+        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg>
+        <span>Лайк</span>
+      </button>
+      <button type="button" onclick="switchTab('buffer-dislike')" id="mob-tab-dislike" class="nav-btn flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full text-[11px] font-semibold">
+        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-3"></path></svg>
+        <span>Дизлайк</span>
+      </button>
+    </nav>
+
     <!-- ПОИСК -->
-    <div class="order-3 lg:order-2 w-full lg:w-auto lg:flex-1 lg:max-w-lg lg:mx-auto z-40" id="searchContainer">
+    <div class="order-4 lg:order-2 w-full lg:w-auto lg:flex-1 lg:max-w-lg lg:mx-auto z-40" id="searchContainer">
       <div class="relative flex items-center group w-full">
         <svg class="w-4 h-4 sm:w-5 sm:h-5 absolute left-4 sm:left-5 text-white/50 group-focus-within:text-white transition-colors pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
@@ -254,50 +282,35 @@
       </nav>
     </aside>
 
-    <main id="main-content" class="flex-1 overflow-y-scroll px-3.5 sm:px-8 lg:px-10 py-2 sm:py-6 pb-[165px] md:pb-36"></main>
+    <main id="main-content" class="flex-1 overflow-y-scroll px-3.5 sm:px-8 lg:px-10 py-2 sm:py-6 pb-[104px] md:pb-36"></main>
   </div>
 
-  <!-- МОБИЛЬНАЯ НАВИГАЦИЯ -->
-  <nav id="mobile-nav" class="md:hidden fixed bottom-2.5 left-1/2 -translate-x-1/2 w-[95%] h-[54px] rounded-full bg-[#0A0A0A]/95 backdrop-blur-2xl z-30 flex items-center justify-between px-1.5 shadow-[0_10px_30px_rgba(0,0,0,0.9)]">
-    <button type="button" onclick="switchTab('wave')" id="mob-tab-wave" class="nav-btn neon-nav-active flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-full text-[11px] font-semibold">
-      <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2z"/></svg>
-      <span>Волна</span>
-    </button>
-    <button type="button" onclick="switchTab('playlist')" id="mob-tab-playlist" class="nav-btn flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-full text-[11px] font-semibold">
-      <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h10"/></svg>
-      <span>Плейлист</span>
-    </button>
-    <button type="button" onclick="switchTab('buffer-like')" id="mob-tab-like" class="nav-btn flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-full text-[11px] font-semibold">
-      <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg>
-      <span>Лайк</span>
-    </button>
-    <button type="button" onclick="switchTab('buffer-dislike')" id="mob-tab-dislike" class="nav-btn flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-full text-[11px] font-semibold">
-      <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-3"></path></svg>
-      <span>Дизлайк</span>
-    </button>
-  </nav>
+
 
   <!-- СТРАНИЦА ТРЕКА -->
-  <div id="song-page" class="fixed inset-0 z-40 bg-[#000000]/95 backdrop-blur-3xl flex flex-col lg:flex-row transition-transform duration-500 ease-out translate-y-full pt-3 sm:pt-6 lg:pt-20 pb-[96px] md:pb-[125px] px-4 sm:px-8 md:px-14 overflow-hidden">
-    <div class="flex lg:hidden items-center justify-between w-full mb-3 px-1 shrink-0">
-      <button type="button" onclick="toggleSongPage(false)" class="p-2.5 rounded-full bg-white/5 text-white active:scale-95 transition">
+  <div id="song-page" class="fixed inset-0 z-40 bg-[#000000]/95 backdrop-blur-3xl flex flex-col lg:flex-row transition-transform duration-300 ease-out translate-y-full pt-2 sm:pt-5 lg:pt-20 pb-6 lg:pb-[125px] px-4 sm:px-8 md:px-14 overflow-hidden">
+    <!-- Полоска-ручка для свайпа вниз на мобильном -->
+    <div class="flex lg:hidden justify-center w-full pb-2 shrink-0">
+      <div class="w-10 h-1 rounded-full bg-white/25"></div>
+    </div>
+
+    <div class="flex lg:hidden items-center justify-between w-full mb-2 px-1 shrink-0">
+      <button type="button" onclick="toggleSongPage(false)" class="p-2.5 rounded-full bg-white/5 text-white active:scale-95 transition" title="Свернуть">
         <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/></svg>
       </button>
       <div class="flex bg-white/5 p-1 rounded-full gap-1">
         <button type="button" onclick="switchMobileSongView('cover')" id="mob-view-cover" class="nav-btn neon-nav-active px-5 py-1.5 rounded-full text-xs font-bold">Трек</button>
         <button type="button" onclick="switchMobileSongView('queue')" id="mob-view-queue" class="nav-btn px-5 py-1.5 rounded-full text-xs font-bold">Очередь</button>
       </div>
-      <button type="button" onclick="toggleRepeat()" id="mob-btn-repeat" class="p-2.5 rounded-full bg-white/5 text-gray-400 transition">
-        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/></svg>
-      </button>
+      <div class="w-11 shrink-0"></div>
     </div>
 
-    <div class="w-full flex-1 max-w-[1550px] mx-auto flex flex-col lg:flex-row items-center gap-6 lg:gap-14 overflow-hidden">
-      <div id="sp-left-panel" class="flex lg:!flex flex-1 flex-col items-center justify-center w-full h-full overflow-hidden">
-        <div class="relative flex items-center justify-center my-4">
+    <div class="w-full flex-1 max-w-[1550px] mx-auto flex flex-col lg:flex-row items-center gap-4 lg:gap-14 overflow-hidden">
+      <div id="sp-left-panel" class="flex lg:!flex flex-1 flex-col items-center justify-start pt-1 lg:pt-0 lg:justify-center w-full h-full overflow-hidden">
+        <div class="relative flex items-center justify-center mt-1 mb-3 lg:my-4 shrink-0">
           <div id="sp-cover-glow" class="absolute -inset-6 rounded-[2.8rem] opacity-30 blur-2xl pointer-events-none will-change-transform" style="background: var(--neon);"></div>
 
-          <div id="sp-cover-wrap" class="relative w-[54vw] h-[54vw] max-w-[240px] max-h-[240px] sm:max-w-[310px] sm:max-h-[310px] lg:max-w-[430px] lg:max-h-[430px] lg:w-[44vh] lg:h-[44vh] rounded-[2rem] overflow-hidden shadow-[0_25px_70px_rgba(0,0,0,0.9)] bg-white/5 shrink-0 z-10">
+          <div id="sp-cover-wrap" class="relative w-[62vw] h-[62vw] max-w-[260px] max-h-[260px] sm:max-w-[300px] sm:max-h-[300px] lg:max-w-[430px] lg:max-h-[430px] lg:w-[44vh] lg:h-[44vh] rounded-[2rem] overflow-hidden shadow-[0_25px_70px_rgba(0,0,0,0.9)] bg-white/5 shrink-0 z-10">
             <img id="sp-cover-img" src="" alt="Album Cover" class="w-full h-full object-cover" onerror="handleImgError(this)">
             <div id="sp-cover-mood" class="absolute top-3.5 left-3.5 px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-black/65 backdrop-blur-md text-[var(--neon)]">
               Весёлая
@@ -305,23 +318,60 @@
           </div>
         </div>
 
-        <div class="flex flex-col items-center text-center w-full max-w-lg mt-4 sm:mt-6 px-2 z-10">
+        <div class="flex flex-col items-center text-center w-full max-w-md lg:max-w-lg mt-2 sm:mt-4 px-2 z-10">
           <h2 id="sp-main-title" class="text-xl sm:text-2xl lg:text-3xl font-extrabold text-white tracking-tight truncate w-full drop-shadow">Выберите трек</h2>
           <p id="sp-main-artist" class="text-xs sm:text-sm lg:text-base text-white/60 font-medium truncate w-full mt-1">Исполнитель</p>
 
-          <div class="w-48 sm:w-64 h-8 sm:h-10 mt-3 flex items-center justify-center">
+          <div class="w-44 sm:w-64 h-6 sm:h-9 mt-2.5 flex items-center justify-center">
             <canvas id="audio-visualizer" width="260" height="40" class="w-full h-full"></canvas>
           </div>
 
-          <div class="flex lg:hidden items-center justify-center gap-5 mt-2">
-            <button type="button" onclick="actionDislike()" id="sp-mob-dislike" class="p-3 rounded-full bg-white/5 text-gray-400 active:scale-90 transition">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-3"></path></svg>
-            </button>
-            <button type="button" onclick="toggleShuffle()" id="sp-mob-shuffle" class="p-3 rounded-full bg-white/5 text-gray-400 active:scale-90 transition">
+          <!-- МОБИЛЬНАЯ СТРОКА ПРОИГРЫВАНИЯ -->
+          <div class="flex lg:hidden flex-col w-full mt-4 px-1">
+            <div class="relative w-full h-7 flex items-center">
+              <div class="w-full h-[4px] bg-white/15 rounded-full relative">
+                <div id="sp-progress-fill" class="absolute top-0 left-0 h-full neon-bg rounded-full" style="width: 0%;"></div>
+                <div id="sp-progress-thumb" class="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 rounded-full neon-bg shadow pointer-events-none" style="left: 0%;"></div>
+              </div>
+              <input type="range" id="sp-progress-slider" min="0" max="100" step="0.05" value="0"
+                     onpointerdown="startSeekDrag()"
+                     oninput="seekTrack(this.value, false)"
+                     onchange="seekTrack(this.value, true)"
+                     class="range-overlay absolute inset-0">
+            </div>
+            <div class="flex justify-between text-[11px] text-white/50 font-medium tabular-nums mt-0.5">
+              <span id="sp-time-current">0:00</span>
+              <span id="sp-time-total">0:00</span>
+            </div>
+          </div>
+
+          <!-- МОБИЛЬНОЕ БОЛЬШОЕ УПРАВЛЕНИЕ: Перемешать | Пред | Плей/Пауза | След | Повтор -->
+          <div class="flex lg:hidden items-center justify-between w-full mt-3 px-1">
+            <button type="button" onclick="toggleShuffle()" id="sp-mob-shuffle" class="p-3 rounded-full text-gray-400 active:scale-90 transition" title="Перемешать">
               <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>
             </button>
-            <button type="button" onclick="actionLike()" id="sp-mob-like" class="p-3 rounded-full bg-white/5 text-gray-400 active:scale-90 transition">
+            <button type="button" onclick="prevTrack()" class="p-3 text-white active:scale-90 transition" title="Предыдущий">
+              <svg class="w-9 h-9" fill="currentColor" viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+            </button>
+            <button type="button" onclick="togglePlay()" class="w-16 h-16 rounded-full bg-white text-black flex items-center justify-center shadow-[0_0_28px_rgba(255,255,255,0.3)] active:scale-95 transition shrink-0" title="Воспроизвести / Пауза">
+              <svg id="sp-mob-play" class="w-8 h-8 ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              <svg id="sp-mob-pause" class="w-8 h-8 hidden" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+            </button>
+            <button type="button" onclick="nextTrack()" class="p-3 text-white active:scale-90 transition" title="Следующий">
+              <svg class="w-9 h-9" fill="currentColor" viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+            </button>
+            <button type="button" onclick="toggleRepeat()" id="mob-btn-repeat" class="p-3 rounded-full text-gray-400 active:scale-90 transition" title="Повтор">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/></svg>
+            </button>
+          </div>
+
+          <!-- ЛАЙК И ДИЗЛАЙК НИЖЕ УПРАВЛЕНИЯ -->
+          <div class="flex lg:hidden items-center justify-center gap-8 mt-4">
+            <button type="button" onclick="actionLike()" id="sp-mob-like" class="flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/[0.06] text-gray-300 active:scale-95 transition" title="Нравится">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg>
+            </button>
+            <button type="button" onclick="actionDislike()" id="sp-mob-dislike" class="flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/[0.06] text-gray-300 active:scale-95 transition" title="Не нравится">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-3"></path></svg>
             </button>
           </div>
         </div>
@@ -344,7 +394,7 @@
   </div>
 
   <!-- НИЖНИЙ ПЛЕЕР -->
-  <footer id="player-footer" class="fixed bottom-[66px] md:bottom-4 left-1/2 transform -translate-x-1/2 w-[95%] max-w-[1800px] h-[72px] md:h-[96px] rounded-[2rem] bg-[#0A0A0A]/95 backdrop-blur-3xl z-50 flex items-center justify-between px-3.5 sm:px-8 shadow-[0_10px_40px_rgba(0,0,0,0.9)] transition-[bottom] duration-300">
+  <footer id="player-footer" class="fixed bottom-3 md:bottom-4 left-1/2 transform -translate-x-1/2 w-[95%] max-w-[1800px] h-[72px] md:h-[96px] rounded-[2rem] bg-[#0A0A0A]/95 backdrop-blur-3xl z-50 flex items-center justify-between px-3.5 sm:px-8 shadow-[0_10px_40px_rgba(0,0,0,0.9)] transition-all duration-300 ease-out">
     <div class="absolute -top-[12px] left-6 right-6 sm:left-8 sm:right-8 h-[24px] group flex items-center z-20">
       <div class="w-full h-[3px] group-hover:h-[5px] bg-white/15 rounded-full transition-[height] duration-150 relative">
         <div id="progress-fill" class="absolute top-0 left-0 h-full neon-bg rounded-full" style="width: 0%;"></div>
@@ -484,6 +534,7 @@
       reconnectAttempts: 0,
       consecutiveErrors: 0,
       lastSyncClearedAt: '',
+      siteLikedIds: [],
       bufferLikes: [],
       bufferDislikes: [],
       waveListenedIds: [],
@@ -1005,6 +1056,7 @@
           isMuted: state.isMuted,
           repeat: state.repeat,
           shuffle: state.shuffle,
+          siteLikedIds: state.siteLikedIds,
           likeIds: state.bufferLikes.map(t => t.id),
           dislikeIds: state.bufferDislikes.map(t => t.id),
           waveListenedIds: state.waveListenedIds,
@@ -1051,8 +1103,15 @@
         if (typeof data.repeat === 'boolean') state.repeat = data.repeat;
         if (typeof data.shuffle === 'boolean') state.shuffle = data.shuffle;
 
+        if (Array.isArray(data.siteLikedIds)) {
+          state.siteLikedIds = data.siteLikedIds;
+        }
         if (Array.isArray(data.likeIds)) {
           state.bufferLikes = data.likeIds.map(id => TRACKS.find(t => t.id === id)).filter(Boolean);
+          // Подстраховка для миграции со старого localStorage
+          if (!Array.isArray(data.siteLikedIds) || data.siteLikedIds.length === 0) {
+            state.siteLikedIds = Array.from(new Set([...state.siteLikedIds, ...data.likeIds]));
+          }
         }
         if (Array.isArray(data.dislikeIds)) {
           state.bufferDislikes = data.dislikeIds.map(id => TRACKS.find(t => t.id === id)).filter(Boolean);
@@ -1257,7 +1316,7 @@
       renderContent();
     }
 
-    function compareNewestFirst(a, b, likedBufIds) {
+    function compareNewestFirst(a, b, siteLikedSet) {
       // 1. Свежелайкнутые на сайте (ещё не в YTMusic или в буфере) — всегда наверху
       const aUnsynced = (!a.inYtmLiked && likedBufIds.has(a.id));
       const bUnsynced = (!b.inYtmLiked && likedBufIds.has(b.id));
@@ -1287,9 +1346,9 @@
 
     function getPlaylistTracks() {
       const dislikedIds = new Set(state.bufferDislikes.map(t => t.id));
-      const likedBufIds = new Set(state.bufferLikes.map(t => t.id));
+      const siteLikedSet = new Set([...(state.siteLikedIds || []), ...state.bufferLikes.map(t => t.id)]);
       const combined = TRACKS.filter(t =>
-        (t.source === 'playlist' || likedBufIds.has(t.id)) && !dislikedIds.has(t.id)
+        (t.source === 'playlist' || siteLikedSet.has(t.id)) && !dislikedIds.has(t.id)
       );
 
       if (state.playlistSort === 'title_asc') {
@@ -1298,7 +1357,7 @@
         );
       }
       if (state.playlistSort === 'added_asc') {
-        return [...combined].sort((a, b) => compareNewestFirst(b, a, likedBufIds));
+        return [...combined].sort((a, b) => compareNewestFirst(b, a, siteLikedSet));
       }
       // По умолчанию: added_desc (свежие лайки сайта + порядок YouTube Music сверху)
       return [...combined].sort((a, b) => compareNewestFirst(a, b, likedBufIds));
@@ -1404,7 +1463,16 @@
         clearTimeout(state.stallTimerId);
         state.reconnectAttempts = 0;
         state.consecutiveErrors = 0;
+        updateMediaSessionMetadata();
+        updateMediaSessionPosition();
         prefetchNextThreeSequential();
+      });
+
+      audio.addEventListener('pause', () => {
+        if ('mediaSession' in navigator) {
+          try { navigator.mediaSession.playbackState = 'paused'; } catch (e) {}
+        }
+        updateMediaSessionPosition();
       });
 
       audio.addEventListener('waiting', () => scheduleStallWatchdog());
@@ -1417,6 +1485,9 @@
           const s = String(state.currentTrack.seconds % 60).padStart(2, '0');
           state.currentTrack.duration = `${m}:${s}`;
           document.getElementById('time-total').textContent = state.currentTrack.duration;
+          const spTot = document.getElementById('sp-time-total');
+          if (spTot) spTot.textContent = state.currentTrack.duration;
+          updateMediaSessionPosition();
         }
       });
 
@@ -1453,9 +1524,131 @@
       });
     }
 
+
+    // =========================================================
+    // MEDIA SESSION API (Управление с экрана блокировки, наушников и Windows)
+    // =========================================================
+    function initMediaSession() {
+      if (!('mediaSession' in navigator)) return;
+      const safeSet = (action, handler) => {
+        try { navigator.mediaSession.setActionHandler(action, handler); } catch (e) {}
+      };
+      safeSet('play', () => { if (!state.isPlaying) togglePlay(); });
+      safeSet('pause', () => { if (state.isPlaying) togglePlay(); });
+      safeSet('previoustrack', () => prevTrack());
+      safeSet('nexttrack', () => nextTrack());
+      safeSet('seekbackward', (details) => {
+        const step = (details && details.seekOffset) || 10;
+        if (audio.duration && !isNaN(audio.duration)) {
+          audio.currentTime = Math.max(0, audio.currentTime - step);
+          updateMediaSessionPosition();
+        }
+      });
+      safeSet('seekforward', (details) => {
+        const step = (details && details.seekOffset) || 10;
+        if (audio.duration && !isNaN(audio.duration)) {
+          audio.currentTime = Math.min(audio.duration, audio.currentTime + step);
+          updateMediaSessionPosition();
+        }
+      });
+      safeSet('seekto', (details) => {
+        if (!details || typeof details.seekTime !== 'number' || !audio.duration || isNaN(audio.duration)) return;
+        audio.currentTime = Math.max(0, Math.min(audio.duration, details.seekTime));
+        state.progress = (audio.currentTime / audio.duration) * 100;
+        syncProgressUI();
+        updateMediaSessionPosition();
+      });
+      safeSet('stop', () => {
+        if (state.isPlaying) togglePlay();
+      });
+    }
+
+    function updateMediaSessionMetadata() {
+      if (!('mediaSession' in navigator) || !state.currentTrack) return;
+      const t = state.currentTrack;
+      let artUrl = '';
+      try {
+        const raw = (t.image && !t.image.startsWith('data:')) ? t.image : 'site-cover.webp';
+        artUrl = new URL(raw, window.location.href).href;
+      } catch (e) {
+        artUrl = '';
+      }
+      const artwork = artUrl ? [
+        { src: artUrl, sizes: '512x512', type: artUrl.endsWith('.webp') ? 'image/webp' : 'image/jpeg' }
+      ] : [];
+      try {
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title: t.title || 'Nikrid Radio',
+          artist: t.artist || 'Nikrid',
+          album: 'Nikrid Radio',
+          artwork
+        });
+        navigator.mediaSession.playbackState = state.isPlaying ? 'playing' : 'paused';
+      } catch (e) {}
+    }
+
+    function updateMediaSessionPosition() {
+      if (!('mediaSession' in navigator) || typeof navigator.mediaSession.setPositionState !== 'function') return;
+      if (!audio.duration || isNaN(audio.duration) || !isFinite(audio.duration) || audio.duration <= 0) return;
+      try {
+        navigator.mediaSession.setPositionState({
+          duration: audio.duration,
+          playbackRate: audio.playbackRate || 1,
+          position: Math.max(0, Math.min(audio.currentTime || 0, audio.duration))
+        });
+      } catch (e) {}
+    }
+
+    // =========================================================
+    // СВАЙП ВНИЗ ДЛЯ ЗАКРЫТИЯ СТРАНИЦЫ ПЕСНИ НА МОБИЛЬНОМ
+    // =========================================================
+    function initSongPageSwipe() {
+      const page = document.getElementById('song-page');
+      if (!page) return;
+      let startY = 0;
+      let startX = 0;
+      let dragging = false;
+      let currentDy = 0;
+
+      page.addEventListener('touchstart', (e) => {
+        if (!state.isSongPageOpen || e.touches.length !== 1) return;
+        if (e.target.closest('input[type="range"]')) return;
+        const queueEl = e.target.closest('#sp-queue');
+        if (queueEl && queueEl.scrollTop > 2) return;
+        startY = e.touches[0].clientY;
+        startX = e.touches[0].clientX;
+        dragging = true;
+        currentDy = 0;
+      }, { passive: true });
+
+      page.addEventListener('touchmove', (e) => {
+        if (!dragging || !state.isSongPageOpen) return;
+        const dy = e.touches[0].clientY - startY;
+        const dx = Math.abs(e.touches[0].clientX - startX);
+        if (dy > 10 && dy > dx) {
+          currentDy = dy;
+          page.style.transition = 'none';
+          page.style.transform = `translateY(${dy}px)`;
+        }
+      }, { passive: true });
+
+      page.addEventListener('touchend', () => {
+        if (!dragging) return;
+        dragging = false;
+        page.style.transition = '';
+        page.style.transform = '';
+        if (currentDy > 95) {
+          toggleSongPage(false);
+        }
+        currentDy = 0;
+      });
+    }
+
     function init() {
       loadState();
       initAudioEngine();
+      initMediaSession();
+      initSongPageSwipe();
       initPullToRefresh();
       tryLoadLocalPlaylistJson();
       pullCloudState(false);
@@ -1745,9 +1938,10 @@
       if (!track) return false;
       const isDisliked = state.bufferDislikes.some(t => t.id === track.id);
       if (isDisliked) return false;
+      const inSiteLiked = (state.siteLikedIds || []).includes(track.id);
       const inLikeBuffer = state.bufferLikes.some(t => t.id === track.id);
-      if (track.source === 'wave') return inLikeBuffer;
-      return track.source === 'playlist' || Boolean(track.liked) || inLikeBuffer;
+      if (track.source === 'wave') return inSiteLiked || inLikeBuffer;
+      return track.source === 'playlist' || Boolean(track.liked) || inSiteLiked || inLikeBuffer;
     }
 
     function renderGridCard(track, context = 'wave') {
@@ -1818,8 +2012,21 @@
       window.open(`https://music.youtube.com/watch?v=${encodeURIComponent(videoId)}`, '_blank', 'noopener,noreferrer');
     }
 
+    function removeFromBuffer(id, kind) {
+      if (kind === 'like') {
+        state.bufferLikes = state.bufferLikes.filter(t => t.id !== id);
+      } else if (kind === 'dislike') {
+        state.bufferDislikes = state.bufferDislikes.filter(t => t.id !== id);
+      }
+      saveState(true);
+      updatePlayerUI();
+      renderContent();
+    }
+
     function clearBuffer(kind) {
       if (kind === 'like') {
+        // Сохраняем лайкнутые треки в локальном плейлисте сайта, очищаем только список-напоминание буфера
+        state.siteLikedIds = Array.from(new Set([...(state.siteLikedIds || []), ...state.bufferLikes.map(t => t.id)]));
         state.bufferLikes = [];
       } else if (kind === 'dislike') {
         state.bufferDislikes = [];
@@ -1827,13 +2034,13 @@
       saveState(true);
       updatePlayerUI();
       renderContent();
-      showToast('Буфер очищен', 'ok', null, null, 2000);
+      showToast('Буфер очищен (песни в плейлисте сохранены)', 'ok', null, null, 2400);
     }
 
     function renderBufferRow(track, kind) {
       const isCur = track.id === (state.currentTrack && state.currentTrack.id);
       const vid = track.videoId || '';
-      const removeFn = kind === 'like' ? `actionLikeBtn(${track.id})` : `actionDislikeBtn(${track.id})`;
+      const removeFn = `removeFromBuffer(${track.id}, '${kind}')`;
       return `
         <div onclick="openInYouTubeMusic('${vid}')" class="px-3.5 sm:px-5 py-2.5 sm:py-3 rounded-3xl flex items-center justify-between gap-2.5 sm:gap-5 cursor-pointer transition-colors duration-200 hover:bg-white/10 group ${isCur ? 'bg-white/[0.12] shadow-lg' : 'bg-white/[0.04]'}">
           <div class="flex items-center gap-3.5 sm:gap-5 min-w-0 flex-1">
@@ -2054,13 +2261,15 @@
     function actionLikeBtn(id) {
       const track = TRACKS.find(t => t.id === id);
       if (!track) return;
-      const exists = state.bufferLikes.some(t => t.id === id);
-      if (exists) {
+      const isCurrentlyLiked = isTrackLiked(track);
+      if (isCurrentlyLiked && (state.bufferLikes.some(t => t.id === id) || (state.siteLikedIds || []).includes(id))) {
         state.bufferLikes = state.bufferLikes.filter(t => t.id !== id);
+        state.siteLikedIds = (state.siteLikedIds || []).filter(x => x !== id);
         if (state.likedAtMap) delete state.likedAtMap[id];
         if (track.source !== 'playlist') track.liked = false;
       } else {
         state.bufferLikes = [...state.bufferLikes.filter(t => t.id !== id), track];
+        state.siteLikedIds = Array.from(new Set([...(state.siteLikedIds || []), id]));
         state.likedAtMap = { ...(state.likedAtMap || {}), [id]: Date.now() };
         track.liked = true;
         state.bufferDislikes = state.bufferDislikes.filter(t => t.id !== id);
@@ -2080,6 +2289,7 @@
         state.bufferDislikes.push(track);
         track.liked = false;
         state.bufferLikes = state.bufferLikes.filter(t => t.id !== id);
+        state.siteLikedIds = (state.siteLikedIds || []).filter(x => x !== id);
       }
       saveState(true);
       updatePlayerUI();
@@ -2105,6 +2315,14 @@
       document.getElementById('progress-slider').value = state.progress;
       document.getElementById('progress-fill').style.width = pct;
       document.getElementById('progress-thumb').style.left = pct;
+
+      const spSlider = document.getElementById('sp-progress-slider');
+      const spFill = document.getElementById('sp-progress-fill');
+      const spThumb = document.getElementById('sp-progress-thumb');
+      if (spSlider) spSlider.value = state.progress;
+      if (spFill) spFill.style.width = pct;
+      if (spThumb) spThumb.style.left = pct;
+
       updateTime();
     }
 
@@ -2168,7 +2386,10 @@
       const curSec = Math.floor((state.progress / 100) * totalSec);
       const m = Math.floor(curSec / 60);
       const s = String(curSec % 60).padStart(2, '0');
-      document.getElementById('time-current').textContent = `${m}:${s}`;
+      const formatted = `${m}:${s}`;
+      document.getElementById('time-current').textContent = formatted;
+      const spCur = document.getElementById('sp-time-current');
+      if (spCur) spCur.textContent = formatted;
     }
 
     function updatePlayerUI() {
@@ -2221,6 +2442,15 @@
       document.getElementById('icon-play').classList.toggle('hidden', state.isPlaying);
       document.getElementById('icon-pause').classList.toggle('hidden', !state.isPlaying);
 
+      const spPlay = document.getElementById('sp-mob-play');
+      const spPause = document.getElementById('sp-mob-pause');
+      if (spPlay) spPlay.classList.toggle('hidden', state.isPlaying);
+      if (spPause) spPause.classList.toggle('hidden', !state.isPlaying);
+
+      const spTot = document.getElementById('sp-time-total');
+      if (spTot) spTot.textContent = t.duration;
+
+      updateMediaSessionMetadata();
       syncProgressUI();
       renderQueue(true);
     }
@@ -2290,15 +2520,13 @@
       if (state.isSongPageOpen) {
         page.classList.remove('translate-y-full');
         page.classList.add('translate-y-0');
-        footer.classList.remove('bottom-[66px]');
-        footer.classList.add('bottom-3');
+        footer.classList.add('footer-hidden-left');
         if (chevron) chevron.classList.remove('rotate-180');
         renderQueue(true);
       } else {
         page.classList.add('translate-y-full');
         page.classList.remove('translate-y-0');
-        footer.classList.add('bottom-[66px]');
-        footer.classList.remove('bottom-3');
+        footer.classList.remove('footer-hidden-left');
         if (chevron) chevron.classList.add('rotate-180');
       }
     }
