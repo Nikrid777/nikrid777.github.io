@@ -1800,24 +1800,6 @@
     "playlistOrder": 130
   },
   {
-    "id": 101,
-    "videoId": "Cwyc2mG9p7g",
-    "title": "Винтаж - Ева (Reverb, remix)",
-    "artist": "Alena Chorna",
-    "duration": "3:25",
-    "seconds": 205,
-    "moods": [
-      "Весёлая"
-    ],
-    "image": "covers/Cwyc2mG9p7g.webp",
-    "source": "playlist",
-    "liked": true,
-    "yadiskPath": "disk:/NikridRadio/Cwyc2mG9p7g.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/UVOTdxViyY4cuA",
-    "inYtmLiked": true,
-    "playlistOrder": 131
-  },
-  {
     "id": 102,
     "videoId": "baMkfoU_SBY",
     "title": "SEREBRO - Мало Тебя (Phonk Remix by akktawa)",
@@ -6551,24 +6533,6 @@
     "playlistOrder": 399
   },
   {
-    "id": 367,
-    "videoId": "fLS4lNa5Q14",
-    "title": "аниме клип - Один за всех все против одного (amv)",
-    "artist": "безупречный",
-    "duration": "3:28",
-    "seconds": 208,
-    "moods": [
-      "Весёлая"
-    ],
-    "image": "covers/fLS4lNa5Q14.webp",
-    "source": "playlist",
-    "liked": true,
-    "yadiskPath": "disk:/NikridRadio/fLS4lNa5Q14.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/ccVUW6Y9NhqBbg",
-    "inYtmLiked": true,
-    "playlistOrder": 400
-  },
-  {
     "id": 368,
     "videoId": "65MP3df-4TA",
     "title": "аниме клип - дым мой круговорот (amv)",
@@ -10248,29 +10212,11 @@
     "moods": [
       "Весёлая"
     ],
-    "source": "wave",
-    "liked": false,
+    "source": "playlist",
+    "liked": true,
     "inYtmLiked": false,
     "playlistOrder": null,
     "image": "covers/R7ZHfYkVaGE.webp"
-  },
-  {
-    "id": 892,
-    "videoId": "N_KuiXlBoMw",
-    "yadiskPath": "disk:/NikridRadio/N_KuiXlBoMw.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/AzqXBoCnTVDeZA",
-    "title": "City of Dreams (Official Audio) – Lost in LA | Dark Pop",
-    "artist": "GRV KXD",
-    "duration": "3:12",
-    "seconds": 192,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "inYtmLiked": false,
-    "playlistOrder": null,
-    "image": "covers/N_KuiXlBoMw.webp"
   },
   {
     "id": 893,
@@ -10777,24 +10723,6 @@
     "image": "covers/mzeceRI-Zqo.webp"
   },
   {
-    "id": 923,
-    "videoId": "tdyM0ANMcT8",
-    "yadiskPath": "disk:/NikridRadio/tdyM0ANMcT8.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/-HuTEUi3k_P9sQ",
-    "title": "Аниме клип - Вода окрасится кровью | Курапика Курута |",
-    "artist": " ★ asya klent  / /",
-    "duration": "2:30",
-    "seconds": 150,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "inYtmLiked": false,
-    "playlistOrder": null,
-    "image": "covers/tdyM0ANMcT8.webp"
-  },
-  {
     "id": 924,
     "videoId": "L3WXlcQaqNM",
     "yadiskPath": "disk:/NikridRadio/L3WXlcQaqNM.webm",
@@ -10957,24 +10885,6 @@
     "image": "covers/du_eG2mspnA.webp"
   },
   {
-    "id": 934,
-    "videoId": "TvEkldfa3T0",
-    "yadiskPath": "disk:/NikridRadio/TvEkldfa3T0.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/uE2L7CLHUzooww",
-    "title": "MALINOVAYA LADA",
-    "artist": "GAYAZOV$ BROTHER$",
-    "duration": "3:53",
-    "seconds": 233,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "inYtmLiked": false,
-    "playlistOrder": null,
-    "image": "covers/TvEkldfa3T0.webp"
-  },
-  {
     "id": 935,
     "videoId": "0hUBigCS92c",
     "yadiskPath": "disk:/NikridRadio/0hUBigCS92c.webm",
@@ -11101,24 +11011,6 @@
     "image": "covers/-JQ6WVrIIGw.webp"
   },
   {
-    "id": 942,
-    "videoId": "EXtNgVJetvs",
-    "yadiskPath": "disk:/NikridRadio/EXtNgVJetvs.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/GfzEpMRYQbksuA",
-    "title": "DAYVØNE1 - On The Dance (Slowed) | Toxic AMV",
-    "artist": "Toxic チーム",
-    "duration": "1:17",
-    "seconds": 77,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "inYtmLiked": false,
-    "playlistOrder": null,
-    "image": "covers/EXtNgVJetvs.webp"
-  },
-  {
     "id": 943,
     "videoId": "UOlpx_Q6meI",
     "yadiskPath": "disk:/NikridRadio/UOlpx_Q6meI.webm",
@@ -11155,24 +11047,6 @@
     "image": "covers/ZAhOIAaAxPw.webp"
   },
   {
-    "id": 945,
-    "videoId": "L7kF4MXXCoA",
-    "yadiskPath": "disk:/NikridRadio/L7kF4MXXCoA.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/Wz_kpDZj9LTRuw",
-    "title": "Dreams pt. II",
-    "artist": "Sara Skinner",
-    "duration": "3:35",
-    "seconds": 215,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "inYtmLiked": false,
-    "playlistOrder": null,
-    "image": "covers/L7kF4MXXCoA.webp"
-  },
-  {
     "id": 946,
     "videoId": "oVhDW9p31Ns",
     "yadiskPath": "disk:/NikridRadio/oVhDW9p31Ns.webm",
@@ -11189,24 +11063,6 @@
     "inYtmLiked": false,
     "playlistOrder": null,
     "image": "covers/oVhDW9p31Ns.webp"
-  },
-  {
-    "id": 947,
-    "videoId": "E6HWucvoz10",
-    "yadiskPath": "disk:/NikridRadio/E6HWucvoz10.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/5R0MSlXsiWQ7DA",
-    "title": "ANIZYZ - Manic (Slowed Anime Edit) [Toji AMV]",
-    "artist": "ANIZYZ",
-    "duration": "2:32",
-    "seconds": 152,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "inYtmLiked": false,
-    "playlistOrder": null,
-    "image": "covers/E6HWucvoz10.webp"
   },
   {
     "id": 948,
@@ -11281,24 +11137,6 @@
     "image": "covers/sKja-YdOVfI.webp"
   },
   {
-    "id": 952,
-    "videoId": "gmBQHtOAUyc",
-    "yadiskPath": "disk:/NikridRadio/gmBQHtOAUyc.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/X7cHonVtuPvWRw",
-    "title": "MONTAGEM ENTROPIA (Super Slowed)",
-    "artist": "LXST DRAGON, ItsInochi",
-    "duration": "1:47",
-    "seconds": 107,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "inYtmLiked": false,
-    "playlistOrder": null,
-    "image": "covers/gmBQHtOAUyc.webp"
-  },
-  {
     "id": 953,
     "videoId": "JisyfKDVJkI",
     "yadiskPath": "disk:/NikridRadio/JisyfKDVJkI.webm",
@@ -11335,24 +11173,6 @@
     "image": "covers/lk3W9iSX7Mg.webp"
   },
   {
-    "id": 955,
-    "videoId": "Oh-YR7o3BJk",
-    "yadiskPath": "disk:/NikridRadio/Oh-YR7o3BJk.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/QLwDOLP0dXHxOw",
-    "title": "MONTAGEM COLOSSUS (ULTRA SLOWED) - CLOUD ZERO, SHIPU, SCHWFTY",
-    "artist": "CLOUD ZERO, SCHWVFTY, SHIPU",
-    "duration": "2:06",
-    "seconds": 126,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "inYtmLiked": false,
-    "playlistOrder": null,
-    "image": "covers/Oh-YR7o3BJk.webp"
-  },
-  {
     "id": 956,
     "videoId": "AYeLloU1qjI",
     "yadiskPath": "disk:/NikridRadio/AYeLloU1qjI.webm",
@@ -11369,24 +11189,6 @@
     "inYtmLiked": false,
     "playlistOrder": null,
     "image": "covers/AYeLloU1qjI.webp"
-  },
-  {
-    "id": 957,
-    "videoId": "4-ZFwT71M18",
-    "yadiskPath": "disk:/NikridRadio/4-ZFwT71M18.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/m3GYYudQ6pzcPw",
-    "title": "RXDXVIL, LUMIX - MONTAGEM CASTELO JUMPSTYLE (LYKYOR REMIX) • EXTREME SLOWED & REVERB • #phonk #edit",
-    "artist": "LYKYOR",
-    "duration": "2:06",
-    "seconds": 126,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "inYtmLiked": false,
-    "playlistOrder": null,
-    "image": "covers/4-ZFwT71M18.webp"
   },
   {
     "id": 958,
@@ -11533,24 +11335,6 @@
     "image": "covers/bfgStrRLPdU.webp"
   },
   {
-    "id": 966,
-    "videoId": "ppmRYLLX7-Y",
-    "yadiskPath": "disk:/NikridRadio/ppmRYLLX7-Y.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/D_RRHOm6_XXxag",
-    "title": "Lost pt. II",
-    "artist": "Shiah Maisel",
-    "duration": "3:07",
-    "seconds": 187,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "inYtmLiked": false,
-    "playlistOrder": null,
-    "image": "covers/ppmRYLLX7-Y.webp"
-  },
-  {
     "id": 967,
     "videoId": "EGuKqwhV9TE",
     "yadiskPath": "disk:/NikridRadio/EGuKqwhV9TE.webm",
@@ -11585,24 +11369,6 @@
     "inYtmLiked": false,
     "playlistOrder": null,
     "image": "covers/kY3ed62OYsk.webp"
-  },
-  {
-    "id": 969,
-    "videoId": "Tmm6RyYSAuQ",
-    "yadiskPath": "disk:/NikridRadio/Tmm6RyYSAuQ.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/tNKqLR3a8rJXiA",
-    "title": "FUNK UNIVERSO",
-    "artist": "Irokz",
-    "duration": "2:19",
-    "seconds": 139,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "inYtmLiked": false,
-    "playlistOrder": null,
-    "image": "covers/Tmm6RyYSAuQ.webp"
   },
   {
     "id": 970,
@@ -11742,8 +11508,8 @@
     "moods": [
       "Весёлая"
     ],
-    "source": "wave",
-    "liked": false,
+    "source": "playlist",
+    "liked": true,
     "inYtmLiked": false,
     "playlistOrder": null,
     "image": "covers/GWeSItO56Zc.webp"
@@ -11983,24 +11749,6 @@
     "image": "covers/av12WhHbaOw.webp"
   },
   {
-    "id": 992,
-    "videoId": "WnRaHYM7a0k",
-    "yadiskPath": "disk:/NikridRadio/WnRaHYM7a0k.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/VareJNDHVq-l_w",
-    "title": "Willy William - Ego (Russian cover)/(кавер на русском)",
-    "artist": "Daniela",
-    "duration": "3:27",
-    "seconds": 207,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "inYtmLiked": false,
-    "playlistOrder": null,
-    "image": "covers/WnRaHYM7a0k.webp"
-  },
-  {
     "id": 993,
     "videoId": "qC4sCCmvoXU",
     "yadiskPath": "disk:/NikridRadio/qC4sCCmvoXU.webm",
@@ -12053,24 +11801,6 @@
     "inYtmLiked": false,
     "playlistOrder": null,
     "image": "covers/kD4AHcSa_Ok.webp"
-  },
-  {
-    "id": 997,
-    "videoId": "iKOvls4i6VQ",
-    "yadiskPath": "disk:/NikridRadio/iKOvls4i6VQ.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/AAR3B-cX2soE6Q",
-    "title": "Netta - Toy (Russian cover)/(кавер на русском)",
-    "artist": "Daniela",
-    "duration": "3:02",
-    "seconds": 182,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "inYtmLiked": false,
-    "playlistOrder": null,
-    "image": "covers/iKOvls4i6VQ.webp"
   },
   {
     "id": 998,
@@ -12307,24 +12037,6 @@
     "image": "covers/JIGYB8eIVa8.webp"
   },
   {
-    "id": 1012,
-    "videoId": "Z3MgogfU6lA",
-    "yadiskPath": "disk:/NikridRadio/Z3MgogfU6lA.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/7XoPO6f3q3tr6Q",
-    "title": "SkyCan - Amonir (slowed) | (4k music video)",
-    "artist": "SkyCan",
-    "duration": "2:19",
-    "seconds": 139,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "inYtmLiked": false,
-    "playlistOrder": null,
-    "image": "covers/Z3MgogfU6lA.webp"
-  },
-  {
     "id": 1013,
     "videoId": "JW-OU3aqhoc",
     "yadiskPath": "disk:/NikridRadio/JW-OU3aqhoc.webm",
@@ -12377,24 +12089,6 @@
     "inYtmLiked": false,
     "playlistOrder": null,
     "image": "covers/eiNDidFVXxc.webp"
-  },
-  {
-    "id": 1016,
-    "videoId": "VFiewLCGeow",
-    "yadiskPath": "disk:/NikridRadio/VFiewLCGeow.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/xVJ1Rp-pmMzTgg",
-    "title": "PINKY SMASH - Foretoken (Slowed)",
-    "artist": "PINKY SMASH",
-    "duration": "2:42",
-    "seconds": 162,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "inYtmLiked": false,
-    "playlistOrder": null,
-    "image": "covers/VFiewLCGeow.webp"
   },
   {
     "id": 1017,
@@ -12559,24 +12253,6 @@
     "image": "covers/jJL6Qq5ALb4.webp"
   },
   {
-    "id": 1026,
-    "videoId": "EfF7fkDBNQM",
-    "yadiskPath": "disk:/NikridRadio/EfF7fkDBNQM.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/uyt3aETpl0L9sQ",
-    "title": "“𝐊𝐈𝐋𝐋 𝐓𝐇𝐄𝐌” 𝐉𝐀𝐒𝐎𝐍 𝐕𝐎𝐎𝐑𝐇𝐄𝐄𝐒 𝐗 𝐄𝐂𝐋𝐈𝐏𝐒𝐄𝐑 - 𝐏𝐈𝐍𝐊𝐘 𝐒𝐌𝐀𝐒𝐇 (𝐔𝐋𝐓𝐑𝐀 𝐒𝐋𝐎𝐖𝐄𝐃)(𝐉𝐞𝐦𝐢𝐧𝐉 𝐑𝐞𝐦𝐢𝐱)",
-    "artist": "JeminJ",
-    "duration": "3:16",
-    "seconds": 196,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "inYtmLiked": false,
-    "playlistOrder": null,
-    "image": "covers/EfF7fkDBNQM.webp"
-  },
-  {
     "id": 1027,
     "videoId": "PrRggpo4PP0",
     "yadiskPath": "disk:/NikridRadio/PrRggpo4PP0.webm",
@@ -12606,29 +12282,11 @@
     "moods": [
       "Весёлая"
     ],
-    "source": "wave",
-    "liked": false,
+    "source": "playlist",
+    "liked": true,
     "inYtmLiked": false,
     "playlistOrder": null,
     "image": "covers/BlBTb_8MjeY.webp"
-  },
-  {
-    "id": 1029,
-    "videoId": "AvmRPDarlTg",
-    "yadiskPath": "disk:/NikridRadio/AvmRPDarlTg.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/HSe-kDUuxc3Niw",
-    "title": "void.exe",
-    "artist": "KIL KROOK",
-    "duration": "2:03",
-    "seconds": 123,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "inYtmLiked": false,
-    "playlistOrder": null,
-    "image": "covers/AvmRPDarlTg.webp"
   },
   {
     "id": 1030,
@@ -12937,24 +12595,6 @@
     "image": "covers/IMjSzjryliE.webp"
   },
   {
-    "id": 1047,
-    "videoId": "BoVHhyU1TOY",
-    "yadiskPath": "disk:/NikridRadio/BoVHhyU1TOY.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/3ZMK-sr6FC85sw",
-    "title": "CORAGEM (SUPER SLOWED + REVERB)",
-    "artist": "DJ NZ9, RXDXVIL, ENZYYYPHONK",
-    "duration": "1:55",
-    "seconds": 115,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "inYtmLiked": false,
-    "playlistOrder": null,
-    "image": "covers/BoVHhyU1TOY.webp"
-  },
-  {
     "id": 1048,
     "videoId": "I-dA52cJfCc",
     "yadiskPath": "disk:/NikridRadio/I-dA52cJfCc.webm",
@@ -13243,24 +12883,6 @@
     "image": "covers/E-IF1kJkHPk.webp"
   },
   {
-    "id": 1064,
-    "videoId": "AUu9M4nxgJs",
-    "yadiskPath": "disk:/NikridRadio/AUu9M4nxgJs.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/ATvO40eKe1K2hA",
-    "title": "TREINAMENTO DE FORÇA  [Yuta okkotsu vs Ryu Ishigori y Takako Uro]",
-    "artist": "Garou AMV",
-    "duration": "2:08",
-    "seconds": 128,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "inYtmLiked": false,
-    "playlistOrder": null,
-    "image": "covers/AUu9M4nxgJs.webp"
-  },
-  {
     "id": 1065,
     "videoId": "6CqvgvLQpQU",
     "yadiskPath": "disk:/NikridRadio/6CqvgvLQpQU.webm",
@@ -13385,24 +13007,6 @@
     "inYtmLiked": false,
     "playlistOrder": null,
     "image": "covers/TJxeLP0VSPs.webp"
-  },
-  {
-    "id": 1072,
-    "videoId": "bKdKSq8ggHo",
-    "yadiskPath": "disk:/NikridRadio/bKdKSq8ggHo.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/iU_ly8ros8hxEQ",
-    "title": "Melodia Extraordinária - DJ LE4K (Slowed & Reverb)",
-    "artist": "Zeta Z",
-    "duration": "2:10",
-    "seconds": 130,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "inYtmLiked": false,
-    "playlistOrder": null,
-    "image": "covers/bKdKSq8ggHo.webp"
   },
   {
     "id": 1073,
@@ -13740,8 +13344,8 @@
     "moods": [
       "Весёлая"
     ],
-    "source": "wave",
-    "liked": false,
+    "source": "playlist",
+    "liked": true,
     "inYtmLiked": false,
     "playlistOrder": null,
     "image": "covers/_Fy3aN07t2I.webp"
@@ -13819,24 +13423,6 @@
     "image": "covers/_qxXTiuObL0.webp"
   },
   {
-    "id": 1096,
-    "videoId": "od0Tx37uLlo",
-    "yadiskPath": "disk:/NikridRadio/od0Tx37uLlo.webm",
-    "yadiskPublicUrl": "https://yadi.sk/d/9B3iUvdJEqjXUA",
-    "title": "𝙙𝙫𝙨𝙥𝙖𝙞𝙧 - 𝙀𝘼𝙎𝙔 𝙈𝙊𝙉𝙀𝙔 (𝙎𝙡𝙤𝙬𝙚𝙙 - 𝙏𝙞𝙠𝙏𝙤𝙠 𝙑𝙚𝙧𝙨𝙞𝙤𝙣) 𝙭 𝙏𝙤𝙟𝙞 𝙁𝙪𝙨𝙝𝙞𝙜𝙪𝙧𝙤",
-    "artist": "𝑩𝒍𝒐𝒐𝒅𝒎𝒐𝒐𝒏",
-    "duration": "2:00",
-    "seconds": 120,
-    "moods": [
-      "Весёлая"
-    ],
-    "source": "wave",
-    "liked": false,
-    "inYtmLiked": false,
-    "playlistOrder": null,
-    "image": "covers/od0Tx37uLlo.webp"
-  },
-  {
     "id": 1097,
     "videoId": "ExlJ0YLTi2c",
     "yadiskPath": "disk:/NikridRadio/ExlJ0YLTi2c.webm",
@@ -13853,5 +13439,455 @@
     "inYtmLiked": false,
     "playlistOrder": null,
     "image": "covers/ExlJ0YLTi2c.webp"
+  },
+  {
+    "id": 1098,
+    "videoId": "N39mqnm3emc",
+    "yadiskPath": "disk:/NikridRadio/N39mqnm3emc.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/FJOB_L9UlSK94Q",
+    "title": "Somebody To Love (Club Remix) @neverbadagain",
+    "artist": "neverbadagain",
+    "duration": "2:45",
+    "seconds": 165,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "inYtmLiked": false,
+    "playlistOrder": null,
+    "image": "covers/N39mqnm3emc.webp"
+  },
+  {
+    "id": 1099,
+    "videoId": "0I647GU3Jsc",
+    "yadiskPath": "disk:/NikridRadio/0I647GU3Jsc.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/SbIHhjjRPJSzRw",
+    "title": "Natural",
+    "artist": "Imagine Dragons",
+    "duration": "3:10",
+    "seconds": 190,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "inYtmLiked": false,
+    "playlistOrder": null,
+    "image": "covers/0I647GU3Jsc.webp"
+  },
+  {
+    "id": 1100,
+    "videoId": "o9zRQijCN5w",
+    "yadiskPath": "disk:/NikridRadio/o9zRQijCN5w.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/I7WNw3acTS2xrA",
+    "title": "Broken People",
+    "artist": "Rag'n'Bone Man, Logic",
+    "duration": "3:34",
+    "seconds": 214,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "inYtmLiked": false,
+    "playlistOrder": null,
+    "image": "covers/o9zRQijCN5w.webp"
+  },
+  {
+    "id": 1101,
+    "videoId": "mWKDZRJWdF4",
+    "yadiskPath": "disk:/NikridRadio/mWKDZRJWdF4.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/s-Lyx3tDtsXo6Q",
+    "title": "Everything Black (feat. Mike Taylor)",
+    "artist": "Unlike Pluto",
+    "duration": "3:49",
+    "seconds": 229,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "inYtmLiked": false,
+    "playlistOrder": null,
+    "image": "covers/mWKDZRJWdF4.webp"
+  },
+  {
+    "id": 1102,
+    "videoId": "wxCsQsKn7O8",
+    "yadiskPath": "disk:/NikridRadio/wxCsQsKn7O8.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/19LHIz7kxTBR6Q",
+    "title": "Break My Baby",
+    "artist": "Kaleo",
+    "duration": "4:23",
+    "seconds": 263,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "inYtmLiked": false,
+    "playlistOrder": null,
+    "image": "covers/wxCsQsKn7O8.webp"
+  },
+  {
+    "id": 1103,
+    "videoId": "PVjiKRfKpPI",
+    "yadiskPath": "disk:/NikridRadio/PVjiKRfKpPI.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/wW3AkmNNLuK0dg",
+    "title": "Take Me To Church",
+    "artist": "Hozier",
+    "duration": "4:17",
+    "seconds": 257,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "inYtmLiked": false,
+    "playlistOrder": null,
+    "image": "covers/PVjiKRfKpPI.webp"
+  },
+  {
+    "id": 1104,
+    "videoId": "TW9uj83Vq-0",
+    "yadiskPath": "disk:/NikridRadio/TW9uj83Vq-0.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/_4JlEv2-QPftSw",
+    "title": "Walk",
+    "artist": "Kwabs",
+    "duration": "3:41",
+    "seconds": 221,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "inYtmLiked": false,
+    "playlistOrder": null,
+    "image": "covers/TW9uj83Vq-0.webp"
+  },
+  {
+    "id": 1105,
+    "videoId": "0OWj0CiM8WU",
+    "yadiskPath": "disk:/NikridRadio/0OWj0CiM8WU.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/ksobafw-uNTEEw",
+    "title": "Love Runs Out",
+    "artist": "OneRepublic",
+    "duration": "3:49",
+    "seconds": 229,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "inYtmLiked": false,
+    "playlistOrder": null,
+    "image": "covers/0OWj0CiM8WU.webp"
+  },
+  {
+    "id": 1106,
+    "videoId": "cA6PRc0KJtE",
+    "yadiskPath": "disk:/NikridRadio/cA6PRc0KJtE.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/6UopEr_V9YA6Zw",
+    "title": "Guilty",
+    "artist": "Rag'n'Bone Man",
+    "duration": "3:35",
+    "seconds": 215,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "inYtmLiked": false,
+    "playlistOrder": null,
+    "image": "covers/cA6PRc0KJtE.webp"
+  },
+  {
+    "id": 1107,
+    "videoId": "CfihYWRWRTQ",
+    "yadiskPath": "disk:/NikridRadio/CfihYWRWRTQ.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/N1fwlB9D8-yVjA",
+    "title": "Love Me Again",
+    "artist": "John Newman",
+    "duration": "3:56",
+    "seconds": 236,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "inYtmLiked": false,
+    "playlistOrder": null,
+    "image": "covers/CfihYWRWRTQ.webp"
+  },
+  {
+    "id": 1108,
+    "videoId": "o-_DVLacX4c",
+    "yadiskPath": "disk:/NikridRadio/o-_DVLacX4c.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/m8QDrTAZqxo_4g",
+    "title": "Hippie Sabotage - Devil Eyes / 350Z Showtime",
+    "artist": "GANGSTER GANG",
+    "duration": "2:16",
+    "seconds": 136,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "inYtmLiked": false,
+    "playlistOrder": null,
+    "image": "covers/o-_DVLacX4c.webp"
+  },
+  {
+    "id": 1109,
+    "videoId": "3qW9dOlyAfc",
+    "yadiskPath": "disk:/NikridRadio/3qW9dOlyAfc.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/zDVlMfcNWiVvHQ",
+    "title": "HARDBASS - Ievan Polkka (Cosmowave Remix)",
+    "artist": "Cosmowave",
+    "duration": "2:42",
+    "seconds": 162,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "inYtmLiked": false,
+    "playlistOrder": null,
+    "image": "covers/3qW9dOlyAfc.webp"
+  },
+  {
+    "id": 1110,
+    "videoId": "L4C2tF4YzFU",
+    "yadiskPath": "disk:/NikridRadio/L4C2tF4YzFU.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/6av3C4hQAJHO_w",
+    "title": "What Do You Believe In? (Official Video)",
+    "artist": "Rag'n'Bone Man",
+    "duration": "3:24",
+    "seconds": 204,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "inYtmLiked": false,
+    "playlistOrder": null,
+    "image": "covers/L4C2tF4YzFU.webp"
+  },
+  {
+    "id": 1111,
+    "videoId": "HhoATZ1Imtw",
+    "yadiskPath": "disk:/NikridRadio/HhoATZ1Imtw.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/xrvASgvUFM0-qQ",
+    "title": "Genius",
+    "artist": "LSD",
+    "duration": "3:43",
+    "seconds": 223,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "inYtmLiked": false,
+    "playlistOrder": null,
+    "image": "covers/HhoATZ1Imtw.webp"
+  },
+  {
+    "id": 1112,
+    "videoId": "_PBlykN4KIY",
+    "yadiskPath": "disk:/NikridRadio/_PBlykN4KIY.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/HUDQ8Xhw0Xowgg",
+    "title": "Unstoppable (Lyric Video)",
+    "artist": "The Score",
+    "duration": "3:12",
+    "seconds": 192,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "inYtmLiked": false,
+    "playlistOrder": null,
+    "image": "covers/_PBlykN4KIY.webp"
+  },
+  {
+    "id": 1113,
+    "videoId": "0-7IHOXkiV8",
+    "yadiskPath": "disk:/NikridRadio/0-7IHOXkiV8.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/25ISQmNM-7IHjw",
+    "title": "Way Down We Go",
+    "artist": "Kaleo",
+    "duration": "3:35",
+    "seconds": 215,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "inYtmLiked": false,
+    "playlistOrder": null,
+    "image": "covers/0-7IHOXkiV8.webp"
+  },
+  {
+    "id": 1114,
+    "videoId": "IPXIgEAGe4U",
+    "yadiskPath": "disk:/NikridRadio/IPXIgEAGe4U.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/u1CvH-Zb0dOFVA",
+    "title": "High Hopes",
+    "artist": "Panic! At The Disco",
+    "duration": "3:17",
+    "seconds": 197,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "inYtmLiked": false,
+    "playlistOrder": null,
+    "image": "covers/IPXIgEAGe4U.webp"
+  },
+  {
+    "id": 1115,
+    "videoId": "wFjw1fNA0AY",
+    "yadiskPath": "disk:/NikridRadio/wFjw1fNA0AY.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/8E8OBbrwkiCLxw",
+    "title": "Fade to Nothing (Official Audio)",
+    "artist": "Rag'n'Bone Man",
+    "duration": "3:45",
+    "seconds": 225,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "inYtmLiked": false,
+    "playlistOrder": null,
+    "image": "covers/wFjw1fNA0AY.webp"
+  },
+  {
+    "id": 1116,
+    "videoId": "MoN9ql6Yymw",
+    "yadiskPath": "disk:/NikridRadio/MoN9ql6Yymw.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/yPgJbI8ftjZJ4g",
+    "title": "Daylight (Official Music Video)",
+    "artist": "David Kushner",
+    "duration": "3:50",
+    "seconds": 230,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "inYtmLiked": false,
+    "playlistOrder": null,
+    "image": "covers/MoN9ql6Yymw.webp"
+  },
+  {
+    "id": 1117,
+    "videoId": "LHCob76kigA",
+    "yadiskPath": "disk:/NikridRadio/LHCob76kigA.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/md4o3zLLhAb3BA",
+    "title": "7 Years",
+    "artist": "Lukas Graham",
+    "duration": "4:00",
+    "seconds": 240,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "inYtmLiked": false,
+    "playlistOrder": null,
+    "image": "covers/LHCob76kigA.webp"
+  },
+  {
+    "id": 1118,
+    "videoId": "Z2CZn966cUg",
+    "yadiskPath": "disk:/NikridRadio/Z2CZn966cUg.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/Hmw5V0qu0Nf-oA",
+    "title": "Legendary",
+    "artist": "Welshly Arms",
+    "duration": "3:38",
+    "seconds": 218,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "inYtmLiked": false,
+    "playlistOrder": null,
+    "image": "covers/Z2CZn966cUg.webp"
+  },
+  {
+    "id": 1119,
+    "videoId": "kI1-E6Bm-70",
+    "yadiskPath": "disk:/NikridRadio/kI1-E6Bm-70.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/ce5cVegoW-pZQQ",
+    "title": "Lay My Body Down (EP Version)",
+    "artist": "Rag'n'Bone Man",
+    "duration": "3:36",
+    "seconds": 216,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "inYtmLiked": false,
+    "playlistOrder": null,
+    "image": "covers/kI1-E6Bm-70.webp"
+  },
+  {
+    "id": 1120,
+    "videoId": "TvhO0Yyb_7w",
+    "yadiskPath": "disk:/NikridRadio/TvhO0Yyb_7w.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/6dtUWOzjA4NyKQ",
+    "title": "Hate That I Love You",
+    "artist": "Jonathan Roy",
+    "duration": "3:18",
+    "seconds": 198,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "inYtmLiked": false,
+    "playlistOrder": null,
+    "image": "covers/TvhO0Yyb_7w.webp"
+  },
+  {
+    "id": 1121,
+    "videoId": "IrV90gXmOpA",
+    "yadiskPath": "disk:/NikridRadio/IrV90gXmOpA.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/ZoubdraDZ7403A",
+    "title": "Glitter & Gold",
+    "artist": "Barns Courtney",
+    "duration": "2:54",
+    "seconds": 174,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "inYtmLiked": false,
+    "playlistOrder": null,
+    "image": "covers/IrV90gXmOpA.webp"
+  },
+  {
+    "id": 1122,
+    "videoId": "nht9Nbi2EY4",
+    "yadiskPath": "disk:/NikridRadio/nht9Nbi2EY4.webm",
+    "yadiskPublicUrl": "https://yadi.sk/d/jw215GLPqKC9FQ",
+    "title": "Pretty Little Devil",
+    "artist": "Shaya Zamora",
+    "duration": "2:48",
+    "seconds": 168,
+    "moods": [
+      "Весёлая"
+    ],
+    "source": "wave",
+    "liked": false,
+    "inYtmLiked": false,
+    "playlistOrder": null,
+    "image": "covers/nht9Nbi2EY4.webp"
   }
 ]
