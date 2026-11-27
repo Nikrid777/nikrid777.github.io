@@ -658,6 +658,8 @@ def reconcile_like_buffer_in_gist(
             "bufferSyncedAt": now_iso,
             "likeIds": new_like_ids,
             "dislikeIds": current.get("dislikeIds", []),
+            "siteLikedIds": current.get("siteLikedIds", []),
+            "likedAtMap": current.get("likedAtMap", {}),
             "waveListenedIds": rem_listened,
             "likeTitles": new_like_titles,
             "dislikeTitles": current.get("dislikeTitles", []),

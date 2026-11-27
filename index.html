@@ -992,6 +992,8 @@
         updatedAt: new Date().toISOString(),
         likeIds: state.bufferLikes.map(t => t.id),
         dislikeIds: state.bufferDislikes.map(t => t.id),
+        siteLikedIds: state.siteLikedIds || [],
+        likedAtMap: state.likedAtMap || {},
         waveListenedIds: state.waveListenedIds,
         likeTitles: state.bufferLikes.map(t => ({ id: t.id, videoId: t.videoId, title: t.title, artist: t.artist })),
         dislikeTitles: state.bufferDislikes.map(t => ({ id: t.id, videoId: t.videoId, title: t.title, artist: t.artist }))
@@ -1053,6 +1055,17 @@
           .map(id => resolveTrackOrStub(id, remote.dislikeTitles))
           .filter(Boolean);
       }
+      if (Array.isArray(remote.siteLikedIds)) {
+        state.siteLikedIds = Array.from(new Set([...(state.siteLikedIds || []), ...remote.siteLikedIds]));
+      }
+      if (remote.likedAtMap && typeof remote.likedAtMap === 'object') {
+        const mergedMap = { ...(state.likedAtMap || {}) };
+        for (const [k, v] of Object.entries(remote.likedAtMap)) {
+          const numV = Number(v) || 0;
+          if (numV > (Number(mergedMap[k]) || 0)) mergedMap[k] = numV;
+        }
+        state.likedAtMap = mergedMap;
+      }
       if (Array.isArray(remote.waveListenedIds)) {
         state.waveListenedIds = serverReconciled
           ? [...remote.waveListenedIds]
@@ -1061,6 +1074,7 @@
 
       const disSet = new Set(state.bufferDislikes.map(t => t.id));
       state.bufferLikes = state.bufferLikes.filter(t => t && !disSet.has(t.id));
+      state.siteLikedIds = (state.siteLikedIds || []).filter(id => !disSet.has(id));
     }
 
     async function pushCloudState(silent = true) {
@@ -1434,6 +1448,9 @@
         const tsA = (state.likedAtMap && state.likedAtMap[a.id]) || 0;
         const tsB = (state.likedAtMap && state.likedAtMap[b.id]) || 0;
         if (tsA !== tsB) return tsB - tsA;
+        const idxA = state.bufferLikes.findIndex(x => x.id === a.id);
+        const idxB = state.bufferLikes.findIndex(x => x.id === b.id);
+        if (idxA !== idxB) return idxB - idxA;
         return (b.id || 0) - (a.id || 0);
       }
 
